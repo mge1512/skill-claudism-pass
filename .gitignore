@@ -1,0 +1,3 @@
+# The packaged skill is a release artifact, never a tracked file.
+*.skill
+build/
