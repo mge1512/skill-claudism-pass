@@ -40,6 +40,41 @@ Settings, then the skills section, then add a custom skill and upload the packag
 `claudism-pass.skill` file from the releases page. Current steps are at
 https://support.claude.com if the menu has moved.
 
+**Antigravity CLI (`agy`) and the Antigravity IDE**
+
+```bash
+# per workspace, recognised by every Antigravity surface
+git clone https://github.com/mge1512/skill-claudism-pass.git \
+    .agents/skills/claudism-pass
+
+# global
+git clone https://github.com/mge1512/skill-claudism-pass.git \
+    ~/.gemini/config/skills/claudism-pass
+```
+
+Antigravity comes in three flavours (`agy`, the CLI and the IDE) and they do not
+search the same global locations. The workspace path is the one all of them agree
+on, and it travels with the repository, so prefer it. Run `/skills` in a session
+to see which locations the installed version reads; the published
+documentation has been behind the binary.
+
+**Gemini CLI**
+
+```bash
+git clone https://github.com/mge1512/skill-claudism-pass.git \
+    ~/.gemini/skills/claudism-pass
+```
+
+Per project, use `.gemini/skills/claudism-pass`. Gemini CLI stopped serving the
+free and individual tiers on 2026-06-18; it needs a Gemini Code Assist Standard or
+Enterprise license, or a paid API key.
+
+**Anything else that reads SKILL.md**
+
+The skill is a plain directory in the Agent Skills format, so copy it wherever the
+agent looks. `.agents/skills/<name>/` is becoming the shared project-level
+convention across tools.
+
 ## Use
 
 Write as usual. The skill applies itself when a draft is an English deliverable:
