@@ -1,0 +1,26 @@
+CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+
+To the extent possible under law, the authors of claudism-pass have waived all
+copyright and related or neighboring rights to this work. The work is published
+from Germany.
+
+Full text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+Summary:   https://creativecommons.org/publicdomain/zero/1.0/
+
+Authors
+-------
+
+Matthias Georg Eckermann (mge1512), author
+Claude (Anthropic), co-author
+
+Included work
+-------------
+
+references/banlist.md derives from the Claudisms banlist at https://claudisms.ai/,
+which its publisher released into the public domain under CC0 1.0. The site does
+not name an individual author; the linked article behind the list is "Your Name Is
+Still on It" (https://wespomeroy.substack.com/p/your-name-is-still-on-it). Local
+additions to the file are covered by this dedication.
+
+CC0 waives the requirement to give credit. The attribution above is offered
+anyway, and anyone reusing this work is asked, not required, to do the same.
