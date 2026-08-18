@@ -19,19 +19,26 @@ nothing runs at install time.
 **Claude Code**
 
 ```bash
-git clone <repository-url> ~/.claude/skills/claudism-pass
+git clone https://github.com/mge1512/skill-claudism-pass.git ~/.claude/skills/claudism-pass
+```
+
+The target directory has to be `claudism-pass`, matching the skill name, not
+`skill-claudism-pass` as the repository is called. Pull in place to update:
+
+```bash
+git -C ~/.claude/skills/claudism-pass pull
 ```
 
 Use `.claude/skills/claudism-pass` inside a repository instead if the skill should
-be available in that project only. Start a new session afterwards; `/skills` lists what was
-picked up. The directory layout must be `claudism-pass/SKILL.md`, with no extra
+be available in that project only. Start a new session afterwards; `/skills` lists
+what was picked up. The layout must be `claudism-pass/SKILL.md`, with no extra
 folder in between.
 
 **Claude.ai and the desktop app**
 
 Settings, then the skills section, then add a custom skill and upload the packaged
-`claudism-pass.skill` file. Current steps are at https://support.claude.com if the
-menu has moved.
+`claudism-pass.skill` file from the releases page. Current steps are at
+https://support.claude.com if the menu has moved.
 
 ## Use
 
@@ -99,6 +106,8 @@ someone's background in an editing report is both rude and often wrong.
 
 ## Layout
 
+The repository root is the skill directory.
+
 ```
 claudism-pass/
 ├── SKILL.md                       what Claude reads
@@ -136,6 +145,10 @@ To add a language that is not European, check the assumption behind `common.md`
 first. It is built around false friends and article systems, which does not
 describe Japanese, Chinese or Korean interference. Those need article and number
 use, topic-comment structure, and politeness calibration instead.
+
+## Repository
+
+https://github.com/mge1512/skill-claudism-pass
 
 ## Source and license
 
