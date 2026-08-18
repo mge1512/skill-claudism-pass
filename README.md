@@ -69,6 +69,28 @@ Per project, use `.gemini/skills/claudism-pass`. Gemini CLI stopped serving the
 free and individual tiers on 2026-06-18; it needs a Gemini Code Assist Standard or
 Enterprise license, or a paid API key.
 
+**KIT (Knowledge Inference Tool)**
+
+```bash
+git clone https://github.com/mge1512/skill-claudism-pass.git \
+    ~/.config/kit/skills/claudism-pass
+```
+
+Point KIT at it in `~/.kit.yml`:
+
+```yaml
+skill:
+  - ~/.config/kit/skills/claudism-pass
+```
+
+Or per invocation: `kit --skill ~/.config/kit/skills/claudism-pass`. An explicit
+`skill:` list switches off auto-discovery, so list every skill you use, or set
+`skills-dir:` to scan a directory of them instead. KIT also discovers skills on
+its own; its documented cross-client convention for named agents is
+`.agents/agents/`, so a project-level clone into `.agents/skills/claudism-pass`
+should be found too, though the README does not state the skill paths. Check
+with `/skill:claudism-pass` in a session.
+
 **Anything else that reads SKILL.md**
 
 The skill is a plain directory in the Agent Skills format, so copy it wherever the
