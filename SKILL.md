@@ -91,7 +91,9 @@ Run this over the finished draft as a separate step. Drafting and editing compet
 If the draft is in a file, run the scanner:
 
 ```bash
-SKILL_DIR=~/.claude/skills/claudism-pass      # or wherever the skill is installed
+# SKILL_DIR is the directory this file sits in. Depending on the agent that is
+# ~/.claude/skills/claudism-pass, .agents/skills/claudism-pass,
+# ~/.gemini/skills/claudism-pass, or a path under /mnt/skills.
 bash "$SKILL_DIR/scripts/scan.sh" draft.md
 bash "$SKILL_DIR/scripts/scan.sh" --eu tender.md
 ```

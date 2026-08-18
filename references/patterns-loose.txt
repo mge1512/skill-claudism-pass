@@ -1,0 +1,32 @@
+# Claudism scanner: loose patterns (grep -E, case-insensitive).
+# These match legitimate uses too. Every hit needs a judgment call, and several
+# have technical carve-outs listed in SKILL.md. Reported separately from the
+# high-confidence hits so the noise does not bury them.
+
+\bthe (whole|entire) [a-z]+\b
+\bthe only [a-z]+ that\b
+\bthe one that [a-z]+\b
+\breal [a-z]+\b
+\ba real\b
+\bthe real\b
+\breach(es|ing)? for\b
+\blandscape\b
+\brealm\b
+\bshape(s|d)?\b
+\bsurface\b
+\bharness\b
+\bphysics\b
+\bquieter\b
+\blouder\b
+\bcome along\b
+\bhold(s|ing)?\b
+\bcarr(y|ies|ying)\b
+\blives\b
+\bmature\b
+\bsettled question\b
+\bwe thought was settled\b
+\bwreck(ed|s)?\b
+\bshatter(ed|s)?\b
+\bobliterate(d|s)?\b
+\bblow up\b
+\bmatters?\b

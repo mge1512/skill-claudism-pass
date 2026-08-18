@@ -1,0 +1,26 @@
+# Words that are almost always the wrong choice in text written by a European
+# second-language speaker, but legitimate English in other uses. Reported
+# separately; each hit needs a judgment call against the L1 reference file.
+\beventual(ly)?\b
+\bactual(ly)?\b
+\bsensible\b
+\brealiz(e|es|ed|ing)\b
+\bcontrol(s|led|ling)?\b
+\bconcept\b
+\bdelay\b
+\bcompromise\b
+\bpretend(s|ed|ing)?\b
+\bassist(s|ed|ing)?\b
+\battend(s|ed|ing)?\b
+\bsupport(s|ed|ing)? the (pressure|load|situation)\b
+\bmust not\b
+\bempathy\b
+\bfirm\b
+\bmaterial\b
+\bformation\b
+\bprotocol\b
+\bnovel\b
+\bglobally\b
+\bmonster\b
+\bpossibility\b
+\bimportant\b

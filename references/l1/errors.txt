@@ -1,0 +1,27 @@
+# Second-language interference the scanner can catch. grep -E, case-insensitive.
+# These are wrong in every register, independent of the writer's first language.
+\b(informations|softwares|hardwares|feedbacks|advices|researches|staffs|equipments|knowledges|trainings)\b
+\bsince [0-9]+ (year|month|week|day)s?\b
+\bsince (two|three|four|five|six|seven|eight|nine|ten) (year|month|week|day)s\b
+\bhow (does|do|did) .{0,25} look like\b
+\bhow it looks like\b
+\bi am agree\b
+\bin a first time\b
+\bin the same time\b
+\bdepend(s|ed|ing)? (of|from)\b
+\bin the other hand\b
+\bthe same that\b
+\bexplain me\b
+\bassist to the\b
+\bmore (better|worse|easier)\b
+\bresp\.
+\bplease find enclosed\b
+\bdear sirs\b
+\bi have [0-9]{2} years\b
+\bthe both\b
+\bin (the )?university\b
+\bdifferent than\b
+\bpeoples\b
+\bmake a (photo|picture)\b
+\btill (monday|tuesday|wednesday|thursday|friday|saturday|sunday|the end)\b
+\b(work|works|live|lives|use|uses|run|runs|manage|manages|support|supports)\b[a-z ]{0,15}since (19|20)[0-9]{2}\b

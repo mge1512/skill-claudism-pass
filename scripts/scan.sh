@@ -1,0 +1,277 @@
+#!/bin/bash
+# scan.sh - mechanical part of the Claudism pass.
+#
+# Usage: bash scan.sh FILE [FILE...]
+#
+# Reports:
+#   1. high-confidence banlist phrases  (references/patterns.txt)
+#   2. loose phrases needing judgment  (references/patterns-loose.txt)
+#   3. decorative punctuation and emoji
+#   4. structural tics grep can see (--- dividers, bold-term bullets)
+#
+# Phrases are matched against whole paragraphs, not single lines, so hard-wrapped
+# text is scanned correctly. Hits are reported by the line the paragraph starts
+# on; search for the quoted phrase itself to jump to it.
+#
+# The scanner only sees literal strings. Crowned superlatives with a novel noun,
+# negative parallelism in fresh wording and staged epiphany have to be caught by
+# reading. See SKILL.md, step 2.
+#
+# English text only. Do not run this over German drafts.
+
+set -u
+
+# grep -P needs a UTF-8 locale to treat multi-byte characters as characters.
+if ! printf '\xe2\x80\x94' | grep -qP '\x{2014}' 2>/dev/null; then
+    for cand in C.UTF-8 C.utf8 en_US.UTF-8 de_DE.UTF-8; do
+        if printf '\xe2\x80\x94' | LC_ALL="$cand" grep -qP '\x{2014}' 2>/dev/null; then
+            export LC_ALL="$cand"
+            break
+        fi
+    done
+fi
+
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ref="${here}/../references"
+strict="${ref}/patterns.txt"
+loose="${ref}/patterns-loose.txt"
+pairs="${ref}/variant-pairs.txt"
+l1_err="${ref}/l1/errors.txt"
+l1_ff="${ref}/l1/false-friends.txt"
+
+variant="auto"
+do_l1="yes"
+files=()
+for arg in "$@"; do
+    case "$arg" in
+        --us|--variant=us)          variant="us" ;;
+        --eu|--gb|--variant=eu)     variant="eu" ;;
+        --variant=auto)             variant="auto" ;;
+        --no-l1)                    do_l1="no" ;;
+        -h|--help)
+            echo "usage: bash scan.sh [--us|--eu] [--no-l1] FILE [FILE...]"
+            echo "  --us | --eu   force the spelling variant (default: auto)"
+            echo "  --no-l1       skip the second-language interference check"
+            exit 0 ;;
+        -*)
+            echo "scan.sh: unknown option $arg" >&2
+            exit 2 ;;
+        *)  files+=("$arg") ;;
+    esac
+done
+
+if [ "${#files[@]}" -lt 1 ]; then
+    echo "usage: bash scan.sh [--us|--eu] [--no-l1] FILE [FILE...]" >&2
+    exit 2
+fi
+
+for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff"; do
+    if [ ! -r "$f" ]; then
+        echo "scan.sh: cannot read $f" >&2
+        exit 2
+    fi
+done
+
+# -ise verbs that are spelled the same in both variants.
+ise_both='advertise|advise|apprise|arise|chastise|circumcise|comprise|compromise|concise|demise|despise|devise|disguise|enterprise|excise|exercise|expertise|franchise|improvise|incise|likewise|merchandise|otherwise|paradise|precise|premise|promise|revise|rise|supervise|surprise|televise|wise'
+
+# Blank out fenced code blocks and inline code spans, keeping the line count so
+# reported line numbers still match the original. Identifiers are not prose.
+strip_code() {
+    awk '
+        /^[[:space:]]*```/ { inblock = !inblock; print ""; next }
+        inblock { print ""; next }
+        { gsub(/`[^`]*`/, " "); print }
+    ' "$1"
+}
+
+# One paragraph per output line, prefixed with the line it starts on.
+join_paragraphs() {
+    awk '
+        /^[[:space:]]*$/ { if (buf != "") { printf "%d:%s\n", start, buf; buf = "" } ; next }
+        { if (buf == "") { start = NR; buf = $0 } else { buf = buf " " $0 } }
+        END { if (buf != "") printf "%d:%s\n", start, buf }
+    ' "$1"
+}
+
+# $1 = joined-paragraph file, $2 = pattern file. One output line per hit.
+scan_list() {
+    local joined="$1" patterns="$2"
+    local pat para start text hit
+
+    while IFS= read -r pat; do
+        case "$pat" in
+            ''|'#'*) continue ;;
+        esac
+        while IFS= read -r para; do
+            start="${para%%:*}"
+            text="${para#*:}"
+            while IFS= read -r hit; do
+                [ -n "$hit" ] || continue
+                printf '  line %-6s %-30s [%s]\n' \
+                    "$start" "$(printf '%s' "$hit" | cut -c1-30)" "$pat"
+            done < <(printf '%s\n' "$text" | grep -i -o -E "$pat" 2>/dev/null)
+        done < <(grep -i -E "$pat" "$joined" 2>/dev/null)
+    done < "$patterns"
+}
+
+total=0
+
+for target in "${files[@]}"; do
+    if [ ! -r "$target" ]; then
+        echo "scan.sh: cannot read $target" >&2
+        continue
+    fi
+
+    echo "=== $target"
+
+    tmp_join="$(mktemp)"
+    tmp_strict="$(mktemp)"
+    tmp_loose="$(mktemp)"
+    tmp_prose="$(mktemp)"
+    tmp_join2="$(mktemp)"
+    strip_code "$target" > "$tmp_prose"
+    join_paragraphs "$tmp_prose" > "$tmp_join"
+    cp "$tmp_join" "$tmp_join2"
+    scan_list "$tmp_join" "$strict" > "$tmp_strict"
+    scan_list "$tmp_join" "$loose" > "$tmp_loose"
+
+    n_strict="$(grep -c . "$tmp_strict" || true)"
+    n_loose="$(grep -c . "$tmp_loose" || true)"
+
+    echo "--- banlist hits, rewrite these: $n_strict"
+    [ "$n_strict" -gt 0 ] && sort -k2,2n "$tmp_strict"
+    echo "--- needs judgment, check the carve-outs in SKILL.md: $n_loose"
+    [ "$n_loose" -gt 0 ] && cat "$tmp_loose"
+    rm -f "$tmp_join" "$tmp_strict" "$tmp_loose"
+
+    # Decorative punctuation. Straight quotes, plain hyphen and three dots
+    # instead. Diacritics belong to the spelling and are never flagged.
+    echo "--- decorative punctuation"
+    punct="$(grep -n -o -P '[\x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{00AB}\x{00BB}\x{2190}\x{2192}\x{2022}\x{00A0}\x{2264}\x{2265}\x{2260}]' "$target" 2>/dev/null)"
+    if [ -z "$punct" ]; then
+        punct="$(grep -n -o -F -e '—' -e '–' -e '…' -e '“' -e '”' -e '‘' -e '’' \
+                              -e '→' -e '←' -e '•' -e '≤' -e '≥' -e '≠' "$target" 2>/dev/null)"
+    fi
+    emoji="$(grep -n -o -P '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]' "$target" 2>/dev/null)"
+    if [ -n "$punct" ] || [ -n "$emoji" ]; then
+        [ -n "$punct" ] && printf '%s\n' "$punct" | sed 's/^/  line /'
+        [ -n "$emoji" ] && printf '%s\n' "$emoji" | sed 's/^/  emoji, line /'
+    else
+        echo "  clean"
+    fi
+
+    # Structural tics a regex can see. A --- on line 1 is YAML frontmatter,
+    # not a divider.
+    echo "--- structural tics"
+    struct=0
+    div="$(grep -n -E '^[[:space:]]*-{3,}[[:space:]]*$' "$tmp_prose" | grep -v '^1:' || true)"
+    if [ -n "$div" ]; then
+        printf '%s\n' "$div" | sed 's/^/  divider, line /'
+        struct=1
+    fi
+    bold="$(grep -n -E '^[[:space:]]*[-*][[:space:]]+\*\*[^*]+\*\*[[:space:]]*[:-]' "$target" || true)"
+    if [ -n "$bold" ]; then
+        printf '%s\n' "$bold" | cut -c1-70 | sed 's/^/  bold-term bullet, line /'
+        struct=1
+    fi
+    [ "$struct" -eq 0 ] && echo "  clean"
+
+    # Spelling variant. Explicit flag beats a marker in the file, which beats
+    # the tally. Detection from content is a judgment call and stays with the
+    # reader of this output.
+    echo "--- spelling variant"
+    marker="$(head -20 "$target" 2>/dev/null \
+        | grep -i -o -m1 -E '^[[:space:]]*(<!--|%|#|//)?[[:space:]]*variant:[[:space:]]*(us|eu|gb|uk|british)' \
+        | grep -i -o -E 'variant:[[:space:]]*(us|eu|gb|uk|british)' | tr 'A-Z' 'a-z')"
+    us_hits=""
+    gb_hits=""
+    while IFS='|' read -r us gb; do
+        case "$us" in ''|'#'*) continue ;; esac
+        found="$(grep -i -o -w -E "${us%e}(e|es|ed|ing|s|ations?)?" "$tmp_prose" 2>/dev/null)"
+        [ -n "$found" ] && us_hits="${us_hits}${found}"$'\n'
+        found="$(grep -i -o -w -E "${gb%e}(e|es|ed|ing|s|ations?)?" "$tmp_prose" 2>/dev/null)"
+        [ -n "$found" ] && gb_hits="${gb_hits}${found}"$'\n'
+    done < "$pairs"
+
+    ize="$(grep -i -o -E '\b[a-z]{3,}(ize|izes|ized|izing|ization|izations)\b' "$tmp_prose" 2>/dev/null)"
+    ise="$(grep -i -o -E '\b[a-z]{3,}(ise|ises|ised|ising|isation|isations)\b' "$tmp_prose" 2>/dev/null \
+           | grep -i -v -E "^(${ise_both})(s|es|ed|ing|d)?$" || true)"
+    [ -n "$ize" ] && us_hits="${us_hits}${ize}"$'\n'
+    [ -n "$ise" ] && gb_hits="${gb_hits}${ise}"$'\n'
+
+    n_us="$(printf '%s' "$us_hits" | grep -c . || true)"
+    n_gb="$(printf '%s' "$gb_hits" | grep -c . || true)"
+
+    eff="$variant"
+    if [ -n "$marker" ]; then
+        echo "  file marker: $marker"
+        if [ "$eff" = "auto" ]; then
+            case "$marker" in *us*) eff="us" ;; *) eff="eu" ;; esac
+        fi
+    fi
+    echo "  US markers: $n_us   EU/British markers: $n_gb   (variant: $eff)"
+    if [ "$eff" = "auto" ] && [ "$n_us" -gt 0 ] && [ "$n_gb" -gt 0 ]; then
+        echo "  MIXED, pick one variant and convert the minority:"
+        [ "$n_us" -le "$n_gb" ] && printf '%s' "$us_hits" | sort -u -f | sed 's/^/    US: /'
+        [ "$n_gb" -lt "$n_us" ] && printf '%s' "$gb_hits" | sort -u -f | sed 's/^/    EU: /'
+    fi
+    if [ "$eff" = "us" ] && [ "$n_gb" -gt 0 ]; then
+        printf '%s' "$gb_hits" | sort -u -f | sed 's/^/  convert to US: /'
+    fi
+    if [ "$eff" = "eu" ] && [ "$n_us" -gt 0 ]; then
+        printf '%s' "$us_hits" | sort -u -f | sed 's/^/  convert to EU: /'
+    fi
+
+    # Dates, clock and units. Identical in both variants.
+    echo "--- dates, clock, units"
+    loc=0
+    for check in \
+        '[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}::ambiguous numeric date, use YYYY-MM-DD' \
+        '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{2,4}::German numeric date, use YYYY-MM-DD' \
+        '[0-9]{1,2}(:[0-9]{2})?[[:space:]]?[ap]\.?m\.?\b::12-hour clock, use 24-hour' \
+        '[0-9],[0-9]{1,2}[[:space:]]?(%|GB|MB|ms|s\b)::decimal comma, use a point' \
+        '\b[0-9]+(GB|MB|TB|KB|MHz|GHz|ms|Gbit)\b::missing space between number and unit'
+    do
+        pat="${check%%::*}"; note="${check##*::}"
+        hit="$(grep -n -o -E "$pat" "$target" 2>/dev/null)"
+        if [ -n "$hit" ]; then
+            printf '%s\n' "$hit" | sed "s/^/  line /; s/$/   <- $note/"
+            loc=1
+        fi
+    done
+    tz="$(grep -n -o -P '\b\d{1,2}:\d{2}\b(?![[:space:]]?(UTC|GMT|CES?T|EES?T|WES?T|Z\b|[+-]\d{2}))' "$target" 2>/dev/null)"
+    if [ -n "$tz" ]; then
+        printf '%s\n' "$tz" | sed 's/^/  line /; s/$/   <- time without a time zone/'
+        loc=1
+    fi
+    [ "$loc" -eq 0 ] && echo "  clean"
+
+    # Second-language interference. The word lists are first-language neutral;
+    # references/l1/<language>.md holds what each L1 adds.
+    if [ "$do_l1" = "yes" ]; then
+        echo "--- second-language interference"
+        tmp_e="$(mktemp)"; tmp_f="$(mktemp)"
+        scan_list "$tmp_join2" "$l1_err" > "$tmp_e"
+        scan_list "$tmp_join2" "$l1_ff" > "$tmp_f"
+        n_e="$(grep -c . "$tmp_e" || true)"
+        n_f="$(grep -c . "$tmp_f" || true)"
+        if [ "$n_e" -gt 0 ]; then
+            echo "  wrong in any register: $n_e"
+            sort -k2,2n "$tmp_e"
+        fi
+        if [ "$n_f" -gt 0 ]; then
+            echo "  false friends, check against the L1 file: $n_f"
+            sort -k2,2n "$tmp_f"
+        fi
+        [ "$n_e" -eq 0 ] && [ "$n_f" -eq 0 ] && echo "  clean"
+        rm -f "$tmp_e" "$tmp_f"
+    fi
+    rm -f "$tmp_join2" "$tmp_prose"
+
+    total=$((total + n_strict + n_loose))
+    echo
+done
+
+echo "total phrase hits: $total"
+echo "Now read the draft for the constructions grep cannot see (SKILL.md, step 2)."

@@ -1,0 +1,148 @@
+# Claudism scanner: high-confidence literal patterns (grep -E, case-insensitive).
+# One extended regular expression per line. Lines starting with # are ignored.
+# A hit here is almost always a rewrite. See references/banlist.md for the reasoning.
+
+# --- reflective-pose filler
+\bsit(s|ting)? with\b
+\bworth (sitting|noting|talking|asking|drawing|making|examining|considering|exploring|a look)\b
+\bworth [a-z]+ing\b
+\barriv(e|es|ed|ing) at (the|a|an) (question|answer|conclusion|point|idea)
+\b(keep|keeps|kept) coming back to\b
+\bcoming back to\b
+\bbrings (me|us) back to\b
+\bthe question (that |i )?(kept|keeps|keep) (coming up|coming back)
+\bhere (is|'s) where i (landed|come down)\b
+\bwhere i landed\b
+
+# --- discovery arc and manufactured emphasis
+\bi did ?n(o|')t (set out to|plan)\b
+\bwhat i did ?n(o|')t expect\b
+\b(surprised|struck) me (the )?(most|hardest)\b
+\bif i had to pick one\b
+\bthe one that (surprised|struck|stuck)\b
+\bstuck with me\b
+\bstayed with me\b
+\bstruck a (chord|nerve)\b
+\bhit a nerve\b
+\bthe thing that (got|hooked) me\b
+\bwhat got me\b
+
+# --- crowned superlatives and totalising claims
+\bthe best thing you can do\b
+\b(helps|pays off|works) (the )?most\b
+\bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b
+\bthe entire point\b
+\bthe only thing that (matters|mattered|changed|happened)\b
+\b(hits|hit|lands|land|strikes|strike) (the )?hardest\b
+\bbest operators\b
+\btop practitioners\b
+
+# --- borrowed-domain metaphors
+\b(different |the )?physics of\b
+\brules of physics\b
+\bthe engine (of|behind|is)\b
+\bload-bearing\b
+\bturns on\b
+\b(compound|compounds|compounding)\b
+\brides (along|on)\b
+\bdoing the (work|heavy lifting)\b
+\bheavy lifting\b
+\bthe tell\b
+\bthroughline\b
+\bparadigm shift\b
+\bseat\b
+
+# --- placement and agency metaphors
+\bthe shape of\b
+\b(risk|work|tension|value|problem|complexity|difference|answer|logic|truth|config|file|code|data) lives\b
+\bhold(s|ing)? (that thought|the line|the tension|both|two things)\b
+\bcarry (this|it|that) (with you|forward)\b
+\bin (my|the same|the) chest\b
+\bstay(s)? yours\b
+\byours to (keep|own|decide)\b
+
+# --- pseudo-elevated diction
+\bnames (the|what|a) (move|question|thing|problem|stake)
+\bnaming (that|it|the)\b
+\bsurfac(e|es|ed|ing) (the|a|an|its|our|their|insights|patterns|issues|risks)\b
+\bunpack(s|ing|ed)?\b
+\bleverag(e|es|ed|ing)\b
+\blean (into|out)\b
+\bdouble-click on\b
+\bbumped into\b
+\bquietly\b
+\bmature (setup|version|state|approach)\b
+\bessays?\b
+
+# --- announcing instead of delivering
+\bthe point is\b
+\bhere (is|'s) where it gets\b
+\bhere (is|'s) the (analogy|moment|thing|part) that\b
+\b(this|that|it) matters\b
+\bbecause it matters\b
+\bthe right (time|question|way|answer|tool|thing|approach|level|mindset)\b
+\bthe useful (thing|part)\b
+\bwhat i (want|keep wanting) (you|people) to (see|know|take)\b
+\bit(')?s worth noting\b
+\bit(')?s important to note\b
+\bwhen it comes to\b
+\bat its core\b
+\bthis is where .{1,30} comes in\b
+\blet(')?s (break it down|explore|dive|turn|look at)\b
+\bcannot be overstated\b
+\breflecting a broader trend\b
+\bmarking a significant shift\b
+\bgreat question\b
+\bi love that you asked\b
+
+# --- negative parallelism and staccato negation
+\bnot just .{1,40}(it(')?s|but)\b
+\bnot only .{1,40} but\b
+\bis ?n(o|')t about .{1,40} it(')?s about\b
+\bno .{1,20}\. no .{1,20}\. just\b
+
+# --- false intimacy and invented observation
+\bi can(')?t stop thinking about\b
+\bmost people( i)?\b
+\beveryone i(')?(ve| have) worked with\b
+\ba lot of folks\b
+\bnobody i know\b
+\bwe(')?ve (seen this movie|been here) before\b
+\bseen this one before\b
+\bthe honest version\b
+\bhonestly,
+\bin my experience, most\b
+
+# --- corporate and hype vocabulary
+\bat the end of the day\b
+\blessons learned\b
+\bfirst wave of a multi-year\b
+\bdispatches from\b
+\bfield notes\b
+\bunderscor(e|es|ing)\b
+\bfoster(s|ing|ed)?\b
+\bshed light on\b
+\bpave the way\b
+\bpivotal\b
+\btransformative\b
+\bgame.chang(er|ing)\b
+\bgroundbreaking\b
+\bcutting.edge\b
+\brobust\b
+\bseamless\b
+\bintricate\b
+\bcomprehensive\b
+\bholistic\b
+\bnavigat(e|ing) the\b
+\btestament\b
+\bdelv(e|es|ing|ed)\b
+\bdive into\b
+\bharness(es|ing|ed)?\b
+\bpressure-test\b
+\bright-size\b
+\bnorth star\b
+\btrue north\b
+\bstrategic imperative\b
+\bthree things to know\b
+\bkey takeaways\b
+\bthe one (thing|part|piece|example|line|idea) that\b

@@ -1,0 +1,36 @@
+# Variant markers for scan.sh. Format: us_word|british_word
+# Matched with word boundaries, case-insensitive. Stems cover the usual endings.
+color|colour
+behavior|behaviour
+favor|favour
+labor|labour
+neighbor|neighbour
+honor|honour
+center|centre
+meter|metre
+theater|theatre
+fiber|fibre
+defense|defence
+offense|offence
+pretense|pretence
+license|licence
+catalog|catalogue
+dialog|dialogue
+analog|analogue
+gray|grey
+toward|towards
+fulfill|fulfil
+enroll|enrol
+skillful|skilful
+canceled|cancelled
+modeling|modelling
+labeled|labelled
+traveled|travelled
+signaling|signalling
+aging|ageing
+judgment|judgement
+acknowledgment|acknowledgement
+practice|practise
+program|programme
+analyze|analyse
+paralyze|paralyse
