@@ -1,35 +1,91 @@
 #!/bin/bash
 # scan.sh - mechanical part of the Claudism pass.
 #
-# Usage: bash scan.sh FILE [FILE...]
+# Usage: bash scan.sh [--us|--eu] [--no-l1] FILE [FILE...]
 #
 # Reports:
 #   1. high-confidence banlist phrases  (references/patterns.txt)
-#   2. loose phrases needing judgment  (references/patterns-loose.txt)
+#   2. loose phrases needing judgment   (references/patterns-loose.txt)
 #   3. decorative punctuation and emoji
 #   4. structural tics grep can see (--- dividers, bold-term bullets)
+#   5. spelling variant, dates and units, second-language interference
 #
 # Phrases are matched against whole paragraphs, not single lines, so hard-wrapped
 # text is scanned correctly. Hits are reported by the line the paragraph starts
 # on; search for the quoted phrase itself to jump to it.
 #
-# The scanner only sees literal strings. Crowned superlatives with a novel noun,
-# negative parallelism in fresh wording and staged epiphany have to be caught by
-# reading. See SKILL.md, step 2.
+# Portability: works with GNU grep and with the BSD grep that macOS ships. GNU
+# grep is preferred when present, including Homebrew's ggrep. Without PCRE the
+# emoji check falls back to a byte match and the time-zone check to a two-pass
+# filter; both still work. Set SCAN_FORCE_POSIX=1 to exercise that path on a
+# GNU system.
+#
+# The scanner only sees literal strings. Crowned superlatives with an unusual
+# noun, negative parallelism in fresh wording and staged epiphany have to be
+# caught by reading. See SKILL.md, step 2.
 #
 # English text only. Do not run this over German drafts.
 
 set -u
 
-# grep -P needs a UTF-8 locale to treat multi-byte characters as characters.
-if ! printf '\xe2\x80\x94' | grep -qP '\x{2014}' 2>/dev/null; then
-    for cand in C.UTF-8 C.utf8 en_US.UTF-8 de_DE.UTF-8; do
-        if printf '\xe2\x80\x94' | LC_ALL="$cand" grep -qP '\x{2014}' 2>/dev/null; then
-            export LC_ALL="$cand"
-            break
-        fi
-    done
+# ---------------------------------------------------------------- grep flavour
+
+# Homebrew installs GNU grep as ggrep and leaves the system one in place.
+if command -v ggrep > /dev/null 2>&1; then
+    GREP="ggrep"
+else
+    GREP="grep"
 fi
+
+has_p="no"
+has_wb="no"
+
+if [ "${SCAN_FORCE_POSIX:-0}" != "1" ]; then
+    if printf 'x\n' | "$GREP" -q -P 'x' 2> /dev/null; then
+        has_p="yes"
+    fi
+    # \b must both match a boundary and refuse a non-boundary. A grep that
+    # silently treats it as a literal passes the first test and fails this one.
+    if printf 'cat\n' | "$GREP" -q -E '\bcat\b' 2> /dev/null \
+       && ! printf 'concatenate\n' | "$GREP" -q -E '\bcat\b' 2> /dev/null; then
+        has_wb="yes"
+    fi
+fi
+
+# PCRE character ranges need a UTF-8 locale to see characters rather than bytes.
+if [ "$has_p" = "yes" ]; then
+    if ! printf '\xe2\x80\x94' | "$GREP" -q -P '\x{2014}' 2> /dev/null; then
+        for cand in C.UTF-8 C.utf8 en_US.UTF-8 de_DE.UTF-8; do
+            if printf '\xe2\x80\x94' | LC_ALL="$cand" "$GREP" -q -P '\x{2014}' 2> /dev/null; then
+                export LC_ALL="$cand"
+                break
+            fi
+        done
+    fi
+fi
+
+# Without GNU \b, drop the boundaries from the pattern and let grep -w enforce
+# them instead. Every pattern in the lists is word-delimited by design, so the
+# two are equivalent here, and -w is POSIX: the fallback behaves the same on GNU
+# and BSD, which means it can be tested on either.
+WB_FLAG=""
+if [ "$has_wb" != "yes" ]; then
+    WB_FLAG="-w"
+fi
+
+port() {
+    if [ "$has_wb" = "yes" ]; then
+        printf '%s' "$1"
+    else
+        printf '%s' "$1" | sed 's/\\b//g'
+    fi
+}
+
+tmpfile() {
+    mktemp "${TMPDIR:-/tmp}/claudism.XXXXXX"
+}
+
+# ---------------------------------------------------------------------- inputs
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ref="${here}/../references"
@@ -41,6 +97,7 @@ l1_ff="${ref}/l1/false-friends.txt"
 
 variant="auto"
 do_l1="yes"
+nfiles=0
 files=()
 for arg in "$@"; do
     case "$arg" in
@@ -56,11 +113,11 @@ for arg in "$@"; do
         -*)
             echo "scan.sh: unknown option $arg" >&2
             exit 2 ;;
-        *)  files+=("$arg") ;;
+        *)  files+=("$arg"); nfiles=$((nfiles + 1)) ;;
     esac
 done
 
-if [ "${#files[@]}" -lt 1 ]; then
+if [ "$nfiles" -lt 1 ]; then
     echo "usage: bash scan.sh [--us|--eu] [--no-l1] FILE [FILE...]" >&2
     exit 2
 fi
@@ -72,8 +129,17 @@ for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff"; do
     fi
 done
 
+if [ "$has_p" != "yes" ] || [ "$has_wb" != "yes" ]; then
+    echo "scan.sh: $GREP lacks PCRE or GNU word boundaries, using the portable path."
+    echo "         All checks run; emoji matching is coarser. On macOS, 'brew install grep'"
+    echo "         provides ggrep and this message goes away."
+    echo
+fi
+
 # -ise verbs that are spelled the same in both variants.
 ise_both='advertise|advise|apprise|arise|chastise|circumcise|comprise|compromise|concise|demise|despise|devise|disguise|enterprise|excise|exercise|expertise|franchise|improvise|incise|likewise|merchandise|otherwise|paradise|precise|premise|promise|revise|rise|supervise|surprise|televise|wise'
+
+# ------------------------------------------------------------------- functions
 
 # Blank out fenced code blocks and inline code spans, keeping the line count so
 # reported line numbers still match the original. Identifiers are not prose.
@@ -97,12 +163,13 @@ join_paragraphs() {
 # $1 = joined-paragraph file, $2 = pattern file. One output line per hit.
 scan_list() {
     local joined="$1" patterns="$2"
-    local pat para start text hit
+    local pat rx para start text hit
 
     while IFS= read -r pat; do
         case "$pat" in
             ''|'#'*) continue ;;
         esac
+        rx="$(port "$pat")"
         while IFS= read -r para; do
             start="${para%%:*}"
             text="${para#*:}"
@@ -110,10 +177,12 @@ scan_list() {
                 [ -n "$hit" ] || continue
                 printf '  line %-6s %-30s [%s]\n' \
                     "$start" "$(printf '%s' "$hit" | cut -c1-30)" "$pat"
-            done < <(printf '%s\n' "$text" | grep -i -o -E "$pat" 2>/dev/null)
-        done < <(grep -i -E "$pat" "$joined" 2>/dev/null)
+            done < <(printf '%s\n' "$text" | "$GREP" -i -o $WB_FLAG -E "$rx" 2> /dev/null)
+        done < <("$GREP" -i $WB_FLAG -E "$rx" "$joined" 2> /dev/null)
     done < "$patterns"
 }
+
+# ------------------------------------------------------------------------ main
 
 total=0
 
@@ -125,19 +194,19 @@ for target in "${files[@]}"; do
 
     echo "=== $target"
 
-    tmp_join="$(mktemp)"
-    tmp_strict="$(mktemp)"
-    tmp_loose="$(mktemp)"
-    tmp_prose="$(mktemp)"
-    tmp_join2="$(mktemp)"
+    tmp_join="$(tmpfile)"
+    tmp_strict="$(tmpfile)"
+    tmp_loose="$(tmpfile)"
+    tmp_prose="$(tmpfile)"
+    tmp_join2="$(tmpfile)"
     strip_code "$target" > "$tmp_prose"
     join_paragraphs "$tmp_prose" > "$tmp_join"
     cp "$tmp_join" "$tmp_join2"
     scan_list "$tmp_join" "$strict" > "$tmp_strict"
     scan_list "$tmp_join" "$loose" > "$tmp_loose"
 
-    n_strict="$(grep -c . "$tmp_strict" || true)"
-    n_loose="$(grep -c . "$tmp_loose" || true)"
+    n_strict="$("$GREP" -c . "$tmp_strict" || true)"
+    n_loose="$("$GREP" -c . "$tmp_loose" || true)"
 
     echo "--- banlist hits, rewrite these: $n_strict"
     [ "$n_strict" -gt 0 ] && sort -k2,2n "$tmp_strict"
@@ -148,12 +217,27 @@ for target in "${files[@]}"; do
     # Decorative punctuation. Straight quotes, plain hyphen and three dots
     # instead. Diacritics belong to the spelling and are never flagged.
     echo "--- decorative punctuation"
-    punct="$(grep -n -o -P '[\x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{00AB}\x{00BB}\x{2190}\x{2192}\x{2022}\x{00A0}\x{2264}\x{2265}\x{2260}]' "$target" 2>/dev/null)"
-    if [ -z "$punct" ]; then
-        punct="$(grep -n -o -F -e '—' -e '–' -e '…' -e '“' -e '”' -e '‘' -e '’' \
-                              -e '→' -e '←' -e '•' -e '≤' -e '≥' -e '≠' "$target" 2>/dev/null)"
+    punct=""
+    if [ "$has_p" = "yes" ]; then
+        punct="$("$GREP" -n -o -P '[\x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{00AB}\x{00BB}\x{2190}\x{2192}\x{2022}\x{00A0}\x{2264}\x{2265}\x{2260}]' "$target" 2> /dev/null)"
     fi
-    emoji="$(grep -n -o -P '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]' "$target" 2>/dev/null)"
+    if [ -z "$punct" ]; then
+        nbsp="$(printf '\302\240')"
+        punct="$("$GREP" -n -o -F -e '—' -e '–' -e '‒' -e '―' -e '…' \
+                                  -e '“' -e '”' -e '‘' -e '’' -e '«' -e '»' \
+                                  -e '→' -e '←' -e '•' -e '≤' -e '≥' -e '≠' \
+                                  -e "$nbsp" "$target" 2> /dev/null)"
+    fi
+    if [ "$has_p" = "yes" ]; then
+        emoji="$("$GREP" -n -o -P '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]' "$target" 2> /dev/null)"
+    else
+        # Match the UTF-8 byte sequences instead: F0 9F xx xx covers the
+        # pictographs, E2 98..9E xx the dingbats, EF B8 8F the variation
+        # selector. Coarser than the PCRE ranges, and it needs no PCRE.
+        emoji="$(LC_ALL=C "$GREP" -n -o -E \
+            $'\xf0\x9f[\x80-\xbf][\x80-\xbf]|\xe2[\x98-\x9e][\x80-\xbf]|\xef\xb8\x8f' \
+            "$target" 2> /dev/null)"
+    fi
     if [ -n "$punct" ] || [ -n "$emoji" ]; then
         [ -n "$punct" ] && printf '%s\n' "$punct" | sed 's/^/  line /'
         [ -n "$emoji" ] && printf '%s\n' "$emoji" | sed 's/^/  emoji, line /'
@@ -165,12 +249,12 @@ for target in "${files[@]}"; do
     # not a divider.
     echo "--- structural tics"
     struct=0
-    div="$(grep -n -E '^[[:space:]]*-{3,}[[:space:]]*$' "$tmp_prose" | grep -v '^1:' || true)"
+    div="$("$GREP" -n -E '^[[:space:]]*-{3,}[[:space:]]*$' "$tmp_prose" | "$GREP" -v '^1:' || true)"
     if [ -n "$div" ]; then
         printf '%s\n' "$div" | sed 's/^/  divider, line /'
         struct=1
     fi
-    bold="$(grep -n -E '^[[:space:]]*[-*][[:space:]]+\*\*[^*]+\*\*[[:space:]]*[:-]' "$target" || true)"
+    bold="$("$GREP" -n -E '^[[:space:]]*[-*][[:space:]]+\*\*[^*]+\*\*[[:space:]]*[:-]' "$target" || true)"
     if [ -n "$bold" ]; then
         printf '%s\n' "$bold" | cut -c1-70 | sed 's/^/  bold-term bullet, line /'
         struct=1
@@ -181,27 +265,27 @@ for target in "${files[@]}"; do
     # the tally. Detection from content is a judgment call and stays with the
     # reader of this output.
     echo "--- spelling variant"
-    marker="$(head -20 "$target" 2>/dev/null \
-        | grep -i -o -m1 -E '^[[:space:]]*(<!--|%|#|//)?[[:space:]]*variant:[[:space:]]*(us|eu|gb|uk|british)' \
-        | grep -i -o -E 'variant:[[:space:]]*(us|eu|gb|uk|british)' | tr 'A-Z' 'a-z')"
+    marker="$(head -20 "$target" 2> /dev/null \
+        | "$GREP" -i -o -m1 -E '^[[:space:]]*(<!--|%|#|//)?[[:space:]]*variant:[[:space:]]*(us|eu|gb|uk|british)' \
+        | "$GREP" -i -o -E 'variant:[[:space:]]*(us|eu|gb|uk|british)' | tr 'A-Z' 'a-z')"
     us_hits=""
     gb_hits=""
     while IFS='|' read -r us gb; do
         case "$us" in ''|'#'*) continue ;; esac
-        found="$(grep -i -o -w -E "${us%e}(e|es|ed|ing|s|ations?)?" "$tmp_prose" 2>/dev/null)"
+        found="$("$GREP" -i -o -w -E "${us%e}(e|es|ed|ing|s|ations?)?" "$tmp_prose" 2> /dev/null)"
         [ -n "$found" ] && us_hits="${us_hits}${found}"$'\n'
-        found="$(grep -i -o -w -E "${gb%e}(e|es|ed|ing|s|ations?)?" "$tmp_prose" 2>/dev/null)"
+        found="$("$GREP" -i -o -w -E "${gb%e}(e|es|ed|ing|s|ations?)?" "$tmp_prose" 2> /dev/null)"
         [ -n "$found" ] && gb_hits="${gb_hits}${found}"$'\n'
     done < "$pairs"
 
-    ize="$(grep -i -o -E '\b[a-z]{3,}(ize|izes|ized|izing|ization|izations)\b' "$tmp_prose" 2>/dev/null)"
-    ise="$(grep -i -o -E '\b[a-z]{3,}(ise|ises|ised|ising|isation|isations)\b' "$tmp_prose" 2>/dev/null \
-           | grep -i -v -E "^(${ise_both})(s|es|ed|ing|d)?$" || true)"
+    ize="$("$GREP" -i -o -w -E "$(port '\b[a-z]{3,}(ize|izes|ized|izing|ization|izations)\b')" "$tmp_prose" 2> /dev/null)"
+    ise="$("$GREP" -i -o -w -E "$(port '\b[a-z]{3,}(ise|ises|ised|ising|isation|isations)\b')" "$tmp_prose" 2> /dev/null \
+           | "$GREP" -i -v -E "^(${ise_both})(s|es|ed|ing|d)?$" || true)"
     [ -n "$ize" ] && us_hits="${us_hits}${ize}"$'\n'
     [ -n "$ise" ] && gb_hits="${gb_hits}${ise}"$'\n'
 
-    n_us="$(printf '%s' "$us_hits" | grep -c . || true)"
-    n_gb="$(printf '%s' "$gb_hits" | grep -c . || true)"
+    n_us="$(printf '%s' "$us_hits" | "$GREP" -c . || true)"
+    n_gb="$(printf '%s' "$gb_hits" | "$GREP" -c . || true)"
 
     eff="$variant"
     if [ -n "$marker" ]; then
@@ -234,13 +318,17 @@ for target in "${files[@]}"; do
         '\b[0-9]+(GB|MB|TB|KB|MHz|GHz|ms|Gbit)\b::missing space between number and unit'
     do
         pat="${check%%::*}"; note="${check##*::}"
-        hit="$(grep -n -o -E "$pat" "$target" 2>/dev/null)"
+        hit="$("$GREP" -n -o $WB_FLAG -E "$(port "$pat")" "$target" 2> /dev/null)"
         if [ -n "$hit" ]; then
             printf '%s\n' "$hit" | sed "s/^/  line /; s/$/   <- $note/"
             loc=1
         fi
     done
-    tz="$(grep -n -o -P '\b\d{1,2}:\d{2}\b(?![[:space:]]?(UTC|GMT|CES?T|EES?T|WES?T|Z\b|[+-]\d{2}))' "$target" 2>/dev/null)"
+    # A time with no zone. Matching the optional zone greedily and then keeping
+    # only the matches that stopped at the minutes avoids a negative lookahead,
+    # which BSD grep has no way to express.
+    tz="$("$GREP" -n -o -E '[0-9]{1,2}:[0-9]{2}([[:space:]]*(UTC|GMT|CES?T|EES?T|WES?T|Z|[+-][0-9]{2}:?[0-9]{2}))?' "$target" 2> /dev/null \
+          | "$GREP" -E ':[0-9]{1,2}:[0-9]{2}$' || true)"
     if [ -n "$tz" ]; then
         printf '%s\n' "$tz" | sed 's/^/  line /; s/$/   <- time without a time zone/'
         loc=1
@@ -251,11 +339,11 @@ for target in "${files[@]}"; do
     # references/l1/<language>.md holds what each L1 adds.
     if [ "$do_l1" = "yes" ]; then
         echo "--- second-language interference"
-        tmp_e="$(mktemp)"; tmp_f="$(mktemp)"
+        tmp_e="$(tmpfile)"; tmp_f="$(tmpfile)"
         scan_list "$tmp_join2" "$l1_err" > "$tmp_e"
         scan_list "$tmp_join2" "$l1_ff" > "$tmp_f"
-        n_e="$(grep -c . "$tmp_e" || true)"
-        n_f="$(grep -c . "$tmp_f" || true)"
+        n_e="$("$GREP" -c . "$tmp_e" || true)"
+        n_f="$("$GREP" -c . "$tmp_f" || true)"
         if [ "$n_e" -gt 0 ]; then
             echo "  wrong in any register: $n_e"
             sort -k2,2n "$tmp_e"

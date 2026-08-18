@@ -142,9 +142,12 @@ mixed spelling variants, date and unit problems, and second-language
 interference. Phrases are matched against whole paragraphs, so hard-wrapped mail
 text is scanned correctly.
 
-Requirements: bash and GNU grep with `-P`, which SLES, openSUSE and most
-distributions ship by default. The script only reads; it writes nothing outside
-`/tmp`.
+Requirements: bash and grep. GNU grep is used when present, including Homebrew's
+`ggrep`. macOS ships the BSD grep, which has neither PCRE (`-P`) nor GNU word
+boundaries; the scanner detects this and takes a portable path that produces the
+same report, with a coarser emoji match. `brew install grep` restores the full
+set. `SCAN_FORCE_POSIX=1` exercises the portable path on a GNU system. The script
+only reads; it writes nothing outside `/tmp`.
 
 ## What it does not do
 
