@@ -17,6 +17,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Run the test suite
+        run: bash tests/run.sh
+
+      - name: Run the test suite against the other awk implementations
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq original-awk mawk gawk
+          for a in gawk original-awk mawk; do
+            echo "== $a"
+            AWK="$a" bash tests/run.sh
+          done
+
       - name: Build claudism-pass.skill
         run: |
           mkdir -p build/claudism-pass
