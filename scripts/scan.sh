@@ -94,9 +94,13 @@ loose="${ref}/patterns-loose.txt"
 pairs="${ref}/variant-pairs.txt"
 l1_err="${ref}/l1/errors.txt"
 l1_ff="${ref}/l1/false-friends.txt"
+hidden="${ref}/hidden-unicode.txt"
 
 variant="auto"
 do_l1="yes"
+gate="no"
+baseline=""
+write_baseline=""
 nfiles=0
 files=()
 for arg in "$@"; do
@@ -105,10 +109,16 @@ for arg in "$@"; do
         --eu|--gb|--variant=eu)     variant="eu" ;;
         --variant=auto)             variant="auto" ;;
         --no-l1)                    do_l1="no" ;;
+        --gate)                     gate="yes" ;;
+        --baseline=*)               baseline="${arg#*=}" ;;
+        --write-baseline=*)         write_baseline="${arg#*=}" ;;
         -h|--help)
             echo "usage: bash scan.sh [--us|--eu] [--no-l1] FILE [FILE...]"
             echo "  --us | --eu   force the spelling variant (default: auto)"
             echo "  --no-l1       skip the second-language interference check"
+            echo "  --gate        exit 1 if any unambiguous hit is found (for CI)"
+            echo "  --baseline=F  ratchet against per-file counts in F; exit 1 on drift"
+            echo "  --write-baseline=F  record the current counts as the new floor"
             exit 0 ;;
         -*)
             echo "scan.sh: unknown option $arg" >&2
@@ -122,7 +132,7 @@ if [ "$nfiles" -lt 1 ]; then
     exit 2
 fi
 
-for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff"; do
+for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff" "$hidden"; do
     if [ ! -r "$f" ]; then
         echo "scan.sh: cannot read $f" >&2
         exit 2
@@ -185,6 +195,8 @@ scan_list() {
 # ------------------------------------------------------------------------ main
 
 total=0
+gate_total=0
+gate_counts="$(tmpfile)"
 
 for target in "${files[@]}"; do
     if [ ! -r "$target" ]; then
@@ -193,6 +205,7 @@ for target in "${files[@]}"; do
     fi
 
     echo "=== $target"
+    gate_n=0
 
     tmp_join="$(tmpfile)"
     tmp_strict="$(tmpfile)"
@@ -210,9 +223,35 @@ for target in "${files[@]}"; do
 
     echo "--- banlist hits, rewrite these: $n_strict"
     [ "$n_strict" -gt 0 ] && sort -k2,2n "$tmp_strict"
+    gate_n=$((gate_n + n_strict))
     echo "--- needs judgment, check the carve-outs in SKILL.md: $n_loose"
     [ "$n_loose" -gt 0 ] && cat "$tmp_loose"
     rm -f "$tmp_join" "$tmp_strict" "$tmp_loose"
+
+    # Invisible characters. Nothing here has a legitimate use in a plain-text
+    # technical document, and none of it shows up in an editor. Matched as
+    # literal bytes, so no PCRE is needed.
+    echo "--- hidden characters"
+    hid=0
+    while IFS="$(printf '\t')" read -r esc name; do
+        case "$esc" in
+            ''|'#'*) continue ;;
+        esac
+        ch="$(printf '%b' "$esc")"
+        found="$(LC_ALL=C "$GREP" -c -F "$ch" "$target" 2> /dev/null || true)"
+        if [ "${found:-0}" -gt 0 ]; then
+            lines="$(LC_ALL=C "$GREP" -n -F "$ch" "$target" | cut -d: -f1 | tr '\n' ' ')"
+            printf '  %-38s x%-4s line %s\n' "$name" "$found" "$lines"
+            hid=$((hid + found))
+        fi
+    done < "$hidden"
+    ent="$("$GREP" -n -i -o -E '&(mdash|ndash|nbsp|ensp|emsp|thinsp|shy|#8212|#x2014|#160|#8194|#8195|#8201|#8239|#173|#8203);' "$target" 2> /dev/null || true)"
+    if [ -n "$ent" ]; then
+        printf '%s\n' "$ent" | sed 's/^/  HTML entity, line /'
+        hid=$((hid + $(printf '%s\n' "$ent" | "$GREP" -c . )))
+    fi
+    [ "$hid" -eq 0 ] && echo "  clean"
+    gate_n=$((gate_n + hid))
 
     # Decorative punctuation. Straight quotes, plain hyphen and three dots
     # instead. Diacritics belong to the spelling and are never flagged.
@@ -241,6 +280,7 @@ for target in "${files[@]}"; do
     if [ -n "$punct" ] || [ -n "$emoji" ]; then
         [ -n "$punct" ] && printf '%s\n' "$punct" | sed 's/^/  line /'
         [ -n "$emoji" ] && printf '%s\n' "$emoji" | sed 's/^/  emoji, line /'
+        gate_n=$((gate_n + $(printf '%s%s' "$punct" "$emoji" | "$GREP" -c . || true)))
     else
         echo "  clean"
     fi
@@ -260,6 +300,7 @@ for target in "${files[@]}"; do
         struct=1
     fi
     [ "$struct" -eq 0 ] && echo "  clean"
+    gate_n=$((gate_n + struct))
 
     # Spelling variant. Explicit flag beats a marker in the file, which beats
     # the tally. Detection from content is a judgment call and stays with the
@@ -347,6 +388,7 @@ for target in "${files[@]}"; do
         if [ "$n_e" -gt 0 ]; then
             echo "  wrong in any register: $n_e"
             sort -k2,2n "$tmp_e"
+            gate_n=$((gate_n + n_e))
         fi
         if [ "$n_f" -gt 0 ]; then
             echo "  false friends, check against the L1 file: $n_f"
@@ -358,8 +400,64 @@ for target in "${files[@]}"; do
     rm -f "$tmp_join2" "$tmp_prose"
 
     total=$((total + n_strict + n_loose))
+    [ "$gate_n" -gt 0 ] && printf '%s %s\n' "$gate_n" "$target" >> "$gate_counts"
+    gate_total=$((gate_total + gate_n))
     echo
 done
 
 echo "total phrase hits: $total"
+echo "gate hits (unambiguous, ratchetable): $gate_total"
 echo "Now read the draft for the constructions grep cannot see (SKILL.md, step 2)."
+
+# The gate counts only what needs no judgment: banlist phrases, hidden
+# characters, decorative punctuation, structural tics, and interference that is
+# wrong in any register. Loose hits and false friends never fail a build.
+rc=0
+
+if [ -n "$write_baseline" ]; then
+    sort -k2 "$gate_counts" > "$write_baseline"
+    echo
+    echo "wrote baseline: $("$GREP" -c . "$write_baseline" || true) files, $gate_total hits"
+fi
+
+if [ -n "$baseline" ]; then
+    echo
+    if [ ! -r "$baseline" ]; then
+        echo "scan.sh: cannot read baseline $baseline" >&2
+        rm -f "$gate_counts"
+        exit 2
+    fi
+    # A ratchet fails three ways: a file got worse, a file is new and dirty, and
+    # a file improved without the win being recorded. The third keeps the
+    # baseline honest about the real floor.
+    drift=0
+    while read -r was file; do
+        [ -n "${file:-}" ] || continue
+        now="$("$GREP" -E "^[0-9]+ ${file}$" "$gate_counts" 2> /dev/null | cut -d' ' -f1)"
+        now="${now:-0}"
+        if [ "$now" -gt "$was" ]; then
+            echo "regressed: $file $was -> $now"
+            drift=1
+        elif [ "$now" -lt "$was" ]; then
+            echo "improved:  $file $was -> $now   lock it in with --write-baseline"
+            drift=1
+        fi
+    done < "$baseline"
+    while read -r now file; do
+        [ -n "${file:-}" ] || continue
+        if ! "$GREP" -q -E "^[0-9]+ ${file}$" "$baseline" 2> /dev/null; then
+            echo "new and not clean: $file has $now"
+            drift=1
+        fi
+    done < "$gate_counts"
+    if [ "$drift" -eq 0 ]; then
+        echo "ratchet holds: no file above its baseline"
+    else
+        rc=1
+    fi
+elif [ "$gate" = "yes" ] && [ "$gate_total" -gt 0 ]; then
+    rc=1
+fi
+
+rm -f "$gate_counts"
+exit "$rc"
