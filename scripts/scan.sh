@@ -178,16 +178,18 @@ strip_quoted() {
 # Comment syntax by file extension, for --comments. See scripts/comments.awk.
 awk_lang() {
     case "$1" in
-        *.c|*.h|*.cc|*.cpp|*.hpp|*.java|*.go|*.rs|*.css|*.scss|*.kt|*.swift|*.cs)
-            echo "cfamily" ;;
-        *.ts|*.tsx|*.js|*.jsx|*.mjs)
-            echo "cfamily" ;;
-        *.sh|*.bash|*.zsh|*.py|*.rb|*.pl|*.yaml|*.yml|*.toml|*.cfg|*.conf|Makefile|*.mk|*.spec)
-            echo "hash" ;;
-        *.sql|*.lua|*.adb|*.ads)  echo "dash" ;;
-        *.el|*.lisp|*.scm|*.ini|*.asm|*.s) echo "semi" ;;
-        *.tex|*.sty|*.erl)        echo "percent" ;;
-        *)                        echo "hash" ;;
+        *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs)   echo "js" ;;
+        *.rs)                                echo "rust" ;;
+        *.py)                                echo "python" ;;
+        *.sh|*.bash|*.zsh)                   echo "shell" ;;
+        *.c|*.h|*.cc|*.cpp|*.hpp|*.java|*.go|*.css|*.scss|*.kt|*.swift|*.cs)
+                                             echo "cfamily" ;;
+        *.rb|*.pl|*.yaml|*.yml|*.toml|*.cfg|*.conf|Makefile|*.mk|*.spec)
+                                             echo "hash" ;;
+        *.sql|*.lua|*.adb|*.ads)             echo "dash" ;;
+        *.el|*.lisp|*.scm|*.ini|*.asm|*.s)   echo "semi" ;;
+        *.tex|*.sty|*.erl)                   echo "percent" ;;
+        *)                                   echo "hash" ;;
     esac
 }
 
@@ -245,9 +247,9 @@ for target in "${files[@]}"; do
     if [ "$do_comments" = "yes" ]; then
         lang="$(awk_lang "$target")"
         case "$target" in
-            *.ts|*.tsx|*.js|*.jsx|*.mjs)
-                echo "  note: a regex literal can throw the lexer off in this language;" >&2
-                echo "        treat the result as approximate." >&2 ;;
+            *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs)
+                echo "  note: a slash after a closing parenthesis is read as division," >&2
+                echo "        so 'if (x) /re/.test(s)' misreads that one line." >&2 ;;
         esac
         awk -v lang="$lang" -f "${here}/comments.awk" "$target" > "$tmp_prose"
         check_src="$tmp_prose"

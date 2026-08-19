@@ -1,0 +1,29 @@
+=== tests/docs/pasted.md
+--- banlist hits, rewrite these: 0
+--- needs judgment, check the carve-outs in SKILL.md: 1
+  line 9      Would you like me to           [\b[Ww]ould you like me to\b]
+--- leaked scaffolding and chatbot boilerplate
+  line 1      Certainly! Here's              [^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|I('ve| have) (created|drafted|outlined|prepared))]
+  line 3      As an AI                       [[Aa]s an? (AI|artificial intelligence|large language model|language model)]
+  line 3      I do not have access to real-t [I (do not|don't) have (access to real.time|the ability to browse|personal (opinions|experiences|feelings))]
+  line 4      my knowledge cutoff            [(my|the) knowledge cut.?off]
+  line 4:built by xAI   [self-identification, outside quotes]
+  line 6      contentReference[oaicite       [contentReference\[oaicite]
+  line 6      oaicite                        [oaicite]
+  line 7      utm_source=chatgpt.com         [utm_source=(chatgpt\.com|openai)]
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 1
+gate hits (unambiguous, ratchetable): 8
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

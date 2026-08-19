@@ -146,3 +146,39 @@
 \bthree things to know\b
 \bkey takeaways\b
 \bthe one (thing|part|piece|example|line|idea) that\b
+
+# --- imported from a deterministic docs gate (colleague of the author, 2026-08)
+\bearns its keep\b
+\b(bar is (high|low|higher|lower)|rais(e|es|ed|ing) the bar)\b
+\bphysically cannot\b
+\bdeep[ -]dive\b
+\bit deserves\b
+\bwhere [a-z']+ (sits|fits)\b
+\bthe [a-z']+ fits\b
+\ba testament to\b
+\btapestry\b
+\btreasure trove\b
+\bin today'?s (world|era|fast)\b
+\bworth (knowing|naming)\b
+\bwhat [a-z].{0,60} is worth\b
+\bmoving on to\b
+\bhonesty notes?\b
+\banchors? it\b
+\bstructurally [a-z]+\b
+\bsurvivab[a-z]*\b
+\bsmoke[ -]test\b
+\bin (the )?(existing|wider|current|competitive) landscape\b
+\bunderscor(es|ing) (the|how|that|a|an)\b
+\bleverag(e|es|ed|ing) (the|its|our|your|their|a|an)\b
+
+# --- from the Lolly field notes (Andy Fitzsimon, SUSE), 2026-08
+\bwhether you('re| are) an? .{2,30} or an? \b
+\b(serves|stands|functions) as\b
+, (highlighting|emphasizing|emphasising|underscoring|reflecting|showcasing|demonstrating|ensuring|fostering|enhancing) 
+\b(foundationally|fundamentally) [a-z]+\b
+\bhere'?s the kicker\b
+\bwant me to .{3,80}\?
+\bmulti-pronged approach\b
+\bit is crucial to acknowledge\b
+\bcamaraderie\b
+\bpalpable\b

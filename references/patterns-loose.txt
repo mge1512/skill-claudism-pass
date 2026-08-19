@@ -30,3 +30,17 @@
 \bobliterate(d|s)?\b
 \bblow up\b
 \bmatters?\b
+# The copula flourish: a clause that redefines its subject and hedges with a
+# trailing "here". Approximated without lookbehind, so "there is a X here" and
+# similar legitimate locatives turn up too. Judgment call.
+\bis (not )?(the|a|an) [a-z'-]+( [a-z'-]+){0,2} here[.,!?:;]
+
+# --- chatbot closers, soft grade. Humans write these too, so they are signal
+# only in bulk and never a conviction on their own (Lolly field notes).
+\bI hope this (helps|email finds you well)\b
+\blet me know if you('d like| have any| need| want)\b
+\b[Ww]ould you like me to\b
+\bfeel free to (reach out|ask|adjust|modify|tweak)\b
+\b[Yy]ou('re| are) absolutely right\b
+\bnot (meant as )?a substitute for professional (medical|legal|financial) advice\b
+\bconsult (with )?a (qualified|licensed) professional\b

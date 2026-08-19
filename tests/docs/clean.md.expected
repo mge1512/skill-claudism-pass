@@ -1,0 +1,21 @@
+=== tests/docs/clean.md
+--- banlist hits, rewrite these: 0
+--- needs judgment, check the carve-outs in SKILL.md: 0
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 0
+gate hits (unambiguous, ratchetable): 0
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

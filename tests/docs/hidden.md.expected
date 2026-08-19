@@ -1,0 +1,24 @@
+=== tests/docs/hidden.md
+--- banlist hits, rewrite these: 0
+--- needs judgment, check the carve-outs in SKILL.md: 0
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  NO-BREAK SPACE                         x1    line 1 
+  ZERO WIDTH SPACE                       x1    line 1 
+  SECTION SIGN (say "section 4" instead) x1    line 1 
+  TAG CHARACTERS (U+E0000-E007F, hidden-instruction channel) x1
+--- decorative punctuation
+  line 1: 
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 0
+gate hits (unambiguous, ratchetable): 5
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

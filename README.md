@@ -256,6 +256,24 @@ claudism-pass/
     └── scan.sh                    the mechanical pass
 ```
 
+## Tests
+
+```bash
+bash tests/run.sh              # exit 1 on any difference
+bash tests/run.sh --update     # re-record after an intended change
+```
+
+`tests/lexer/<lang>.<ext>` exercises `comments.awk` on its own, so a lexer
+regression is isolated. `tests/docs/*.md` exercises the whole scanner, each case
+run twice: once with the installed grep and once with `SCAN_FORCE_POSIX=1`,
+because the portable path is a separate implementation. Two cases assert that
+the gate fails a dirty file and passes a clean one.
+
+A fixture is only useful if its output differs when the code breaks. The
+division-before-a-line-comment case exists because the obvious fixture,
+`a / b / c`, blanks identically whether the slash is read as division or as a
+regular expression, so it cannot detect the difference.
+
 ## Contributing
 
 The banlist and the language files are meant to grow.

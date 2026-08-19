@@ -98,6 +98,10 @@ bash "$SKILL_DIR/scripts/scan.sh" draft.md
 bash "$SKILL_DIR/scripts/scan.sh" --eu tender.md
 ```
 
+The scanner also reports leaked scaffolding: citation and tool-call tokens, prompt-format tags, stamped URL parameters and chatbot boilerplate ("As an AI language model", knowledge-cutoff disclaimers, compliance openers). These convict where a style tell only suggests, and the token is pure noise, so a hit is always a removal. Tokens inside code spans are ignored, so a document that documents them stays clean.
+
+The scanner also reports invisible characters: zero-width spaces and joiners, bidi controls, byte order marks, soft hyphens, non-breaking and exotic spaces, and their HTML entity spellings. None of these have a use in a plain-text technical document, and none show up in an editor, so a hit is always a paste artifact and always gets removed. Two are reported but never counted: the zero-width joiner and non-joiner carry meaning in Arabic and Indic shaping, and removing them corrupts the text.
+
 Without a flag the scanner reads a `variant:` marker in the file, and falls back
 to a tally of the spellings it finds. `--us` and `--eu` override both and list
 every word that needs converting. It also checks dates, clock, decimal separator,

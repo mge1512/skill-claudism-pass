@@ -1,0 +1,53 @@
+# Invisible and near-invisible characters. Format: octal escape TAB name.
+# These do not show up in an editor and are a reliable fingerprint of text that
+# was pasted out of a model, a word processor or a web page. Unlike the
+# decorative punctuation list, nothing here has a legitimate use in a plain-text
+# technical document.
+#
+# Idea taken from a deterministic docs gate written by a colleague of Matthias
+# Eckermann, which checks the same class of characters.
+
+\302\240	NO-BREAK SPACE
+\302\255	SOFT HYPHEN
+\302\205	NEXT LINE (NEL)
+\342\200\213	ZERO WIDTH SPACE
+\342\201\240	WORD JOINER
+\357\273\277	BYTE ORDER MARK
+\342\200\221	NON-BREAKING HYPHEN
+\342\200\250	LINE SEPARATOR
+\342\200\251	PARAGRAPH SEPARATOR
+\342\200\252	BIDI LEFT-TO-RIGHT EMBEDDING
+\342\200\253	BIDI RIGHT-TO-LEFT EMBEDDING
+\342\200\254	BIDI POP DIRECTIONAL FORMATTING
+\342\200\255	BIDI LEFT-TO-RIGHT OVERRIDE
+\342\200\256	BIDI RIGHT-TO-LEFT OVERRIDE
+\342\201\246	BIDI LEFT-TO-RIGHT ISOLATE
+\342\201\247	BIDI RIGHT-TO-LEFT ISOLATE
+\342\201\250	BIDI FIRST STRONG ISOLATE
+\342\201\251	BIDI POP DIRECTIONAL ISOLATE
+\342\200\200	EN QUAD
+\342\200\201	EM QUAD
+\342\200\202	EN SPACE
+\342\200\203	EM SPACE
+\342\200\204	THREE-PER-EM SPACE
+\342\200\205	FOUR-PER-EM SPACE
+\342\200\206	SIX-PER-EM SPACE
+\342\200\207	FIGURE SPACE
+\342\200\210	PUNCTUATION SPACE
+\342\200\211	THIN SPACE
+\342\200\212	HAIR SPACE
+\342\200\257	NARROW NO-BREAK SPACE
+\342\201\237	MEDIUM MATHEMATICAL SPACE
+\341\232\200	OGHAM SPACE MARK
+\341\240\216	MONGOLIAN VOWEL SEPARATOR
+\343\200\200	IDEOGRAPHIC SPACE
+\302\247	SECTION SIGN (say "section 4" instead)
+
+# Context-dependent: invisible, but they carry meaning in Arabic and Indic
+# shaping and in emoji sequences, so removing them corrupts non-Latin text.
+# Reported separately and never counted towards the gate.
+?\342\200\214	ZERO WIDTH NON-JOINER (required in Arabic and Indic text)
+?\342\200\215	ZERO WIDTH JOINER (required in Arabic, Indic and emoji sequences)
+\015	CARRIAGE RETURN (CRLF line ending)
+\013	VERTICAL TAB
+\014	FORM FEED

@@ -1,0 +1,44 @@
+=== tests/docs/dirty.md
+--- banlist hits, rewrite these: 15
+  line 3      It's worth noting              [\bit(')?s worth noting\b]
+  line 3      leverage                       [\bleverag(e|es|ed|ing)\b]
+  line 3      not just a technical problem,  [\bnot just .{1,40}(it(')?s|but)\b]
+  line 3      surprised me most              [\b(surprised|struck) me (the )?(most|hardest)\b]
+  line 3      the one thing that             [\bthe one (thing|part|piece|example|line|idea) that\b]
+  line 3      worth noting                   [\bworth (sitting|noting|talking|asking|drawing|making|examining|considering|exploring|a look)\b]
+  line 3      worth noting                   [\bworth [a-z]+ing\b]
+  line 9      the right way                  [\bthe right (time|question|way|answer|tool|thing|approach|level|mindset)\b]
+  line 12     Let's break it down            [\blet(')?s (break it down|explore|dive|turn|look at)\b]
+  line 12     Most people I                  [\bmost people( i)?\b]
+  line 12     compounds                      [\b(compound|compounds|compounding)\b]
+  line 12     robust                         [\brobust\b]
+  line 12     seamless                       [\bseamless\b]
+  line 12     the tell                       [\bthe tell\b]
+  line 12     the whole game                 [\bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b]
+--- needs judgment, check the carve-outs in SKILL.md: 5
+  line 12     the whole game                 [\bthe (whole|entire) [a-z]+\b]
+  line 12     reach for                      [\breach(es|ing)? for\b]
+  line 12     surface                        [\bsurface\b]
+  line 12     lives                          [\blives\b]
+  line 1      matter                         [\bmatters?\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  line 13:—
+  emoji, line 14:🚀
+--- structural tics
+  divider, line 7:---
+  bold-term bullet, line 9:- **Provenance**: you need to know where the bits came from.
+  bold-term bullet, line 10:- **Policy**: the right way to enforce it is at admission time.
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 20
+gate hits (unambiguous, ratchetable): 17
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).
