@@ -149,6 +149,49 @@ same report, with a coarser emoji match. `brew install grep` restores the full
 set. `SCAN_FORCE_POSIX=1` exercises the portable path on a GNU system. The script
 only reads; it writes nothing outside `/tmp`.
 
+## Comments in source files
+
+Comments are prose that people read, so the same rules apply to them. `--comments`
+runs the checks over the comment text only, leaving code, strings and command
+output untouched.
+
+```bash
+scan.sh --comments engine/*.go scripts/*.sh
+```
+
+The comment text is extracted by `scripts/comments.awk`, a state machine in POSIX
+awk: it tracks strings and escapes, so a `//` inside a URL or a `#` inside
+`${#var}` is not mistaken for a comment, and a quote inside a comment does not
+confuse it. Comment syntax is chosen by file extension. Line numbers survive, so
+a hit still points at the right line of the original.
+
+The limit is the one no lexer can solve without the grammar of the language: in
+JavaScript and TypeScript a `/` may open a regular expression or divide, and a
+quote inside a regex can throw the string tracking off. The scanner warns on those
+extensions rather than pretending otherwise. If the language has a real parser
+available, use it.
+
+## Leaked scaffolding
+
+Copying out of a chat window brings more than prose with it. Citation tokens,
+tool-call markers, prompt-format tags and stamped URL parameters survive the
+paste and are pure noise, so the scanner always reports them:
+
+```
+--- leaked scaffolding and chatbot boilerplate
+  line 1   Certainly! Here's      [^(Sure|Certainly|Absolutely|Of course)[!,.] ...]
+  line 3   As an AI               [[Aa]s an? (AI|artificial intelligence|...)]
+  line 6   contentReference[oaicite
+  line 7   utm_source=chatgpt.com
+```
+
+`references/artifacts.txt` carries these. Two calibration rules keep them from
+firing on honest text: a line-start `Assistant:` counts only when a line-start
+`Human:` appears too, since film credits and staff rosters use it; and
+self-identification strings convict only outside quotation marks, since an
+article quoting a chatbot is a human writing about a machine. Tokens inside code
+spans are ignored, so a document that documents these tokens stays clean.
+
 ## Using it as a gate
 
 The scanner is deterministic: character and substring matching, no model in the
@@ -236,6 +279,13 @@ use, topic-comment structure, and politeness calibration instead.
 
 https://github.com/mge1512/skill-claudism-pass
 
+## Detection
+
+`references/detection.md` covers the other direction: what changes when the same
+lists are used to judge whether a text was machine-written rather than to clean
+it up. Short version, evidence has grades, density beats count, and style alone
+never names a model.
+
 ## Source and license
 
 `references/banlist.md` is the Claudisms banlist from https://claudisms.ai/
@@ -249,6 +299,10 @@ Everything else here - the skill, the scanner, the pattern lists, the language
 files - is dedicated to the public domain under the same terms. See `LICENSE`.
 
 Authors: Matthias Georg Eckermann (mge1512), with Claude (Anthropic) as co-author.
+
+The leaked-scaffolding list, the chatbot-register patterns, the detection notes
+and several corrections to the variant pairs and the invisible-character list
+come from the Lolly project (Andy Fitzsimon, SUSE), contributed under CC0 1.0.
 
 CC0 removes the obligation to give credit. Credit is given here anyway, and anyone
 reusing this is asked, not required, to do the same.

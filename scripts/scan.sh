@@ -95,10 +95,13 @@ pairs="${ref}/variant-pairs.txt"
 l1_err="${ref}/l1/errors.txt"
 l1_ff="${ref}/l1/false-friends.txt"
 hidden="${ref}/hidden-unicode.txt"
+artifacts="${ref}/artifacts.txt"
+lexicon_file="${ref}/VERSION"
 
 variant="auto"
 do_l1="yes"
 gate="no"
+do_comments="no"
 baseline=""
 write_baseline=""
 nfiles=0
@@ -109,6 +112,7 @@ for arg in "$@"; do
         --eu|--gb|--variant=eu)     variant="eu" ;;
         --variant=auto)             variant="auto" ;;
         --no-l1)                    do_l1="no" ;;
+        --comments)                 do_comments="yes" ;;
         --gate)                     gate="yes" ;;
         --baseline=*)               baseline="${arg#*=}" ;;
         --write-baseline=*)         write_baseline="${arg#*=}" ;;
@@ -116,6 +120,7 @@ for arg in "$@"; do
             echo "usage: bash scan.sh [--us|--eu] [--no-l1] FILE [FILE...]"
             echo "  --us | --eu   force the spelling variant (default: auto)"
             echo "  --no-l1       skip the second-language interference check"
+            echo "  --comments    scan the comments of a source file, not prose"
             echo "  --gate        exit 1 if any unambiguous hit is found (for CI)"
             echo "  --baseline=F  ratchet against per-file counts in F; exit 1 on drift"
             echo "  --write-baseline=F  record the current counts as the new floor"
@@ -132,7 +137,7 @@ if [ "$nfiles" -lt 1 ]; then
     exit 2
 fi
 
-for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff" "$hidden"; do
+for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff" "$hidden" "$artifacts"; do
     if [ ! -r "$f" ]; then
         echo "scan.sh: cannot read $f" >&2
         exit 2
@@ -145,6 +150,8 @@ if [ "$has_p" != "yes" ] || [ "$has_wb" != "yes" ]; then
     echo "         provides ggrep and this message goes away."
     echo
 fi
+
+lexicon="$(cat "$lexicon_file" 2> /dev/null || echo unknown)"
 
 # -ise verbs that are spelled the same in both variants.
 ise_both='advertise|advise|apprise|arise|chastise|circumcise|comprise|compromise|concise|demise|despise|devise|disguise|enterprise|excise|exercise|expertise|franchise|improvise|incise|likewise|merchandise|otherwise|paradise|precise|premise|promise|revise|rise|supervise|surprise|televise|wise'
@@ -159,6 +166,29 @@ strip_code() {
         inblock { print ""; next }
         { gsub(/`[^`]*`/, " "); print }
     ' "$1"
+}
+
+# Blank the contents of double-quoted spans. A document that quotes a chatbot is
+# a human writing about a machine, so the self-identification patterns must not
+# fire inside quotation marks.
+strip_quoted() {
+    awk '{ gsub(/"[^"]*"/, " "); print }' "$1"
+}
+
+# Comment syntax by file extension, for --comments. See scripts/comments.awk.
+awk_lang() {
+    case "$1" in
+        *.c|*.h|*.cc|*.cpp|*.hpp|*.java|*.go|*.rs|*.css|*.scss|*.kt|*.swift|*.cs)
+            echo "cfamily" ;;
+        *.ts|*.tsx|*.js|*.jsx|*.mjs)
+            echo "cfamily" ;;
+        *.sh|*.bash|*.zsh|*.py|*.rb|*.pl|*.yaml|*.yml|*.toml|*.cfg|*.conf|Makefile|*.mk|*.spec)
+            echo "hash" ;;
+        *.sql|*.lua|*.adb|*.ads)  echo "dash" ;;
+        *.el|*.lisp|*.scm|*.ini|*.asm|*.s) echo "semi" ;;
+        *.tex|*.sty|*.erl)        echo "percent" ;;
+        *)                        echo "hash" ;;
+    esac
 }
 
 # One paragraph per output line, prefixed with the line it starts on.
@@ -212,7 +242,19 @@ for target in "${files[@]}"; do
     tmp_loose="$(tmpfile)"
     tmp_prose="$(tmpfile)"
     tmp_join2="$(tmpfile)"
-    strip_code "$target" > "$tmp_prose"
+    if [ "$do_comments" = "yes" ]; then
+        lang="$(awk_lang "$target")"
+        case "$target" in
+            *.ts|*.tsx|*.js|*.jsx|*.mjs)
+                echo "  note: a regex literal can throw the lexer off in this language;" >&2
+                echo "        treat the result as approximate." >&2 ;;
+        esac
+        awk -v lang="$lang" -f "${here}/comments.awk" "$target" > "$tmp_prose"
+        check_src="$tmp_prose"
+    else
+        strip_code "$target" > "$tmp_prose"
+        check_src="$target"
+    fi
     join_paragraphs "$tmp_prose" > "$tmp_join"
     cp "$tmp_join" "$tmp_join2"
     scan_list "$tmp_join" "$strict" > "$tmp_strict"
@@ -228,6 +270,43 @@ for target in "${files[@]}"; do
     [ "$n_loose" -gt 0 ] && cat "$tmp_loose"
     rm -f "$tmp_join" "$tmp_strict" "$tmp_loose"
 
+    # Leaked scaffolding and chatbot boilerplate. A hit here is near-certain
+    # machine origin and pure noise, so it is always a removal.
+    echo "--- leaked scaffolding and chatbot boilerplate"
+    tmp_art="$(tmpfile)"
+    while IFS= read -r pat; do
+        case "$pat" in
+            ''|'#'*) continue ;;
+        esac
+        while IFS= read -r hit; do
+            [ -n "$hit" ] || continue
+            printf '  line %-6s %-30s [%s]\n' \
+                "${hit%%:*}" "$(printf '%s' "${hit#*:}" | cut -c1-30)" "$pat" >> "$tmp_art"
+        done < <("$GREP" -n -o -E "$(port "$pat")" "$tmp_prose" 2> /dev/null)
+    done < "$artifacts"
+    # A line-start "Assistant:" is ordinary human writing (film credits, staff
+    # rosters). It counts only when a line-start "Human:" appears as well.
+    if "$GREP" -q -E '^[[:space:]]*Human:' "$tmp_prose" 2> /dev/null \
+       && "$GREP" -q -E '^[[:space:]]*Assistant:' "$tmp_prose" 2> /dev/null; then
+        echo "  Human:/Assistant: transcript markers, both present" >> "$tmp_art"
+    fi
+    # Self-identification convicts only outside quotation marks.
+    tmp_unq="$(tmpfile)"
+    strip_quoted "$tmp_prose" > "$tmp_unq"
+    selfid="$("$GREP" -n -o -E -i "(I am|I'm) (Grok|Claude|ChatGPT|Gemini)( built by| made by| trained by| created by)|built by (xAI|Anthropic|OpenAI)|trained by (Google|OpenAI|Anthropic)" "$tmp_unq" 2> /dev/null || true)"
+    if [ -n "$selfid" ]; then
+        printf '%s\n' "$selfid" | sed 's|^|  line |; s|$|   [self-identification, outside quotes]|' >> "$tmp_art"
+    fi
+    rm -f "$tmp_unq"
+    n_art="$("$GREP" -c . "$tmp_art" || true)"
+    if [ "$n_art" -gt 0 ]; then
+        sort -k2,2n "$tmp_art"
+    else
+        echo "  clean"
+    fi
+    rm -f "$tmp_art"
+    gate_n=$((gate_n + n_art))
+
     # Invisible characters. Nothing here has a legitimate use in a plain-text
     # technical document, and none of it shows up in an editor. Matched as
     # literal bytes, so no PCRE is needed.
@@ -237,15 +316,39 @@ for target in "${files[@]}"; do
         case "$esc" in
             ''|'#'*) continue ;;
         esac
+        ctx="no"
+        case "$esc" in
+            '?'*) ctx="yes"; esc="${esc#?}" ;;
+        esac
         ch="$(printf '%b' "$esc")"
-        found="$(LC_ALL=C "$GREP" -c -F "$ch" "$target" 2> /dev/null || true)"
+        found="$(LC_ALL=C "$GREP" -c -F "$ch" "$check_src" 2> /dev/null || true)"
         if [ "${found:-0}" -gt 0 ]; then
-            lines="$(LC_ALL=C "$GREP" -n -F "$ch" "$target" | cut -d: -f1 | tr '\n' ' ')"
-            printf '  %-38s x%-4s line %s\n' "$name" "$found" "$lines"
-            hid=$((hid + found))
+            lines="$(LC_ALL=C "$GREP" -n -F "$ch" "$check_src" | cut -d: -f1 | tr '\n' ' ')"
+            if [ "$ctx" = "yes" ]; then
+                printf '  check: %-31s x%-4s line %s\n' "$name" "$found" "$lines"
+            else
+                printf '  %-38s x%-4s line %s\n' "$name" "$found" "$lines"
+                hid=$((hid + found))
+            fi
         fi
     done < "$hidden"
-    ent="$("$GREP" -n -i -o -E '&(mdash|ndash|nbsp|ensp|emsp|thinsp|shy|#8212|#x2014|#160|#8194|#8195|#8201|#8239|#173|#8203);' "$target" 2> /dev/null || true)"
+    # Ranges, which a literal list cannot express. Tag characters are both
+    # invisible and a known channel for hidden instructions; the private-use
+    # block wraps ChatGPT citation tokens, so finding it convicts even when the
+    # visible token has already been stripped.
+    for rng in \
+        '\363\240[\200\201][\200-\277]::TAG CHARACTERS (U+E0000-E007F, hidden-instruction channel)' \
+        '\363\240[\204-\207][\200-\277]::VARIATION SELECTOR SUPPLEMENT (U+E0100-E01EF)' \
+        '\356\210[\200-\206]::PRIVATE USE (U+E200-E206, wraps chat citation tokens)'
+    do
+        rpat="${rng%%::*}"; rname="${rng##*::}"
+        rhit="$(LC_ALL=C "$GREP" -c -E "$(printf '%b' "$rpat")" "$check_src" 2> /dev/null || true)"
+        if [ "${rhit:-0}" -gt 0 ]; then
+            printf '  %-38s x%s\n' "$rname" "$rhit"
+            hid=$((hid + rhit))
+        fi
+    done
+    ent="$("$GREP" -n -i -o -E '&(mdash|ndash|nbsp|ensp|emsp|thinsp|shy|#8212|#x2014|#160|#8194|#8195|#8201|#8239|#173|#8203);' "$check_src" 2> /dev/null || true)"
     if [ -n "$ent" ]; then
         printf '%s\n' "$ent" | sed 's/^/  HTML entity, line /'
         hid=$((hid + $(printf '%s\n' "$ent" | "$GREP" -c . )))
@@ -258,24 +361,24 @@ for target in "${files[@]}"; do
     echo "--- decorative punctuation"
     punct=""
     if [ "$has_p" = "yes" ]; then
-        punct="$("$GREP" -n -o -P '[\x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{00AB}\x{00BB}\x{2190}\x{2192}\x{2022}\x{00A0}\x{2264}\x{2265}\x{2260}]' "$target" 2> /dev/null)"
+        punct="$("$GREP" -n -o -P '[\x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{00AB}\x{00BB}\x{2190}\x{2192}\x{2022}\x{00A0}\x{2264}\x{2265}\x{2260}]' "$check_src" 2> /dev/null)"
     fi
     if [ -z "$punct" ]; then
         nbsp="$(printf '\302\240')"
         punct="$("$GREP" -n -o -F -e '—' -e '–' -e '‒' -e '―' -e '…' \
                                   -e '“' -e '”' -e '‘' -e '’' -e '«' -e '»' \
                                   -e '→' -e '←' -e '•' -e '≤' -e '≥' -e '≠' \
-                                  -e "$nbsp" "$target" 2> /dev/null)"
+                                  -e "$nbsp" "$check_src" 2> /dev/null)"
     fi
     if [ "$has_p" = "yes" ]; then
-        emoji="$("$GREP" -n -o -P '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]' "$target" 2> /dev/null)"
+        emoji="$("$GREP" -n -o -P '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]' "$check_src" 2> /dev/null)"
     else
         # Match the UTF-8 byte sequences instead: F0 9F xx xx covers the
         # pictographs, E2 98..9E xx the dingbats, EF B8 8F the variation
         # selector. Coarser than the PCRE ranges, and it needs no PCRE.
         emoji="$(LC_ALL=C "$GREP" -n -o -E \
             $'\xf0\x9f[\x80-\xbf][\x80-\xbf]|\xe2[\x98-\x9e][\x80-\xbf]|\xef\xb8\x8f' \
-            "$target" 2> /dev/null)"
+            "$check_src" 2> /dev/null)"
     fi
     if [ -n "$punct" ] || [ -n "$emoji" ]; then
         [ -n "$punct" ] && printf '%s\n' "$punct" | sed 's/^/  line /'
@@ -294,7 +397,7 @@ for target in "${files[@]}"; do
         printf '%s\n' "$div" | sed 's/^/  divider, line /'
         struct=1
     fi
-    bold="$("$GREP" -n -E '^[[:space:]]*[-*][[:space:]]+\*\*[^*]+\*\*[[:space:]]*[:-]' "$target" || true)"
+    bold="$("$GREP" -n -E '^[[:space:]]*[-*][[:space:]]+\*\*[^*]+\*\*[[:space:]]*[:-]' "$check_src" || true)"
     if [ -n "$bold" ]; then
         printf '%s\n' "$bold" | cut -c1-70 | sed 's/^/  bold-term bullet, line /'
         struct=1
@@ -306,7 +409,7 @@ for target in "${files[@]}"; do
     # the tally. Detection from content is a judgment call and stays with the
     # reader of this output.
     echo "--- spelling variant"
-    marker="$(head -20 "$target" 2> /dev/null \
+    marker="$(head -20 "$check_src" 2> /dev/null \
         | "$GREP" -i -o -m1 -E '^[[:space:]]*(<!--|%|#|//)?[[:space:]]*variant:[[:space:]]*(us|eu|gb|uk|british)' \
         | "$GREP" -i -o -E 'variant:[[:space:]]*(us|eu|gb|uk|british)' | tr 'A-Z' 'a-z')"
     us_hits=""
@@ -336,7 +439,9 @@ for target in "${files[@]}"; do
         fi
     fi
     echo "  US markers: $n_us   EU/British markers: $n_gb   (variant: $eff)"
-    if [ "$eff" = "auto" ] && [ "$n_us" -gt 0 ] && [ "$n_gb" -gt 0 ]; then
+    # One flipped word is a quotation, a proper noun or a package name. Two or
+    # more is a mixed document.
+    if [ "$eff" = "auto" ] && [ "$n_us" -ge 2 ] && [ "$n_gb" -ge 2 ]; then
         echo "  MIXED, pick one variant and convert the minority:"
         [ "$n_us" -le "$n_gb" ] && printf '%s' "$us_hits" | sort -u -f | sed 's/^/    US: /'
         [ "$n_gb" -lt "$n_us" ] && printf '%s' "$gb_hits" | sort -u -f | sed 's/^/    EU: /'
@@ -359,7 +464,7 @@ for target in "${files[@]}"; do
         '\b[0-9]+(GB|MB|TB|KB|MHz|GHz|ms|Gbit)\b::missing space between number and unit'
     do
         pat="${check%%::*}"; note="${check##*::}"
-        hit="$("$GREP" -n -o $WB_FLAG -E "$(port "$pat")" "$target" 2> /dev/null)"
+        hit="$("$GREP" -n -o $WB_FLAG -E "$(port "$pat")" "$check_src" 2> /dev/null)"
         if [ -n "$hit" ]; then
             printf '%s\n' "$hit" | sed "s/^/  line /; s/$/   <- $note/"
             loc=1
@@ -368,7 +473,7 @@ for target in "${files[@]}"; do
     # A time with no zone. Matching the optional zone greedily and then keeping
     # only the matches that stopped at the minutes avoids a negative lookahead,
     # which BSD grep has no way to express.
-    tz="$("$GREP" -n -o -E '[0-9]{1,2}:[0-9]{2}([[:space:]]*(UTC|GMT|CES?T|EES?T|WES?T|Z|[+-][0-9]{2}:?[0-9]{2}))?' "$target" 2> /dev/null \
+    tz="$("$GREP" -n -o -E '[0-9]{1,2}:[0-9]{2}([[:space:]]*(UTC|GMT|CES?T|EES?T|WES?T|Z|[+-][0-9]{2}:?[0-9]{2}))?' "$check_src" 2> /dev/null \
           | "$GREP" -E ':[0-9]{1,2}:[0-9]{2}$' || true)"
     if [ -n "$tz" ]; then
         printf '%s\n' "$tz" | sed 's/^/  line /; s/$/   <- time without a time zone/'
@@ -406,7 +511,7 @@ for target in "${files[@]}"; do
 done
 
 echo "total phrase hits: $total"
-echo "gate hits (unambiguous, ratchetable): $gate_total"
+echo "gate hits (unambiguous, ratchetable): $gate_total   lexicon $lexicon"
 echo "Now read the draft for the constructions grep cannot see (SKILL.md, step 2)."
 
 # The gate counts only what needs no judgment: banlist phrases, hidden
@@ -415,7 +520,7 @@ echo "Now read the draft for the constructions grep cannot see (SKILL.md, step 2
 rc=0
 
 if [ -n "$write_baseline" ]; then
-    sort -k2 "$gate_counts" > "$write_baseline"
+    { echo "# lexicon $lexicon"; sort -k2 "$gate_counts"; } > "$write_baseline"
     echo
     echo "wrote baseline: $("$GREP" -c . "$write_baseline" || true) files, $gate_total hits"
 fi
@@ -431,7 +536,13 @@ if [ -n "$baseline" ]; then
     # a file improved without the win being recorded. The third keeps the
     # baseline honest about the real floor.
     drift=0
+    base_lex="$("$GREP" -m1 '^# lexicon ' "$baseline" | cut -d' ' -f3)"
+    if [ "${base_lex:-none}" != "$lexicon" ]; then
+        echo "note: baseline was recorded against lexicon ${base_lex:-none}, the lists are now $lexicon."
+        echo "      Counts move when the lists change; re-record after reviewing."
+    fi
     while read -r was file; do
+        case "$was" in '#'*) continue ;; esac
         [ -n "${file:-}" ] || continue
         now="$("$GREP" -E "^[0-9]+ ${file}$" "$gate_counts" 2> /dev/null | cut -d' ' -f1)"
         now="${now:-0}"
@@ -444,6 +555,7 @@ if [ -n "$baseline" ]; then
         fi
     done < "$baseline"
     while read -r now file; do
+        case "$now" in '#'*) continue ;; esac
         [ -n "${file:-}" ] || continue
         if ! "$GREP" -q -E "^[0-9]+ ${file}$" "$baseline" 2> /dev/null; then
             echo "new and not clean: $file has $now"

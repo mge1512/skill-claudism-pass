@@ -1,0 +1,68 @@
+# Leaked scaffolding and chatbot boilerplate. grep -E, case-sensitive unless the
+# pattern says otherwise. One extended regular expression per line.
+#
+# These are not style. They are tool-call, citation and prompt scaffolding that
+# chat products leak into copied text, plus conversation boilerplate that nobody
+# writes into a document on purpose. A style tell suggests; these convict, and
+# the token itself is noise, so a hit is always a removal.
+#
+# Contributed by Andy Fitzsimon (SUSE) from the Lolly project, CC0 1.0.
+#
+# Two patterns deliberately keep their bracket context: bare "contentReference"
+# and bare "attached_file" are ordinary identifiers in hand-written code.
+
+# --- OpenAI / ChatGPT
+oaicite
+oai_citation
+contentReference\[oaicite
+turn[0-9]+(search|news|view|image|forecast)[0-9]+
+(cite|video|navlist)turn[0-9]+
+attributableIndex
+filecite
+:::writing\{
+utm_source=(chatgpt\.com|openai)
+
+# --- ChatML and open-weight prompt formats
+<\|im_(start|sep|end)\|>
+<\|endoftext\|>
+\[/?INST\]
+<<SYS>>
+<\|start_header_id\|>
+<\|eot_id\|>
+
+# --- Google / Gemini
+\[cite: *[0-9]+\]
+\[cite_start\]
+\[span_[0-9]+\]
+googleusercontent\.com/[a-z_]*content/[0-9]
+^[[:space:]]*```(tool_code|tool_outputs)
+
+# --- Microsoft Copilot
+\[\^[0-9]+\^\]
+utm_source=copilot\.com
+
+# --- xAI / Grok
+grok_card
+render_inline_citation
+<xaiArtifact
+referrer=grok\.com
+
+# --- Perplexity
+ppl-ai-file-upload
+\[attached_file
+
+# --- reasoning traces and other namespaces
+</?think>
+</?antml:
+
+# --- chatbot register, hard grade: conversation pasted into a document
+[Aa]s an? (AI|artificial intelligence|large language model|language model)
+I('m| am) (just )?an? (AI|large language model|language model)
+^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|I('ve| have) (created|drafted|outlined|prepared))
+^Here('s| is) an? (draft|outline|version|summary|example|overview|template) (of|for)
+I('m| am) sorry,? but I (can('t|not)|am unable to)
+I (can('t|not)|am unable to) (fulfill|fulfil|comply with|assist with|help with) (that|this) request
+(against|violates?|contrary to) my (safety |ethical |core )?(guidelines|policies|principles|programming)
+I (do not|don't) have (access to real.time|the ability to browse|personal (opinions|experiences|feelings))
+(my|the) knowledge cut.?off
+as of my (last|latest|most recent) (knowledge )?(update|training)
