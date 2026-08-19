@@ -149,6 +149,32 @@ same report, with a coarser emoji match. `brew install grep` restores the full
 set. `SCAN_FORCE_POSIX=1` exercises the portable path on a GNU system. The script
 only reads; it writes nothing outside `/tmp`.
 
+## Using it as a gate
+
+The scanner is deterministic: character and substring matching, no model in the
+loop. That makes it usable in CI, where guidance in a document binds only the
+person who reads it.
+
+```bash
+scan.sh --gate docs/*.md          # exit 1 if anything unambiguous is found
+```
+
+The gate counts banlist phrases, hidden characters, decorative punctuation,
+structural tics and interference that is wrong in any register. Loose hits and
+false friends never fail a build, because a judgment call is not a gate.
+
+An existing docs tree will fail on day one, so there is a ratchet: a per-file
+count that can only go down.
+
+```bash
+scan.sh --write-baseline=.claudism-baseline docs/*.md   # record the floor
+scan.sh --baseline=.claudism-baseline docs/*.md         # exit 1 on drift
+```
+
+It fails three ways. A file that got worse. A new file that is not clean. And a
+file that improved without the baseline being updated, which keeps the recorded
+floor honest and forces each win to be locked in.
+
 ## What it does not do
 
 The scanner matches literal strings. Several constructions use ordinary words in
