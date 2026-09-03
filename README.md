@@ -165,11 +165,10 @@ awk: it tracks strings and escapes, so a `//` inside a URL or a `#` inside
 confuse it. Comment syntax is chosen by file extension. Line numbers survive, so
 a hit still points at the right line of the original.
 
-The limit is the one no lexer can solve without the grammar of the language: in
-JavaScript and TypeScript a `/` may open a regular expression or divide, and a
-quote inside a regex can throw the string tracking off. The scanner warns on those
-extensions rather than pretending otherwise. If the language has a real parser
-available, use it.
+One case needs the grammar of the language, which no lexer has. In JavaScript
+and TypeScript a `/` may open a regular expression or divide, and a quote inside
+a regex can throw the string tracking off. The scanner warns on those extensions. Where a parser for
+the language is available, use it instead.
 
 ## Leaked scaffolding
 
@@ -185,7 +184,7 @@ paste and are pure noise, so the scanner always reports them:
   line 7   utm_source=chatgpt.com
 ```
 
-`references/artifacts.txt` carries these. Two calibration rules keep them from
+These are in `references/artifacts.txt`. Two calibration rules keep them from
 firing on honest text: a line-start `Assistant:` counts only when a line-start
 `Human:` appears too, since film credits and staff rosters use it; and
 self-identification strings convict only outside quotation marks, since an
@@ -195,8 +194,7 @@ spans are ignored, so a document that documents these tokens stays clean.
 ## Using it as a gate
 
 The scanner is deterministic: character and substring matching, no model in the
-loop. That makes it usable in CI, where guidance in a document binds only the
-person who reads it.
+loop. That makes it usable in CI.
 
 ```bash
 scan.sh --gate docs/*.md          # exit 1 if anything unambiguous is found
@@ -204,7 +202,7 @@ scan.sh --gate docs/*.md          # exit 1 if anything unambiguous is found
 
 The gate counts banlist phrases, hidden characters, decorative punctuation,
 structural tics and interference that is wrong in any register. Loose hits and
-false friends never fail a build, because a judgment call is not a gate.
+false friends never fail a build.
 
 An existing docs tree will fail on day one, so there is a ratchet: a per-file
 count that can only go down.
@@ -214,9 +212,9 @@ scan.sh --write-baseline=.claudism-baseline docs/*.md   # record the floor
 scan.sh --baseline=.claudism-baseline docs/*.md         # exit 1 on drift
 ```
 
-It fails three ways. A file that got worse. A new file that is not clean. And a
-file that improved without the baseline being updated, which keeps the recorded
-floor honest and forces each win to be locked in.
+It fails when a file gets worse, when a new file is not clean, and when a file
+improves without the baseline being updated. The third case forces every
+improvement to be recorded.
 
 ## What it does not do
 
@@ -225,13 +223,11 @@ a particular arrangement, and those need a person or a model reading the draft:
 crowned superlatives with an unusual noun, negative parallelism, announcing an
 insight instead of delivering it. `SKILL.md` step 2 lists what to look for.
 
-The language files are lists of known traps, not a grammar checker. They catch
-the errors that a spelling checker passes over because every word is spelled
-correctly.
+The language files list known traps. They catch the errors a spelling checker
+passes over, because every word in them is spelled correctly.
 
-Detection of a writer's first language is a guess. The skill is instructed to
-report what it fixed, never to name the language it inferred, because guessing at
-someone's background in an editing report is both rude and often wrong.
+Detection of a writer's first language is a guess, so the skill reports what it
+fixed and never names the language it inferred.
 
 ## Layout
 
@@ -256,6 +252,48 @@ claudism-pass/
     └── scan.sh                    the mechanical pass
 ```
 
+## Using it with simple-english
+
+[simple-english](https://github.com/AminBlg/SimpleEnglish) implements ASD-STE100
+Simplified Technical English. That is the controlled language aerospace and
+defence manufacturers use for maintenance documentation. It has 53 rules:
+sentence limits, one word one meaning, approved modals, condition before
+command. MIT licensed.
+
+The two do different jobs and compose well. STE is constructive and tells you how
+to write a sentence. This skill is subtractive and mechanical: a banlist, a
+scanner, a gate. STE has no scanner; this has no rule catalogue. Three things
+here have no counterpart there: first-language interference, leaked scaffolding,
+and the spelling variant switch.
+
+Run simple-english first, because it restructures sentences.
+Run the Claudism pass last, because it is the final check and its list is the
+longer of the two.
+
+**Use both** on procedural and reference text. READMEs, runbooks, installation
+and upgrade procedures, error messages, release notes, incident reports, API
+guides, and agent instructions such as `AGENTS.md`.
+
+**Use this one alone** on anything written to persuade or to keep a reader
+reading. Blog
+and LinkedIn posts, conference abstracts and talk proposals, mails, slide text,
+customer-facing and marketing prose. The simple-english skill says the same in
+its own Limits section: STE removes persuasion by design, so applying it to blog
+voice deletes the persuasion.
+
+**One conflict.** STE rule 1.14 mandates American spelling. The EU mode here
+exists for tenders and submissions to EU institutions. Those are exactly the
+procedural documents STE targets. When both apply, the audience wins over the
+standard. If STE compliance is contractually required, say so in the document and
+let the standard win. Smaller frictions in the same direction: STE bans "should", "may",
+"might" and "could", bans semicolons and contractions, and restricts `-ing` forms
+to technical nouns. Correct in a maintenance manual, stilted in an abstract.
+
+**If both are installed**, their descriptions overlap enough to compete for
+triggering, since both mention documentation and removing AI slop. Narrow one of
+them, or state the rule plainly: procedural documentation goes to
+simple-english first, everything else starts here.
+
 ## Tests
 
 ```bash
@@ -266,8 +304,8 @@ bash tests/run.sh --update     # re-record after an intended change
 Thirty-nine cases in five classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
-  regex matches nothing and reports a file clean, which is the failure mode this
-  suite exists to catch. Both forms are checked, since the portable path strips
+  regex matches nothing and reports a file clean. Both forms are checked, since
+  the portable path strips
   `\b` and relies on `grep -w`.
 - **The lexer**, via `tests/lexer/<lang>.<ext>`, run directly against
   `comments.awk` so a regression there is isolated. `AWK=gawk bash tests/run.sh`
@@ -279,11 +317,10 @@ Thirty-nine cases in five classes:
 - **The variant switch and comments mode**, including the two-flip threshold and
   the rule that a marker inside a code span does not count.
 
-A fixture is only useful if its output differs when the code breaks. The
-division-before-a-line-comment case exists because the obvious fixture,
+The division-before-a-line-comment fixture exists because the obvious one,
 `a / b / c`, blanks identically whether the slash is read as division or as a
-regular expression, so it cannot detect the difference. Every case here was
-checked by breaking the code it covers and confirming the suite fails.
+regular expression. Every case here was checked by breaking the code it covers
+and confirming the suite fails.
 
 ## Contributing
 
@@ -312,8 +349,8 @@ https://github.com/mge1512/skill-claudism-pass
 
 `references/detection.md` covers the other direction: what changes when the same
 lists are used to judge whether a text was machine-written rather than to clean
-it up. Short version, evidence has grades, density beats count, and style alone
-never names a model.
+it up. It covers the grades of evidence, density thresholds, and why style alone
+cannot name a model.
 
 ## Source and license
 

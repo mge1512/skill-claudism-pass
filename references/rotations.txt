@@ -1,0 +1,21 @@
+# Terminology rotations. One synonym set per line, members separated by |.
+#
+# English rewards variety in prose and punishes it in technical writing. Using
+# "check" here and "verify" there makes a reader who parses English as a second
+# language stop and ask whether two different things are meant. Pick one member
+# per document and keep it.
+#
+# Reported as a notice, never gated: a document may legitimately use "delete"
+# and "remove" for two different operations, and only the author knows.
+#
+# The sets come from the simple-english skill (ASD-STE100 rules 1.11 and 9.4).
+check|verify|confirm|validate
+config|configuration|settings|options|preferences
+run|execute|invoke|launch
+show|display|render|present
+delete|remove|drop|destroy
+error|issue|problem|failure|fault
+start|begin|initiate|commence
+build|compile|assemble
+enable|activate
+folder|directory
