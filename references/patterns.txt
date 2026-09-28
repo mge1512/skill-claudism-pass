@@ -182,3 +182,9 @@
 \bit is crucial to acknowledge\b
 \bcamaraderie\b
 \bpalpable\b
+
+# --- caught in review (colleague of the author), 2026-09
+# The word "here" directly before a comma: "the difference here, is", "Here, the
+# service reads its configuration". A deictic hedge plus a spoken pause; the
+# sentence is nearly always better with both cut.
+\bhere,

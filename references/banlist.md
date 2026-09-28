@@ -173,3 +173,9 @@ Source: https://claudisms.ai/ (Markdown at https://claudisms.ai/claudisms.md).
 This copy was taken on 2026-08-18. The upstream list grows; re-fetch it before
 assuming this file is current. Local additions belong here and, where a regular
 expression can catch them, in `patterns.txt`.
+
+## Local additions
+
+Entries caught in review after the upstream copy was taken. The matching expressions are in `patterns.txt`.
+
+- **"here,"** (the word "here" directly before a comma - "The difference here, is that ...", "What we see here, is ...", "Here, the service reads its configuration") - deictic hedge plus a spoken pause. "Here" points at the current case without saying which case it is; the comma is the pause a speaker makes before the verb, and in the mid-sentence form it also cuts the subject off from its verb. The sentence is better without both nearly every time: "The difference is that ...", "The service reads its configuration". If the case has to be named, name it: "In this configuration, ...", "After the upgrade, ...". Same family as "I want to be careful here" and the trailing "here" in "X is the problem here". Note: "Here, m is the mass" after a formula and "From here, the installer takes over" in a procedure are the legitimate uses, and even those read as well as "where m is the mass" and "The installer then takes over". Caught in review, 2026-09.

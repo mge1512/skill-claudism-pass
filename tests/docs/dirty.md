@@ -12,3 +12,5 @@ most was how few teams leverage signed artifacts.
 Most people I've talked to reach for a robust, seamless pipeline. But the whole
 game is the supply chain — and that's the tell. The attack surface lives in the
 build step, and trust compounds over time. Let's break it down. 🚀
+
+The difference here, is the signing key. Here, the pipeline rejects unsigned images.

@@ -127,7 +127,7 @@ A text search matches literal strings. The same move with a different noun or ve
 - "Bold term: explanation sentence" bullet lists, `---` as a section divider, and a neat bullet summary at the end.
 - Four or more short declarative sentences in a row. Vary the length.
 
-Consult `references/banlist.md` for the full list with the reasoning behind each entry, and to check anything that looks borderline. The file is grouped into confirmed entries, structural and framing tics, register tics, spoken-word tells, and imported vocabulary.
+Consult `references/banlist.md` for the full list with the reasoning behind each entry, and to check anything that looks borderline. The file is grouped into confirmed entries, structural and framing tics, register tics, spoken-word tells, imported vocabulary, and local additions caught in review.
 
 ### Step 3: report
 

@@ -1,5 +1,5 @@
 === tests/docs/dirty.md
---- banlist hits, rewrite these: 15
+--- banlist hits, rewrite these: 17
   line 3      It's worth noting              [\bit(')?s worth noting\b]
   line 3      leverage                       [\bleverag(e|es|ed|ing)\b]
   line 3      not just a technical problem,  [\bnot just .{1,40}(it(')?s|but)\b]
@@ -15,6 +15,8 @@
   line 12     seamless                       [\bseamless\b]
   line 12     the tell                       [\bthe tell\b]
   line 12     the whole game                 [\bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b]
+  line 16     Here,                          [\bhere,]
+  line 16     here,                          [\bhere,]
 --- needs judgment, check the carve-outs in SKILL.md: 5
   line 12     the whole game                 [\bthe (whole|entire) [a-z]+\b]
   line 12     reach for                      [\breach(es|ing)? for\b]
@@ -39,6 +41,6 @@
 --- second-language interference
   clean
 
-total phrase hits: 20
-gate hits (unambiguous, ratchetable): 17
+total phrase hits: 22
+gate hits (unambiguous, ratchetable): 19
 Now read the draft for the constructions grep cannot see (SKILL.md, step 2).
