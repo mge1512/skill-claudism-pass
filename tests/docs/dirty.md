@@ -14,3 +14,7 @@ game is the supply chain — and that's the tell. The attack surface lives in th
 build step, and trust compounds over time. Let's break it down. 🚀
 
 The difference here, is the signing key. Here, the pipeline rejects unsigned images.
+
+What I keep running into is that nobody handed us a signed base image; the registry
+hands you whatever it has, and the team hand-waves the objection. The reviewer waves
+that away. What moved is the trust boundary, and nobody has settled where it ends.

@@ -1,5 +1,5 @@
 === tests/docs/dirty.md
---- banlist hits, rewrite these: 17
+--- banlist hits, rewrite these: 24
   line 3      It's worth noting              [\bit(')?s worth noting\b]
   line 3      leverage                       [\bleverag(e|es|ed|ing)\b]
   line 3      not just a technical problem,  [\bnot just .{1,40}(it(')?s|but)\b]
@@ -17,11 +17,19 @@
   line 12     the whole game                 [\bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b]
   line 16     Here,                          [\bhere,]
   line 16     here,                          [\bhere,]
---- needs judgment, check the carve-outs in SKILL.md: 5
+  line 18     What I keep running into       [\bwhat i keep (running into|noticing|seeing|finding)\b]
+  line 18     What moved is                  [\bwhat (actually )?moved (is|was)\b]
+  line 18     hand-waves                     [\bhand[ -]?wav(e|es|ed|ing)\b]
+  line 18     hands you                      [\bhands (you|me|us|them|it|back)\b]
+  line 18     nobody handed us               [\b(nobody|no one|no-one) (handed|gave) (you|me|us|him|her|them|it|that)\b]
+  line 18     nobody has settled             [\b(nobody|no one|no-one) has settled\b]
+  line 18     waves that away                [\bwav(e|es|ed|ing) (it|that|them|the [a-z]+) away\b]
+--- needs judgment, check the carve-outs in SKILL.md: 6
   line 12     the whole game                 [\bthe (whole|entire) [a-z]+\b]
   line 12     reach for                      [\breach(es|ing)? for\b]
   line 12     surface                        [\bsurface\b]
   line 12     lives                          [\blives\b]
+  line 18     settled                        [\b(un)?settled\b]
   line 1      matter                         [\bmatters?\b]
 --- leaked scaffolding and chatbot boilerplate
   clean
@@ -41,6 +49,6 @@
 --- second-language interference
   clean
 
-total phrase hits: 22
-gate hits (unambiguous, ratchetable): 19
+total phrase hits: 30
+gate hits (unambiguous, ratchetable): 26
 Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

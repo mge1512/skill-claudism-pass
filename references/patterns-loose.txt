@@ -23,13 +23,18 @@
 \bcarr(y|ies|ying)\b
 \blives\b
 \bmature\b
-\bsettled question\b
-\bwe thought was settled\b
+\b(un)?settled\b
 \bwreck(ed|s)?\b
 \bshatter(ed|s)?\b
 \bobliterate(d|s)?\b
 \bblow up\b
 \bmatters?\b
+# Abstract motion and directional gestures (upstream sync 2026-09-28). A file
+# that moves and a symlink that points to a target are literal, so only the
+# usual abstract subjects and the "toward a conclusion" forms are matched.
+\b(attention|argument|conversation|discussion|focus|emphasis|burden|weight|risk|question|debate|center of gravity|centre of gravity) (moves|moved|moving|shifts|shifted)\b
+\bpoint(s|ed|ing)? (toward|towards|in the same direction|the same direction|at the same)\b
+\bthe (shift|unlock) is\b
 # The copula flourish: a clause that redefines its subject and hedges with a
 # trailing "here". Approximated without lookbehind, so "there is a X here" and
 # similar legitimate locatives turn up too. Judgment call.

@@ -188,3 +188,18 @@
 # service reads its configuration". A deictic hedge plus a spoken pause; the
 # sentence is nearly always better with both cut.
 \bhere,
+
+# --- upstream sync 2026-09-28: claudisms.ai entries added since 2026-08-18
+\bhands (you|me|us|them|it|back)\b
+\bhanded back\b
+\b(nobody|no one|no-one) (handed|gave) (you|me|us|him|her|them|it|that)\b
+\bhand[ -]?wav(e|es|ed|ing)\b
+\bwave of the hand\b
+\bwav(e|es|ed|ing) (it|that|them|the [a-z]+) away\b
+\bwhat i keep (running into|noticing|seeing|finding)\b
+\bwhere i keep landing\b
+\bwhat (actually )?moved (is|was)\b
+\bwhat changed is the\b
+\b(nobody|no one|no-one) has settled\b
+\b(is|are|was|were) ?n(o|')t settled\b
+\bnot settled yet\b
