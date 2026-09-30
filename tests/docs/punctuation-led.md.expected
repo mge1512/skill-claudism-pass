@@ -1,0 +1,28 @@
+=== tests/docs/punctuation-led.md
+--- banlist hits, rewrite these: 1
+  line 1      , highlighting                 [, (highlighting|emphasizing|emphasising|underscoring|reflecting|showcasing|demonstrating|ensuring|fostering|enhancing) ]
+--- needs judgment, check the carve-outs in SKILL.md: 2
+  line 1      , because a judgment call is n [, because [a-z ]{1,30} is (not )?(a|an|the) [a-z]+\b]
+  line 1      , which keeps                  [, which (keeps|makes|forces|ensures|means|is what)\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 1   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 3
+gate hits (unambiguous, ratchetable): 1
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

@@ -91,6 +91,20 @@ port() {
     fi
 }
 
+# grep -w enforces a word boundary at BOTH ends of the match, unconditionally.
+# That equals \b only for patterns bounded by \b at both ends. A pattern that
+# starts with punctuation (", because ...", ", highlighting ...") would be
+# rejected, because the character before the comma is a letter, and it would
+# silently never match. So -w is applied per pattern, only where the original
+# was bounded on both sides. One-sided patterns lose their single boundary on
+# the portable path, which can add a hit but never removes one.
+wflag() {
+    [ "$has_wb" = "yes" ] && return 0
+    case "$1" in
+        '\b'*'\b') printf '%s' '-w' ;;
+    esac
+}
+
 tmpfile() {
     if command -v mktemp > /dev/null 2>&1; then
         mktemp "${TMPDIR:-/tmp}/claudism.XXXXXX"
@@ -234,13 +248,14 @@ join_paragraphs() {
 # $1 = joined-paragraph file, $2 = pattern file. One output line per hit.
 scan_list() {
     local joined="$1" patterns="$2"
-    local pat rx para start text hit
+    local pat rx wf para start text hit
 
     while IFS= read -r pat; do
         case "$pat" in
             ''|'#'*) continue ;;
         esac
         rx="$(port "$pat")"
+        wf="$(wflag "$pat")"
         while IFS= read -r para; do
             start="${para%%:*}"
             text="${para#*:}"
@@ -248,8 +263,8 @@ scan_list() {
                 [ -n "$hit" ] || continue
                 printf '  line %-6s %-30s [%s]\n' \
                     "$start" "$(printf '%s' "$hit" | cut -c1-30)" "$pat"
-            done < <(printf '%s\n' "$text" | "$GREP" -i -o $WB_FLAG -E "$rx" 2> /dev/null)
-        done < <("$GREP" -i $WB_FLAG -E "$rx" "$joined" 2> /dev/null)
+            done < <(printf '%s\n' "$text" | "$GREP" -i -o $wf -E "$rx" 2> /dev/null)
+        done < <("$GREP" -i $wf -E "$rx" "$joined" 2> /dev/null)
     done < "$patterns"
 }
 
