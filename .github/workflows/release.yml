@@ -40,10 +40,17 @@ jobs:
           (cd build && zip -q -r ../claudism-pass.skill claudism-pass)
           unzip -l claudism-pass.skill
 
+      - name: Checksums
+        run: |
+          find . -type f -not -path './.git/*' -not -name '*.skill' \
+            | sort | xargs sha256sum > SHA256SUMS
+          sha256sum claudism-pass.skill >> SHA256SUMS
+          cat SHA256SUMS
+
       - name: Attach to the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" claudism-pass.skill \
+          gh release create "${GITHUB_REF_NAME}" claudism-pass.skill SHA256SUMS \
             --title "${GITHUB_REF_NAME}" \
             --generate-notes

@@ -203,3 +203,28 @@
 \b(nobody|no one|no-one) has settled\b
 \b(is|are|was|were) ?n(o|')t settled\b
 \bnot settled yet\b
+
+# --- preemptive defence: answering an objection nobody raised
+\b(that|this) is n(o|')t an? [a-z]+ (claim|criticism|complaint|attack|dig|swipe|judgment)\b
+\bnot that anyone asked\b
+\brather than pretending otherwise\b
+\blest anyone\b
+
+# --- from the simple-english skill (ASD-STE100), MIT, see LICENSE
+\butiliz(e|es|ed|ing)\b
+\bin order to\b
+\bprior to\b
+\bin the event that\b
+\bdue to the fact that\b
+\bgracefully (handles|handled|handling)\b
+\bout of the box\b
+\bunder the hood\b
+\bblazingly fast\b
+\bstate.of.the.art\b
+\bstreamlin(e|es|ed|ing)\b
+\bplethora\b
+\bmyriad\b
+\b(enables|allows) (you|users|teams|developers) to\b
+\bis designed to\b
+\baims to\b
+\bfacilitat(e|es|ed|ing)\b

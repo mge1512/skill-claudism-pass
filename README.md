@@ -191,6 +191,27 @@ self-identification strings convict only outside quotation marks, since an
 article quoting a chatbot is a human writing about a machine. Tokens inside code
 spans are ignored, so a document that documents these tokens stays clean.
 
+## Sentence length and terminology
+
+Two notices, neither of which gates a build.
+
+```bash
+scan.sh --max-sentence=20 docs/*.md    # 25 is the default; 20 suits procedures
+```
+
+Sentence length is the strongest predictor of misreading for a reader who is
+fluent in English but did not grow up with it. The default limit is 25 words and
+`--max-sentence=20` matches the ASD-STE100 figure for instructions. Counting
+ignores what the scanner has already blanked, so code spans and identifiers do
+not inflate it.
+
+`references/rotations.txt` lists synonym sets: check/verify/confirm,
+run/execute/invoke, folder/directory. English rewards variety in prose and
+punishes it in technical writing. A reader parsing a second language stops to ask
+whether two words mean two things. Two members of a set in one document gets a
+notice rather than a hit, since two members can also name two different
+operations.
+
 ## Using it as a gate
 
 The scanner is deterministic: character and substring matching, no model in the
@@ -301,7 +322,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Thirty-nine cases in five classes:
+Fifty-seven cases in seven classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
@@ -313,6 +334,14 @@ Thirty-nine cases in five classes:
 - **The scanner**, via `tests/docs/*.md`, each case run twice: once with the
   installed grep and once with `SCAN_FORCE_POSIX=1`, because the portable path
   is a separate implementation.
+- **List integrity.** Each reference list must hold at least a floor number of
+  entries. A fetch route that truncates a list yields fewer patterns, all of them
+  valid, so the compile check passes and the scanner calls files clean.
+- **Locale independence.** The report must be byte-identical whichever locale the
+  reader's shell sets. Report lines that share a line number are ordered by a
+  whole-line comparison, which is collation dependent, so the scanner clears
+  `LC_ALL` and pins `LC_COLLATE=C` while leaving `LC_CTYPE` on a UTF-8 locale for
+  the `grep -P` ranges.
 - **The ratchet**, in all three drift directions plus a stale lexicon stamp.
 - **The variant switch and comments mode**, including the two-flip threshold and
   the rule that a marker inside a code span does not count.
@@ -351,6 +380,21 @@ https://github.com/mge1512/skill-claudism-pass
 lists are used to judge whether a text was machine-written rather than to clean
 it up. It covers the grades of evidence, density thresholds, and why style alone
 cannot name a model.
+
+## Installing it intact
+
+Use `git clone`, or download the `.skill` from a release and verify it against
+the `SHA256SUMS` attached to the same release. Two failure modes are known, both
+observed in the field:
+
+- Some agent runtimes rewrite fetched text: one inserts a newline every 2000
+  characters and truncates at about 32000. A mangled pattern list does not crash
+  the scanner, it just matches less, so the damage is silent. Verify, or clone.
+- `references/artifacts.txt` lists prompt-format tags and citation tokens, so it
+  reads like an injection payload and some content filters quarantine it. Fetch
+  it through the GitHub contents API in base64 form, or clone. Obfuscating the
+  file would defeat the reason everything here is plain text. Where the file is
+  blocked, the leaked-scaffolding check goes missing without saying so.
 
 ## Source and license
 

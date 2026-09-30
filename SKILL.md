@@ -1,6 +1,6 @@
 ---
 name: claudism-pass
-description: Remove AI-writing tells ("Claudisms") from ENGLISH text and write English in a register that suits fluent non-native readers in IT. Use this skill whenever an English deliverable is drafted, rewritten, translated into English or reviewed - articles, blog and LinkedIn posts, mails, README and documentation, abstracts, talk proposals, slide text, customer-facing material - and whenever the user says "Claudism pass", "scrub Claudisms", "AI tells", or asks whether a text reads as AI-generated. Apply it before delivering any longer English text, even when the user does not ask. Do NOT apply it to German texts, to code, diffs, configuration or log output, or to short conversational chat replies.
+description: Remove AI-writing tells ("Claudisms") from ENGLISH text and write in a register that suits fluent non-native readers. Use whenever an English deliverable is drafted, rewritten or reviewed: article, blog or LinkedIn post, mail, README, documentation, abstract, talk proposal, slide text, customer-facing copy. Apply before delivering longer English text, even unasked. Also on request: "Claudism pass", "AI tells". NOT for German, code, diffs, config, logs or short chat replies.
 ---
 
 # Claudism pass
@@ -121,6 +121,8 @@ A text search matches literal strings. The same move with a different noun or ve
 - "the whole [X]" and "the only [X] that [verb]" with any noun in the slot.
 - Negative parallelism and staccato negation in any wording.
 - Section announcers and staged epiphany: any sentence that promises an insight instead of stating it.
+- Preemptive defence: any sentence answering an objection nobody raised ("That is not a turf claim", "rather than pretending otherwise"). Delete it and check whether anything was lost; usually the sentence before it already carried the argument.
+- The trailing moral: a fact followed by a clause explaining why the reader should approve of it ("..., because a judgment call is not a gate", "..., which keeps the floor honest"). State the fact and stop.
 - Discovery-arc framing: "I didn't set out to ..., but", "what I didn't expect to find".
 - Invented observations: "most people I've talked to", "everyone I've worked with". If the conversation or the source material does not contain it, it did not happen and cannot go in.
 - Invented reactions: "it stuck with me", "the thing that got me". Name the actual reaction or leave it out.

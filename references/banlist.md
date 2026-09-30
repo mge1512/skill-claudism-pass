@@ -88,6 +88,8 @@ AI models overuse the same words. This is a running catalog of them: the phrases
 
 ---
 
+- **Preemptive defence** - "That is not a turf claim." "Not that anyone asked." "rather than pretending otherwise." "I'm not saying X, but". Answering an objection nobody raised. The move invents a critic so the text can be seen defeating one, and it tells the reader the writer expected resistance, which plants the doubt it was meant to remove. If the point needs defending, the defence belongs where the objection actually appears. Delete the sentence and check whether anything was lost; usually the sentence before it already carried the argument.
+- **The trailing moral** - a factual sentence followed by a clause saying why the reader should approve: "..., because a judgment call is not a gate", "..., which keeps the floor honest and forces each win to be locked in", "..., and that is the point". The clause adds no information and instructs the reader how to feel about the sentence it is attached to. State the fact and stop. Related to value-claim filler, but the shape rather than the vocabulary is the tell, so a word search does not find it.
 ## Structural / framing tics
 
 - **Announcing the structure before delivering it** - "I'm going to make three points" instead of just making them. Trust the reader to follow.

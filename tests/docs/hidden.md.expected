@@ -16,6 +16,10 @@
   US markers: 0   EU/British markers: 0   (variant: auto)
 --- dates, clock, units
   clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
 --- second-language interference
   clean
 

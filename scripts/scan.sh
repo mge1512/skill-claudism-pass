@@ -37,6 +37,16 @@ else
     GREP="grep"
 fi
 
+# Output must not depend on the reader's locale. Two things are at stake and they
+# pull apart, so they are set separately: collation decides how report lines that
+# share a line number sort against each other, and must be C for the output to be
+# reproducible; character type must be UTF-8 for the grep -P ranges in the hidden
+# character check. LC_ALL cannot express that, because it overrides both, so it is
+# cleared. C.UTF-8 alone would not do either: macOS does not ship it, and the
+# en_US.UTF-8 it would fall back to collates in dictionary order.
+unset LC_ALL
+export LC_COLLATE=C
+
 has_p="no"
 has_wb="no"
 
@@ -56,8 +66,8 @@ fi
 if [ "$has_p" = "yes" ]; then
     if ! printf '\xe2\x80\x94' | "$GREP" -q -P '\x{2014}' 2> /dev/null; then
         for cand in C.UTF-8 C.utf8 en_US.UTF-8 de_DE.UTF-8; do
-            if printf '\xe2\x80\x94' | LC_ALL="$cand" "$GREP" -q -P '\x{2014}' 2> /dev/null; then
-                export LC_ALL="$cand"
+            if printf '\xe2\x80\x94' | LC_CTYPE="$cand" "$GREP" -q -P '\x{2014}' 2> /dev/null; then
+                export LC_CTYPE="$cand"
                 break
             fi
         done
@@ -82,12 +92,25 @@ port() {
 }
 
 tmpfile() {
-    mktemp "${TMPDIR:-/tmp}/claudism.XXXXXX"
+    if command -v mktemp > /dev/null 2>&1; then
+        mktemp "${TMPDIR:-/tmp}/claudism.XXXXXX"
+    else
+        # Restricted runtimes without mktemp: pick an unused name from the PID.
+        # mktemp also creates the file, so this does too. The race window is
+        # acceptable for a scratch file owned by the running shell.
+        d="${TMPDIR:-/tmp}"
+        i=0
+        while [ -e "$d/claudism.$$.$i" ]; do i=$((i + 1)); done
+        f="$d/claudism.$$.$i"
+        : > "$f" || return 1
+        printf '%s\n' "$f"
+    fi
 }
 
 # ---------------------------------------------------------------------- inputs
 
-here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# BASH_SOURCE is unset in some restricted runtimes; $0 is the fallback there.
+here="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 ref="${here}/../references"
 strict="${ref}/patterns.txt"
 loose="${ref}/patterns-loose.txt"
@@ -97,10 +120,13 @@ l1_ff="${ref}/l1/false-friends.txt"
 hidden="${ref}/hidden-unicode.txt"
 artifacts="${ref}/artifacts.txt"
 lexicon_file="${ref}/VERSION"
+rotations="${ref}/rotations.txt"
+sentences_awk="${here}/sentences.awk"
 
 variant="auto"
 do_l1="yes"
 gate="no"
+maxsent=25
 do_comments="no"
 baseline=""
 write_baseline=""
@@ -113,6 +139,7 @@ for arg in "$@"; do
         --variant=auto)             variant="auto" ;;
         --no-l1)                    do_l1="no" ;;
         --comments)                 do_comments="yes" ;;
+        --max-sentence=*)           maxsent="${arg#*=}" ;;
         --gate)                     gate="yes" ;;
         --baseline=*)               baseline="${arg#*=}" ;;
         --write-baseline=*)         write_baseline="${arg#*=}" ;;
@@ -121,6 +148,8 @@ for arg in "$@"; do
             echo "  --us | --eu   force the spelling variant (default: auto)"
             echo "  --no-l1       skip the second-language interference check"
             echo "  --comments    scan the comments of a source file, not prose"
+            echo "  --max-sentence=N  report sentences longer than N words (default 25;"
+            echo "                    20 suits procedural text)"
             echo "  --gate        exit 1 if any unambiguous hit is found (for CI)"
             echo "  --baseline=F  ratchet against per-file counts in F; exit 1 on drift"
             echo "  --write-baseline=F  record the current counts as the new floor"
@@ -137,7 +166,7 @@ if [ "$nfiles" -lt 1 ]; then
     exit 2
 fi
 
-for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff" "$hidden" "$artifacts"; do
+for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff" "$hidden" "$artifacts" "$rotations"; do
     if [ ! -r "$f" ]; then
         echo "scan.sh: cannot read $f" >&2
         exit 2
@@ -482,6 +511,41 @@ for target in "${files[@]}"; do
         loc=1
     fi
     [ "$loc" -eq 0 ] && echo "  clean"
+
+    # Sentence length. A notice, never gated: length is the author's judgment
+    # and a long sentence is sometimes the right one.
+    echo "--- long sentences (over $maxsent words)"
+    long="$(awk -v limit="$maxsent" -f "$sentences_awk" "$tmp_prose" 2> /dev/null)"
+    if [ -n "$long" ]; then
+        printf '%s\n' "$long" | while IFS=: read -r ln cnt txt; do
+            printf '  line %-6s %3s words   %s...\n' "$ln" "$cnt" "$txt"
+        done
+    else
+        echo "  clean"
+    fi
+
+    # Terminology rotations. Also a notice: two members of a set can name two
+    # different operations, and only the author knows whether they do.
+    echo "--- terminology consistency"
+    rot=0
+    while IFS= read -r set; do
+        case "$set" in ''|'#'*) continue ;; esac
+        hits=""
+        count=0
+        old_ifs="$IFS"; IFS='|'
+        for word in $set; do
+            if "$GREP" -q -i -w -E "${word}(s|es|ed|ing)?" "$tmp_prose" 2> /dev/null; then
+                hits="${hits}${word} "
+                count=$((count + 1))
+            fi
+        done
+        IFS="$old_ifs"
+        if [ "$count" -ge 2 ]; then
+            echo "  ${hits}- pick one and use it throughout"
+            rot=$((rot + 1))
+        fi
+    done < "$rotations"
+    [ "$rot" -eq 0 ] && echo "  clean"
 
     # Second-language interference. The word lists are first-language neutral;
     # references/l1/<language>.md holds what each L1 adds.

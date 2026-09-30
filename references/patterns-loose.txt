@@ -49,3 +49,15 @@
 \b[Yy]ou('re| are) absolutely right\b
 \bnot (meant as )?a substitute for professional (medical|legal|financial) advice\b
 \bconsult (with )?a (qualified|licensed) professional\b
+
+# The trailing moral and preemptive defence, approximated. A legitimate causal
+# clause looks the same, so every hit is a judgment call.
+, because [a-z ]{1,30} is (not )?(a|an|the) [a-z]+\b
+, which (keeps|makes|forces|ensures|means|is what)\b
+, and that (matters|is the point|is why)\b
+\bI('m| am) not (saying|arguing|claiming)\b
+\bto be clear,
+\bthat said,
+\bensures?\b
+\bfunctionality\b
+\band/or\b

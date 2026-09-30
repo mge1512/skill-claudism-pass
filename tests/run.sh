@@ -178,6 +178,75 @@ printf 'See the table in `<!-- variant: eu -->` further down the document.\n%s' 
 out="$(SCAN_FORCE_POSIX=0 bash "$scan" "${work}/late.md" 2>&1)"
 case "$out" in *"file marker"*) bad "a marker inside a code span must not count" ;; *) ok ;; esac
 
+# --- report order must not depend on the environment's locale ----------------
+# sort ties on the line number and then compares whole lines, which is collation
+# dependent, so the same draft produced different output on a German system than
+# on a C one. Every sort in the scanner is pinned to C.
+printf 'What moved is clear. hand-waves at it. Here, nobody has settled.\n' > "${work}/collate.md"
+# stdout only: a locale that is not installed makes the shell warn on stderr,
+# which says nothing about the report.
+ref="$(SCAN_FORCE_POSIX=0 LC_ALL=C bash "$scan" "${work}/collate.md" 2> /dev/null | norm)"
+same=1
+for loc in C.utf8 en_US.UTF-8 de_DE.UTF-8 tr_TR.UTF-8; do
+    locale -a 2> /dev/null | "${GREP:-grep}" -q -i -x "$(printf '%s' "$loc" | tr 'A-Z' 'a-z' | tr -d '-')" \
+        || locale -a 2> /dev/null | "${GREP:-grep}" -q -x "$loc" \
+        || continue
+    got="$(SCAN_FORCE_POSIX=0 LC_ALL="$loc" bash "$scan" "${work}/collate.md" 2> /dev/null | norm)"
+    [ "$got" = "$ref" ] || same=0
+done
+if [ "$same" -eq 1 ]; then ok; else bad "report order changes with the locale"; fi
+
+# The comparison above can only run where a dictionary-collating locale is
+# installed, so assert the mechanism as well: the scanner must clear LC_ALL,
+# which would override both settings, and pin collation to C.
+if "${GREP:-grep}" -q '^unset LC_ALL$' "$scan" && "${GREP:-grep}" -q '^export LC_COLLATE=C$' "$scan"; then
+    ok
+else
+    bad "scan.sh must clear LC_ALL and pin LC_COLLATE=C"
+fi
+
+# --- reference lists must not arrive truncated --------------------------------
+# A fetch route that truncates a list produces fewer patterns, all of them valid,
+# so the compile check passes and the scanner reports files clean. A floor on the
+# entry count catches a truncated or placeholder file.
+check_floor() {
+    local file="$1" floor="$2" n
+    n="$("${GREP:-grep}" -c -v -E '^[[:space:]]*(#|$)' "${root}/references/${file}" 2> /dev/null)"
+    if [ "${n:-0}" -ge "$floor" ]; then ok; else bad "references/${file} has ${n:-0} entries, expected at least ${floor}"; fi
+}
+check_floor patterns.txt 175
+check_floor patterns-loose.txt 40
+check_floor artifacts.txt 35
+check_floor variant-pairs.txt 28
+check_floor rotations.txt 9
+check_floor hidden-unicode.txt 35
+check_floor l1/errors.txt 22
+check_floor l1/false-friends.txt 20
+if [ "$("${GREP:-grep}" -c . "${root}/references/banlist.md")" -ge 140 ]; then ok; else bad "references/banlist.md looks truncated"; fi
+
+# --- sentence length and terminology rotations ------------------------------
+printf 'The system will check the configuration and then verify the settings before it runs the migration, which is a long sentence that runs well past any reasonable limit for a second language reader.\n' > "${work}/long.md"
+printf 'A short sentence. Another short one.\n' > "${work}/short.md"
+
+out="$(SCAN_FORCE_POSIX=0 bash "$scan" "${work}/long.md" 2>&1)"
+case "$out" in *"33 words"*) ok ;; *) bad "long sentence is counted and reported" ;; esac
+case "$out" in *"check verify"*) ok ;; *) bad "a terminology rotation is reported" ;; esac
+
+out="$(SCAN_FORCE_POSIX=0 bash "$scan" "${work}/short.md" 2>&1)"
+case "$out" in *"long sentences"*clean*) ok ;; *) bad "short sentences report clean" ;; esac
+
+out="$(SCAN_FORCE_POSIX=0 bash "$scan" --max-sentence=10 "${work}/short.md" 2>&1)"
+case "$out" in *"over 10 words"*) ok ;; *) bad "--max-sentence changes the limit" ;; esac
+
+SCAN_FORCE_POSIX=0 bash "$scan" --gate "${work}/long.md" > /dev/null 2>&1
+if [ $? -eq 0 ]; then ok; else bad "long sentences and rotations must not gate"; fi
+
+# --- preemptive defence and the trailing moral ------------------------------
+printf 'That is not a turf claim.\nIt fails, because a judgment call is not a gate.\n' > "${work}/defence.md"
+out="$(SCAN_FORCE_POSIX=0 bash "$scan" "${work}/defence.md" 2>&1)"
+case "$out" in *"That is not a turf claim"*) ok ;; *) bad "preemptive defence is caught" ;; esac
+case "$out" in *", because a judgment call"*) ok ;; *) bad "the trailing moral is caught" ;; esac
+
 # --- comments mode through the whole scanner --------------------------------
 out="$(SCAN_FORCE_POSIX=0 bash "$scan" --comments "${here}/lexer/python.py" 2>&1)"
 case "$out" in *"worth noting"*) ok ;; *) bad "--comments reads a python docstring" ;; esac
