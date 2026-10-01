@@ -180,7 +180,12 @@ if [ "$nfiles" -lt 1 ]; then
     exit 2
 fi
 
-for f in "$strict" "$loose" "$pairs" "$l1_err" "$l1_ff" "$hidden" "$artifacts" "$rotations"; do
+# The awk programs are checked with the lists. A missing one does not make awk
+# crash the scan: it makes awk print nothing, and nothing reads as "clean".
+comments_awk="${here}/comments.awk"
+need="$strict $loose $pairs $l1_err $l1_ff $hidden $artifacts $rotations $sentences_awk"
+[ "$do_comments" = "yes" ] && need="$need $comments_awk"
+for f in $need; do
     if [ ! -r "$f" ]; then
         echo "scan.sh: cannot read $f" >&2
         exit 2
@@ -295,7 +300,10 @@ for target in "${files[@]}"; do
                 echo "  note: a slash after a closing parenthesis is read as division," >&2
                 echo "        so 'if (x) /re/.test(s)' misreads that one line." >&2 ;;
         esac
-        awk -v lang="$lang" -f "${here}/comments.awk" "$target" > "$tmp_prose"
+        if ! awk -v lang="$lang" -f "$comments_awk" "$target" > "$tmp_prose"; then
+            echo "scan.sh: comments.awk failed on $target; not reporting it clean" >&2
+            exit 2
+        fi
         check_src="$tmp_prose"
     else
         strip_code "$target" > "$tmp_prose"
@@ -530,7 +538,10 @@ for target in "${files[@]}"; do
     # Sentence length. A notice, never gated: length is the author's judgment
     # and a long sentence is sometimes the right one.
     echo "--- long sentences (over $maxsent words)"
-    long="$(awk -v limit="$maxsent" -f "$sentences_awk" "$tmp_prose" 2> /dev/null)"
+    if ! long="$(awk -v limit="$maxsent" -f "$sentences_awk" "$tmp_prose")"; then
+        echo "scan.sh: sentences.awk failed on $target; not reporting it clean" >&2
+        exit 2
+    fi
     if [ -n "$long" ]; then
         printf '%s\n' "$long" | while IFS=: read -r ln cnt txt; do
             printf '  line %-6s %3s words   %s...\n' "$ln" "$cnt" "$txt"

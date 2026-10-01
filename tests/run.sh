@@ -256,6 +256,25 @@ out="$(SCAN_FORCE_POSIX=0 bash "$scan" --comments "${here}/lexer/shell.sh" 2>&1)
 case "$out" in *tapestry*) bad "--comments must not read a heredoc body" ;; *) ok ;; esac
 case "$out" in *"cutting-edge"*) ok ;; *) bad "--comments reads a shell comment" ;; esac
 
+# --- a missing awk program must fail loudly, not report clean ----------------
+# awk with a missing -f file prints nothing, and nothing reads as "clean". The
+# scanner is copied so the real tree is never touched.
+copy="${work}/copy"
+mkdir -p "$copy"
+cp -r "${root}/scripts" "${root}/references" "$copy/"
+printf '# This is groundbreaking and seamless.\necho hi\n' > "${work}/x.sh"
+
+rm "${copy}/scripts/comments.awk"
+SCAN_FORCE_POSIX=0 bash "${copy}/scripts/scan.sh" --comments "${work}/x.sh" > /dev/null 2>&1
+if [ $? -eq 2 ]; then ok; else bad "missing comments.awk must exit 2 under --comments"; fi
+SCAN_FORCE_POSIX=0 bash "${copy}/scripts/scan.sh" "${work}/short.md" > /dev/null 2>&1
+if [ $? -eq 0 ]; then ok; else bad "comments.awk is only required under --comments"; fi
+cp "${root}/scripts/comments.awk" "${copy}/scripts/"
+
+rm "${copy}/scripts/sentences.awk"
+SCAN_FORCE_POSIX=0 bash "${copy}/scripts/scan.sh" "${work}/short.md" > /dev/null 2>&1
+if [ $? -eq 2 ]; then ok; else bad "missing sentences.awk must exit 2"; fi
+
 rm -rf "$work"
 
 # The gate must fail on a dirty file and pass on a clean one, or CI is decorative.

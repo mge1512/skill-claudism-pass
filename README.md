@@ -322,7 +322,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Fifty-seven cases in seven classes:
+Sixty-two cases in eight classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
@@ -342,6 +342,9 @@ Fifty-seven cases in seven classes:
   whole-line comparison, which is collation dependent, so the scanner clears
   `LC_ALL` and pins `LC_COLLATE=C` while leaving `LC_CTYPE` on a UTF-8 locale for
   the `grep -P` ranges.
+- **Fail loudly.** A missing `comments.awk` or `sentences.awk` makes the scanner
+  exit 2. Without the check, awk prints nothing for a missing program, and an
+  empty result reads as a clean file.
 - **The ratchet**, in all three drift directions plus a stale lexicon stamp.
 - **The variant switch and comments mode**, including the two-flip threshold and
   the rule that a marker inside a code span does not count.
