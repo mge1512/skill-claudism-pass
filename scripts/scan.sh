@@ -378,6 +378,7 @@ for target in "${files[@]}"; do
         found="$(LC_ALL=C "$GREP" -c -F "$ch" "$check_src" 2> /dev/null || true)"
         if [ "${found:-0}" -gt 0 ]; then
             lines="$(LC_ALL=C "$GREP" -n -F "$ch" "$check_src" | cut -d: -f1 | tr '\n' ' ')"
+            lines="${lines% }"
             if [ "$ctx" = "yes" ]; then
                 printf '  check: %-31s x%-4s line %s\n' "$name" "$found" "$lines"
             else
@@ -413,17 +414,17 @@ for target in "${files[@]}"; do
     # Decorative punctuation. Straight quotes, plain hyphen and three dots
     # instead. Diacritics belong to the spelling and are never flagged.
     echo "--- decorative punctuation"
-    punct=""
-    if [ "$has_p" = "yes" ]; then
-        punct="$("$GREP" -n -o -P '[\x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{00AB}\x{00BB}\x{2190}\x{2192}\x{2022}\x{00A0}\x{2264}\x{2265}\x{2260}]' "$check_src" 2> /dev/null)"
-    fi
-    if [ -z "$punct" ]; then
-        nbsp="$(printf '\302\240')"
-        punct="$("$GREP" -n -o -F -e '—' -e '–' -e '‒' -e '―' -e '…' \
-                                  -e '“' -e '”' -e '‘' -e '’' -e '«' -e '»' \
-                                  -e '→' -e '←' -e '•' -e '≤' -e '≥' -e '≠' \
-                                  -e "$nbsp" "$check_src" 2> /dev/null)"
-    fi
+    # One implementation for both grep paths: the characters are enumerated as
+    # UTF-8 byte sequences, so the two paths cannot drift apart and the script
+    # stays ASCII. They did drift once: the PCRE class and a literal fallback
+    # list disagreed, and U+2010 went undetected on BSD grep. U+00A0 and U+2011
+    # are invisible and belong to the hidden-character check above; listing
+    # them here as well counted every occurrence twice.
+    #   U+2010 U+2012-2015 hyphen and dashes     U+2018 U+2019 U+201C U+201D quotes
+    #   U+2026 ellipsis   U+00AB U+00BB guillemets   U+2190 U+2192 arrows
+    #   U+2022 bullet     U+2264 U+2265 U+2260 comparison signs
+    punct_pat="$(printf '\342\200\220|\342\200\222|\342\200\223|\342\200\224|\342\200\225|\342\200\230|\342\200\231|\342\200\234|\342\200\235|\342\200\246|\302\253|\302\273|\342\206\220|\342\206\222|\342\200\242|\342\211\244|\342\211\245|\342\211\240')"
+    punct="$(LC_ALL=C "$GREP" -n -o -E "$punct_pat" "$check_src" 2> /dev/null)"
     if [ "$has_p" = "yes" ]; then
         emoji="$("$GREP" -n -o -P '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]' "$check_src" 2> /dev/null)"
     else

@@ -2,13 +2,10 @@
    Module docstring: this is a testament to something.
 
 Spanning lines, at the end of the day.
-   
-         
 
-         
-       One-line docstring worth noting.   
-                         
+
+
+
+       One-line docstring worth noting.
+
               # a real comment, seamless
-
-
-                 

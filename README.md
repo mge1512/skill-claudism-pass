@@ -322,7 +322,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Sixty-two cases in eight classes:
+Seventy-one cases in nine classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
@@ -342,6 +342,13 @@ Sixty-two cases in eight classes:
   whole-line comparison, which is collation dependent, so the scanner clears
   `LC_ALL` and pins `LC_COLLATE=C` while leaving `LC_CTYPE` on a UTF-8 locale for
   the `grep -P` ranges.
+- **One count per character.** Each special character is owned by one check:
+  invisible ones by the hidden-character check, visible ones by decorative
+  punctuation. `tests/docs/typography.md` holds every character in both sets
+  and runs on both grep paths, so the lists cannot drift apart again.
+  Recorded output carries no trailing whitespace, since editors and
+  `git apply --whitespace=fix` strip it and a golden file depending on it
+  would fail for no reason.
 - **Fail loudly.** A missing `comments.awk` or `sentences.awk` makes the scanner
   exit 2. Without the check, awk prints nothing for a missing program, and an
   empty result reads as a clean file.

@@ -52,7 +52,7 @@ function blanks(k,    s) {
         t = line
         if (heredoc_dash) sub(/^[ \t]+/, "", t)
         if (t == heredoc) heredoc = ""
-        print blanks(n)
+        print ""
         next
     }
 
@@ -73,8 +73,8 @@ function blanks(k,    s) {
             i = i + 1
         }
         if (multi != "") {
-            if (docstring) print line
-            else print blanks(n)
+            if (docstring) { t = line; sub(/[ \t]+$/, "", t); print t }
+            else print ""
             next
         }
     }
@@ -212,5 +212,6 @@ function blanks(k,    s) {
         i = i + 1
     }
 
+    sub(/[ \t]+$/, "", out)
     print out
 }

@@ -256,6 +256,22 @@ out="$(SCAN_FORCE_POSIX=0 bash "$scan" --comments "${here}/lexer/shell.sh" 2>&1)
 case "$out" in *tapestry*) bad "--comments must not read a heredoc body" ;; *) ok ;; esac
 case "$out" in *"cutting-edge"*) ok ;; *) bad "--comments reads a shell comment" ;; esac
 
+# --- each special character is counted once, on both grep paths -----------
+# U+00A0 and U+2011 sat in both the hidden-character list and the punctuation
+# class, so one occurrence counted twice; U+2010 was missing from the BSD path
+# altogether. tests/docs/typography.md holds every character and runs on both
+# paths; these three pin the counts.
+for ch in '\302\240' '\342\200\221' '\342\200\220'; do
+    printf 'one%bhere\n' "$ch" > "${work}/one.md"
+    for posix in 0 1; do
+        out="$(SCAN_FORCE_POSIX=$posix bash "$scan" "${work}/one.md" 2>&1)"
+        case "$out" in
+            *"ratchetable): 1"*) ok ;;
+            *) bad "single $ch must give exactly one gate hit (SCAN_FORCE_POSIX=$posix)" ;;
+        esac
+    done
+done
+
 # --- a missing awk program must fail loudly, not report clean ----------------
 # awk with a missing -f file prints nothing, and nothing reads as "clean". The
 # scanner is copied so the real tree is never touched.
@@ -276,6 +292,12 @@ SCAN_FORCE_POSIX=0 bash "${copy}/scripts/scan.sh" "${work}/short.md" > /dev/null
 if [ $? -eq 2 ]; then ok; else bad "missing sentences.awk must exit 2"; fi
 
 rm -rf "$work"
+
+# Recorded output must carry no trailing whitespace. Editors strip it on save
+# and git apply --whitespace=fix strips it from patches, and a golden file that
+# depends on it then fails for no reason.
+tw="$("${GREP:-grep}" -l '[[:space:]]$' "${here}"/docs/*.expected "${here}"/lexer/*.expected 2> /dev/null)"
+if [ -z "$tw" ]; then ok; else bad "trailing whitespace in recorded output: $(printf '%s ' $tw)"; fi
 
 # The gate must fail on a dirty file and pass on a clean one, or CI is decorative.
 SCAN_FORCE_POSIX=0 bash "$scan" --gate "${here}/docs/clean.md" > /dev/null 2>&1

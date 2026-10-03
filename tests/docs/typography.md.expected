@@ -1,15 +1,30 @@
-=== tests/docs/hidden.md
+=== tests/docs/typography.md
 --- banlist hits, rewrite these: 0
 --- needs judgment, check the carve-outs in SKILL.md: 0
 --- leaked scaffolding and chatbot boilerplate
   clean
 --- hidden characters
-  NO-BREAK SPACE                         x1    line 1
-  ZERO WIDTH SPACE                       x1    line 1
-  SECTION SIGN (say "section 4" instead) x1    line 1
-  TAG CHARACTERS (U+E0000-E007F, hidden-instruction channel) x1
+  NO-BREAK SPACE                         x1    line 23
+  NON-BREAKING HYPHEN                    x1    line 25
 --- decorative punctuation
-  clean
+  line 1:‐
+  line 3:‒
+  line 5:–
+  line 7:—
+  line 9:―
+  line 11:‘
+  line 11:’
+  line 11:“
+  line 11:”
+  line 13:…
+  line 15:«
+  line 15:»
+  line 17:←
+  line 17:→
+  line 19:•
+  line 21:≤
+  line 21:≥
+  line 21:≠
 --- structural tics
   clean
 --- spelling variant
@@ -24,5 +39,5 @@
   clean
 
 total phrase hits: 0
-gate hits (unambiguous, ratchetable): 4
+gate hits (unambiguous, ratchetable): 20
 Now read the draft for the constructions grep cannot see (SKILL.md, step 2).
