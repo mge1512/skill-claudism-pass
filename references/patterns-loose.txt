@@ -39,6 +39,10 @@
 # trailing "here". Approximated without lookbehind, so "there is a X here" and
 # similar legitimate locatives turn up too. Judgment call.
 \bis (not )?(the|a|an) [a-z'-]+( [a-z'-]+){0,2} here[.,!?:;]
+# Testimony verbs (review, 2026-10). A person, a project or a certificate
+# authority vouching is literal; a decoder, a checksum or a signature vouching
+# is the agency metaphor in banlist.md. Judgment call.
+\bvouch(es|ed|ing)? (for|that)\b
 
 # --- chatbot closers, soft grade. Humans write these too, so they are signal
 # only in bulk and never a conviction on their own (Lolly field notes).

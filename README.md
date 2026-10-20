@@ -322,7 +322,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Seventy-one cases in nine classes:
+Seventy-three cases in nine classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since

@@ -80,7 +80,7 @@ Prevention beats repair. While writing, keep off the four constructions that pro
 3. **Announcing instead of delivering.** "Here's where it gets interesting", "Let's break it down", "I'm going to make three points", "It's worth noting that". Deliver the point; the announcement adds nothing.
 4. **Value-claim filler.** "this matters", "worth considering", "the right way", "the useful thing here". Telling the reader what to value before they decided. Let the substance make the case.
 
-Also keep off placement and agency metaphors ("shape", "lives", "holds", "carries", "moves", "points", "hands you", "the engine", "doing the work") and off hype adjectives ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge").
+Also keep off placement and agency metaphors ("shape", "lives", "holds", "carries", "moves", "points", "hands you", "vouches for", "the engine", "doing the work") and off hype adjectives ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge").
 
 ## The pass
 

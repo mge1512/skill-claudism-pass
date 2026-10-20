@@ -1,0 +1,29 @@
+=== tests/docs/agency.md
+--- banlist hits, rewrite these: 1
+  line 1      decoder cannot vouch for       [\b(decoders?|checksums?|hash(es)?|digests?|crcs?|parity|codewords?|tests?|suites?|scanners?|verifiers?|compilers?|kernel|file ?systems?|pipelines?|builds?) (can(no|')t |could(n't| not) |can |will )?vouch(es|ed|ing)? for\b]
+--- needs judgment, check the carve-outs in SKILL.md: 3
+  line 1      vouch for                      [\bvouch(es|ed|ing)? (for|that)\b]
+  line 3      vouch for                      [\bvouch(es|ed|ing)? (for|that)\b]
+  line 5      vouches for                    [\bvouch(es|ed|ing)? (for|that)\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 4
+gate hits (unambiguous, ratchetable): 1
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

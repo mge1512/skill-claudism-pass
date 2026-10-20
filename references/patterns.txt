@@ -189,6 +189,13 @@
 # sentence is nearly always better with both cut.
 \bhere,
 
+# --- caught in review, 2026-10
+# "vouch for" with a mechanism as the subject: "a block the decoder cannot vouch
+# for is never returned". People vouch; a decoder corrects or fails. A person, a
+# project or a certificate authority vouching is literal, so only mechanism
+# nouns are matched here; patterns-loose.txt reports every other use.
+\b(decoders?|checksums?|hash(es)?|digests?|crcs?|parity|codewords?|tests?|suites?|scanners?|verifiers?|compilers?|kernel|file ?systems?|pipelines?|builds?) (can(no|')t |could(n't| not) |can |will )?vouch(es|ed|ing)? for\b
+
 # --- upstream sync 2026-09-28: claudisms.ai entries added since 2026-08-18
 \bhands (you|me|us|them|it|back)\b
 \bhanded back\b
