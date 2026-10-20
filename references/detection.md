@@ -29,9 +29,10 @@ Never present grade 3 as grade 1.
   writing, or this file would otherwise convict itself. The scanner blanks code
   spans and quoted spans before the scaffolding check for this reason.
 - **Leave the common words out.** `key`, `additionally` and `valuable` are
-  over-represented in machine text and still far too common in human prose. The
-  distinctive tail carries the weight: `delve`, `tapestry`, `testament`,
-  `multifaceted`.
+  over-represented in machine text and still far too common in human prose.
+  Only the distinctive tail counts: `delve`, `tapestry`, `testament`,
+  `multifaceted`. Even that tail dates: the first three mark output from 2023
+  to 2024 and are rarer in current models. Date every lean.
 - **Version the lists.** `references/VERSION` stamps them, the ratchet baseline
   records the stamp, and the scanner says so when they differ. Counts move when
   the lists change, and an unversioned stored verdict goes stale without saying
@@ -43,15 +44,19 @@ Different models over-use different words, which is what makes attribution
 possible at all. `camaraderie` and `palpable` run far above the human rate in
 GPT-4o output; `a multi-pronged approach` and
 `However, it is crucial to acknowledge` lean Gemini; full-width CJK punctuation glued into Latin prose is
-tokeniser residue. Formatting habits separate model families better than
-vocabulary does: the bold enumeration label is a ChatGPT habit specifically.
+tokeniser residue. Formatting separates model families, but less well than
+vocabulary: in a five-way test, Markdown elements alone reached 73.1%
+accuracy, word-shuffled text 88.9% and the full text 97.1% (Sun et al.). The
+bold enumeration label is a ChatGPT habit specifically.
 
 Treat all of this as a lean and never as proof.
 
 ## Sources to track
 
 - Wikipedia, "Signs of AI writing", actively maintained.
-- Reinhart et al., PNAS 2025, per-model lexical fingerprints.
-- The ICML 2025 idiosyncrasies study, formatting habits by model family.
+- Reinhart et al., PNAS 2025: grammatical and lexical profiles of GPT-4o,
+  GPT-4o Mini and Llama 3. No Claude model was tested.
+- Sun et al., "Idiosyncrasies in Large Language Models", ICML 2025: words and
+  formatting by model family, Claude 3.5 Sonnet included.
 - System-prompt and scaffolding leak collections. Each new chat product feature
   leaks a new token family within weeks, which is where `artifacts.txt` grows.

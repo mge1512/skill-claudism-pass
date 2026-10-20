@@ -11,7 +11,7 @@
 \bcoming back to\b
 \bbrings (me|us) back to\b
 \bthe question (that |i )?(kept|keeps|keep) (coming up|coming back)
-\bhere (is|'s) where i (landed|come down)\b
+\bhere('s| is) where i (landed|come down)\b
 \bwhere i landed\b
 
 # --- discovery arc and manufactured emphasis
@@ -76,15 +76,15 @@
 
 # --- announcing instead of delivering
 \bthe point is\b
-\bhere (is|'s) where it gets\b
-\bhere (is|'s) the (analogy|moment|thing|part) that\b
+\bhere('s| is) where it gets\b
+\bhere('s| is) the (analogy|moment|thing|part) that\b
 \b(this|that|it) matters\b
 \bbecause it matters\b
 \bthe right (time|question|way|answer|tool|thing|approach|level|mindset)\b
 \bthe useful (thing|part)\b
 \bwhat i (want|keep wanting) (you|people) to (see|know|take)\b
 \bit(')?s worth noting\b
-\bit(')?s important to note\b
+\bit( i|')?s important to note\b
 \bwhen it comes to\b
 \bat its core\b
 \bthis is where .{1,30} comes in\b
@@ -96,9 +96,9 @@
 \bi love that you asked\b
 
 # --- negative parallelism and staccato negation
-\bnot just .{1,40}(it(')?s|but)\b
+\bnot (just|merely|simply) .{1,40}(it(')?s|it is|they('re| are)|but)\b
 \bnot only .{1,40} but\b
-\bis ?n(o|')t about .{1,40} it(')?s about\b
+\b(is|are) ?n(o|')t about .{1,40} (it(')?s|it is|they('re| are)) about\b
 \bno .{1,20}\. no .{1,20}\. just\b
 
 # --- false intimacy and invented observation
@@ -119,24 +119,24 @@
 \bfirst wave of a multi-year\b
 \bdispatches from\b
 \bfield notes\b
-\bunderscor(e|es|ing)\b
 \bfoster(s|ing|ed)?\b
-\bshed light on\b
-\bpave the way\b
+\bshed(s|ding)? light on\b
+\bpav(e|es|ed|ing) the way\b
 \bpivotal\b
 \btransformative\b
-\bgame.chang(er|ing)\b
+\bgame.chang(er|ers|ing)\b
 \bgroundbreaking\b
 \bcutting.edge\b
-\brobust\b
-\bseamless\b
-\bintricate\b
-\bcomprehensive\b
-\bholistic\b
+\brobust(ly)?\b
+\bseamless(ly)?\b
+\bintrica(te|tely|cy|cies)\b
+\bcomprehensive(ly)?\b
+\bholistic(ally)?\b
 \bnavigat(e|ing) the\b
 \btestament\b
 \bdelv(e|es|ing|ed)\b
-\bdive into\b
+\bmultifaceted\b
+\bdiv(e|es|ing) into\b
 \bharness(es|ing|ed)?\b
 \bpressure-test\b
 \bright-size\b
@@ -168,12 +168,12 @@
 \bsurvivab[a-z]*\b
 \bsmoke[ -]test\b
 \bin (the )?(existing|wider|current|competitive) landscape\b
-\bunderscor(es|ing) (the|how|that|a|an)\b
+\bunderscor(es|ed|ing) (the|how|that|a|an|its|their|our)\b
 \bleverag(e|es|ed|ing) (the|its|our|your|their|a|an)\b
 
 # --- from the Lolly field notes (Andy Fitzsimon, SUSE), 2026-08
 \bwhether you('re| are) an? .{2,30} or an? \b
-\b(serves|stands|functions) as\b
+\b(serves|stands) as\b
 , (highlighting|emphasizing|emphasising|underscoring|reflecting|showcasing|demonstrating|ensuring|fostering|enhancing) 
 \b(foundationally|fundamentally) [a-z]+\b
 \bhere'?s the kicker\b
@@ -218,7 +218,7 @@
 \blest anyone\b
 
 # --- from the simple-english skill (ASD-STE100), MIT, see LICENSE
-\butiliz(e|es|ed|ing)\b
+\butili[sz](e|es|ed|ing)\b
 \bin order to\b
 \bprior to\b
 \bin the event that\b

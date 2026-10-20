@@ -88,8 +88,6 @@ AI models overuse the same words. This is a running catalog of them: the phrases
 
 ---
 
-- **Preemptive defence** - "That is not a turf claim." "Not that anyone asked." "rather than pretending otherwise." "I'm not saying X, but". Answering an objection nobody raised. The move invents a critic so the text can be seen defeating one, and it tells the reader the writer expected resistance, which plants the doubt it was meant to remove. If the point needs defending, the defence belongs where the objection actually appears. Delete the sentence and check whether anything was lost; usually the sentence before it already carried the argument.
-- **The trailing moral** - a factual sentence followed by a clause saying why the reader should approve: "..., because a judgment call is not a gate", "..., which keeps the floor honest and forces each win to be locked in", "..., and that is the point". The clause adds no information and instructs the reader how to feel about the sentence it is attached to. State the fact and stop. Related to value-claim filler, but the shape rather than the vocabulary is the tell, so a word search does not find it.
 ## Structural / framing tics
 
 - **Announcing the structure before delivering it** - "I'm going to make three points" instead of just making them. Trust the reader to follow.
@@ -176,18 +174,35 @@ When drafting, check against this list before producing. If a candidate phrase a
 
 ---
 
-Source: https://claudisms.ai/ (Markdown at https://claudisms.ai/claudisms.md).
-This copy was taken on 2026-09-28. The upstream list grows; re-fetch it before
-assuming this file is current. Local additions belong here and, where a regular
-expression can catch them, in `patterns.txt`.
+Source: https://claudisms.ai/ (Markdown at https://claudisms.ai/claudisms.md),
+built from https://github.com/wespomeroyny/claudisms, whose `claudisms.json`
+has the same entries with a list of aliases for each. This copy was taken on
+2026-09-28 and still matched upstream `main` (852854b) on 2026-10-20. The
+upstream list grows; re-fetch it before assuming this file is current. Local
+additions belong below and, where a regular expression can catch them, in
+`patterns.txt`.
 
-The copy taken on 2026-08-18 ended with a CC0 1.0 dedication. The upstream
-footer now says "Free to copy and adapt." and names no license; for the entries
-added upstream between the two dates, that sentence is the only statement.
+The list is dedicated to the public domain under CC0 1.0. The upstream
+repository's LICENSE, the `license` field in `claudisms.json`, the site footer
+and the About page all say so. Only the footer of the Markdown file leaves the
+dedication out ("Free to copy and adapt."), and it has done so since the first
+upstream commit.
+
+## Notes on the upstream text
+
+The entries above are kept as upstream wrote them. Checked on 2026-10-20, some
+of their attributions no longer match the sources:
+
+- "Imported from external AI-writing references" cites Will Francis, "How to Stop Claude Writing Like an AI". The article is now titled "How to Make Claude Sound More Human" (published 2026-03-13, page modified 2026-09-11). Its current text names neither negative parallelism nor the bold-label list, and of the imported vocabulary only pivotal, robust and seamless.
+- The negative-parallelism entry says Wikipedia, Francis and the Washington Post all flag it as the most recognizable AI structure, at 6% of July 2025 ChatGPT messages. The Post reports about 6% of chats in July 2025 and ranks nothing. Copies of Wikipedia's "Signs of AI writing" from December 2025 and early 2026 rank nothing either, and say the construction is common in human writing too.
+- The vocabulary block was checked against Wikipedia's page as it stood at the time. The page's later lists of words by model era contain none of robust, seamless, realm, navigate, comprehensive, holistic, harness, cutting-edge, transformative, game-changing or "pave the way". The bans stand on their own.
+- The em-dash entry puts " - " in place of every em dash. One substitute in every slot keeps the habit, so `SKILL.md` asks for a rewrite instead (a comma, a full stop, parentheses or two sentences) and keeps " - " for the rare aside.
 
 ## Local additions
 
-Entries caught in review after the upstream copy was taken. The matching expressions are in `patterns.txt`, and in `patterns-loose.txt` where a match needs judgment.
+Entries added here; upstream does not have them. The matching expressions are in `patterns.txt`, and in `patterns-loose.txt` where a match needs judgment.
 
+- **Preemptive defense** - "That is not a turf claim." "Not that anyone asked." "rather than pretending otherwise." "I'm not saying X, but". Answering an objection nobody raised. The move invents a critic so the text can be seen defeating one, and it tells the reader the writer expected resistance, which plants the doubt it was meant to remove. If the point needs defending, the defense belongs where the objection actually appears. Delete the sentence and check whether anything was lost; usually the sentence before it already carried the argument.
+- **The trailing moral** - a factual sentence followed by a clause saying why the reader should approve: "..., because a judgment call is not a gate", "..., which keeps the floor honest and forces each win to be locked in", "..., and that is the point". The clause adds no information and instructs the reader how to feel about the sentence it is attached to. State the fact and stop. Related to value-claim filler, but the shape rather than the vocabulary is the tell, so a word search does not find it.
 - **"here,"** (the word "here" directly before a comma - "The difference here, is that ...", "What we see here, is ...", "Here, the service reads its configuration") - deictic hedge plus a spoken pause. "Here" refers to the current case without saying which case it is; the comma is the pause a speaker makes before the verb, and in the mid-sentence form it also cuts the subject off from its verb. The sentence is better without both nearly every time: "The difference is that ...", "The service reads its configuration". If the case has to be named, name it: "In this configuration, ...", "After the upgrade, ...". Same family as "I want to be careful here" and the trailing "here" in "X is the problem here". Note: "Here, m is the mass" after a formula and "From here, the installer takes over" in a procedure are the legitimate uses, and even those read as well as "where m is the mass" and "The installer then takes over". Caught in review, 2026-09.
 - **"vouch for" / "vouches for" / "cannot vouch for"** (with a mechanism as the subject - "a block the decoder cannot vouch for is never returned", "the checksum vouches for the block", "a test suite that vouches for the release") - testimony metaphor. Vouching is a human act: a person gives a personal guarantee for a claim someone else makes. A decoder, a checksum or a test suite does no such thing. It runs a defined check, and the check passes or fails. The metaphor hides which check that is, and in storage and security text the reader needs exactly that information: a CRC detects corruption, a Reed-Solomon decoder corrects up to a stated number of symbol errors, a signature shows that a named key signed exactly these bytes. Say what the mechanism checks and what happens on failure: "a read that fails decoding returns -EIO", "the block checksum matches", "the release passes the test suite". Where the field has a term, use it: "verify", "detect", "correct", "attest" (TPM, remote attestation). Same agency family as "lives", "holds", "carries" and "doing the work"; "testify" and "swear to" fail the same way when the subject is a machine. Note: a person or a project vouching for someone ("two maintainers vouch for the new committer") is literal, and so is the PKI sense, where a certificate authority vouches for the binding of a key to an identity. The loose pattern reports those for a judgment call. Caught in review, 2026-10.

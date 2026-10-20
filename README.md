@@ -43,7 +43,7 @@ https://support.claude.com if the menu has moved.
 **Antigravity CLI (`agy`) and the Antigravity IDE**
 
 ```bash
-# per workspace, recognised by every Antigravity surface
+# per workspace, recognized by every Antigravity surface
 git clone https://github.com/mge1512/skill-claudism-pass.git \
     .agents/skills/claudism-pass
 
@@ -52,7 +52,7 @@ git clone https://github.com/mge1512/skill-claudism-pass.git \
     ~/.gemini/config/skills/claudism-pass
 ```
 
-Antigravity comes in three flavours (`agy`, the CLI and the IDE) and they do not
+Antigravity comes in three flavors (`agy`, the CLI and the IDE) and they do not
 search the same global locations. The workspace path is the one all of them agree
 on, and it travels with the repository, so prefer it. Run `/skills` in a session
 to see which locations the installed version reads; the published
@@ -127,7 +127,11 @@ setting, only the shared file applies, which already covers the traps common to
 all of them.
 
 Dates, clock and numbers are the same in both variants: `YYYY-MM-DD`, 24-hour
-with the time zone named, decimal point, a space before the unit.
+with two-digit hours and the time zone named, decimal point, a space before the
+unit. The thousands separator is the exception: EU mode follows the European
+Commission's style guide and writes 3 000 with a no-break space, which the
+scanner then lists for checking instead of counting. Official Journal
+citations keep their published dates (OJ L 119, 4.5.2016) in both modes.
 
 ## The scanner
 
@@ -140,7 +144,9 @@ bash "$SKILL_DIR/scripts/scan.sh" --eu --no-l1 tender.md
 It reports banlist phrases, decorative punctuation and emoji, `---` dividers,
 mixed spelling variants, date and unit problems, and second-language
 interference. Phrases are matched against whole paragraphs, so hard-wrapped mail
-text is scanned correctly.
+text is scanned correctly. Typographic quotes and apostrophes are folded to
+ASCII before the phrase and scaffolding checks, so "Let's" typed with U+2019
+still matches; the decorative-punctuation check reports the character itself.
 
 Requirements: bash and grep. GNU grep is used when present, including Homebrew's
 `ggrep`. macOS ships the BSD grep, which has neither PCRE (`-P`) nor GNU word
@@ -275,17 +281,22 @@ claudism-pass/
 
 ## Using it with simple-english
 
-[simple-english](https://github.com/AminBlg/SimpleEnglish) implements ASD-STE100
-Simplified Technical English. That is the controlled language aerospace and
-defence manufacturers use for maintenance documentation. It has 53 rules:
-sentence limits, one word one meaning, approved modals, condition before
-command. MIT licensed.
+[simple-english](https://github.com/AminBlg/SimpleEnglish) (MIT, by AminBlg,
+checked at 2.1.1) writes plain English in the spirit of ASD-STE100 Simplified
+Technical English, the controlled language that aerospace and defense
+manufacturers use for maintenance documentation. Since 2.0.0, Plain is its
+default mode: sentence limits, one word one meaning, approved modals, condition
+before command. Strict mode applies the STE vocabulary and the 53 writing rules
+of STE Issue 9, and runs only when you name STE, ASD-STE100 or compliance. A
+reply register covers chat as well: the answer first, prose only, no headings,
+bullets, bold or tables.
 
-The two do different jobs and compose well. STE is constructive and tells you how
-to write a sentence. This skill is subtractive and mechanical: a banlist, a
-scanner, a gate. STE has no scanner; this has no rule catalogue. Three things
-here have no counterpart there: first-language interference, leaked scaffolding,
-and the spelling variant switch.
+The two do different jobs and compose well. simple-english is constructive and
+tells you how to write a sentence. This skill is subtractive and mechanical: a
+banlist, a scanner, a gate. simple-english lints too, through plugin hooks that
+warn, but it has no CI gate and no ratchet; this skill has no rule catalog.
+Three things here have no counterpart there: first-language interference,
+leaked scaffolding, and the spelling variant switch.
 
 Run simple-english first, because it restructures sentences.
 Run the Claudism pass last, because it is the final check and its list is the
@@ -296,24 +307,38 @@ and upgrade procedures, error messages, release notes, incident reports, API
 guides, and agent instructions such as `AGENTS.md`.
 
 **Use this one alone** on anything written to persuade or to keep a reader
-reading. Blog
-and LinkedIn posts, conference abstracts and talk proposals, mails, slide text,
-customer-facing and marketing prose. The simple-english skill says the same in
-its own Limits section: STE removes persuasion by design, so applying it to blog
-voice deletes the persuasion.
+reading. Blog and LinkedIn posts, conference abstracts and talk proposals,
+mails, slide text, customer-facing and marketing prose. The simple-english
+skill says the same in its own Limits section: its rules delete persuasion, so
+they are not for marketing or brand writing.
 
-**One conflict.** STE rule 1.14 mandates American spelling. The EU mode here
-exists for tenders and submissions to EU institutions. Those are exactly the
-procedural documents STE targets. When both apply, the audience wins over the
-standard. If STE compliance is contractually required, say so in the document and
-let the standard win. Smaller frictions in the same direction: STE bans "should", "may",
-"might" and "could", bans semicolons and contractions, and restricts `-ing` forms
-to technical nouns. Correct in a maintenance manual, stilted in an abstract.
+**Spelling.** STE rule 1.14 asks for American spelling unless another official
+directive says otherwise, and simple-english applies it without that exception.
+The EU mode here exists for tenders and submissions to EU institutions. Those
+are exactly the procedural documents STE targets, and an EU contracting
+authority's style requirement is such a directive. When both apply, the
+audience wins over the standard. If STE compliance is contractually required,
+say so in the document and let the standard win. Smaller frictions in the same
+direction: simple-english bans "should", "would", "may", "might" and "could",
+contractions, semicolons, and an "-ing" verb after a comma. Correct in a
+maintenance manual, stilted in an abstract.
 
-**If both are installed**, their descriptions overlap enough to compete for
-triggering, since both mention documentation and removing AI slop. Narrow one of
-them, or state the rule plainly: procedural documentation goes to
-simple-english first, everything else starts here.
+**Dashes.** simple-english counts a spaced or double hyphen between two
+statements as an em dash. The Claudism pass therefore rewrites an em dash as a
+comma, a full stop, parentheses or two sentences, and keeps " - " for the rare
+aside, so running it last does not bring dashes back.
+
+**The report.** simple-english's reply rules flag the headings and bullets that
+the Claudism pass report uses. When both are active in one session, the pass
+writes its report as plain lines (`SKILL.md`, step 3).
+
+**If both are installed.** The simple-english plugins for Claude Code and Codex
+load its rules through a SessionStart hook at every session start, resume,
+clear and compaction, so narrowing a description no longer keeps it out of a
+session. Its other hooks lint written Markdown files and replies; all of them
+only warn. State the rule in the request instead: procedural documentation goes
+to simple-english first, everything else starts here. `npx skills add
+AminBlg/SimpleEnglish` installs the skill without the hooks.
 
 ## Tests
 
@@ -322,7 +347,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Seventy-three cases in nine classes:
+Eighty-one cases in nine classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
@@ -409,8 +434,9 @@ observed in the field:
 ## Source and license
 
 `references/banlist.md` is the Claudisms banlist from https://claudisms.ai/
-(Markdown at https://claudisms.ai/claudisms.md), which its publisher released into
-the public domain under CC0 1.0. The article behind the list is "Your Name Is Still
+(Markdown at https://claudisms.ai/claudisms.md), kept by Wes Pomeroy in
+https://github.com/wespomeroyny/claudisms and released into the public domain
+under CC0 1.0. The article behind the list is "Your Name Is Still
 on It" (https://wespomeroy.substack.com/p/your-name-is-still-on-it). The local copy
 records the date it was taken; the upstream list grows, so re-fetch it now and
 then. Entries caught in review are added locally.

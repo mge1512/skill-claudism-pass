@@ -1,0 +1,44 @@
+=== tests/docs/siblings.md
+--- banlist hits, rewrite these: 15
+  line 1      It is important to note        [\bit( i|')?s important to note\b]
+  line 3      not just a bug, it is          [\bnot (just|merely|simply) .{1,40}(it(')?s|it is|they('re| are)|but)\b]
+  line 5      is not about speed, it is abou [\b(is|are) ?n(o|')t about .{1,40} (it(')?s|it is|they('re| are)) about\b]
+  line 7      diving into                    [\bdiv(e|es|ing) into\b]
+  line 7      intricacies                    [\bintrica(te|tely|cy|cies)\b]
+  line 7      paving the way                 [\bpav(e|es|ed|ing) the way\b]
+  line 7      seamlessly                     [\bseamless(ly)?\b]
+  line 7      shedding light on              [\bshed(s|ding)? light on\b]
+  line 10     comprehensively                [\bcomprehensive(ly)?\b]
+  line 10     game-changers                  [\bgame.chang(er|ers|ing)\b]
+  line 10     holistically                   [\bholistic(ally)?\b]
+  line 10     robustly                       [\brobust(ly)?\b]
+  line 12     underscored the                [\bunderscor(es|ed|ing) (the|how|that|a|an|its|their|our)\b]
+  line 12     utilise                        [\butili[sz](e|es|ed|ing)\b]
+  line 16     Here's where it gets           [\bhere('s| is) where it gets\b]
+--- needs judgment, check the carve-outs in SKILL.md: 3
+  line 12     underscored                    [\bunderscor(e|es|ed|ing)\b]
+  line 14     underscores                    [\bunderscor(e|es|ed|ing)\b]
+  line 14     served as                      [\b(served|serving|functions|functioned|functioning) as\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 1   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  false friends, check against the L1 file: 1
+  line 1      important                      [\bimportant\b]
+
+total phrase hits: 18
+gate hits (unambiguous, ratchetable): 15
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

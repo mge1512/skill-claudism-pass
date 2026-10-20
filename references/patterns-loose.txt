@@ -65,3 +65,10 @@
 \bensures?\b
 \bfunctionality\b
 \band/or\b
+
+# --- moved from patterns.txt (review, 2026-10). The bare word also names the
+# _ character ("names may contain underscores"); the verb with an object stays
+# strict. Past forms of "serves as" are ordinary in biographies ("served as
+# chair"), and "functions as well as" is a plural noun.
+\bunderscor(e|es|ed|ing)\b
+\b(served|serving|functions|functioned|functioning) as\b

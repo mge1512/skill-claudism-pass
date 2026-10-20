@@ -51,9 +51,9 @@ State the chosen variant in the first line of the report, every time. A wrong ch
 
 The reason for the default is collision, not popularity. The technical vocabulary inside the same sentence is already American: `--no-color`, `initialize()`, `serialize`, `text-align: center`, RFC and POSIX wording, and the style guides of Microsoft, Google, IBM and Red Hat. British prose around American identifiers produces "initialise the `initialize()` method", which reads as carelessness rather than as a choice.
 
-**EU mode**: `-ise` endings, colour, centre, defence, licence as noun and license as verb, "programme" for everything except a computer program, and the institutional vocabulary of the body being addressed (Member State, the Commission, the Agency). The European Commission English Style Guide is the reference.
+**EU mode**: `-ise` endings, colour, centre, defence, licence as noun and license as verb, "programme" for everything except a computer program, "per cent", "judgment" in legal contexts and "judgement" elsewhere, and the institutional vocabulary of the body being addressed (Member State, the Commission, the Agency). The European Commission English Style Guide (8th edition, updated August 2026) is the reference, with one deliberate exception: the guide prescribes curly single quotation marks (2.29), and this skill keeps straight double quotes in both modes. The guide is house style for the Commission's own authors and translators. If a contracting authority requires it, follow it and record the decorative-punctuation hits as deliberate keeps.
 
-**What the switch controls**: spelling family, quotation punctuation placement, and institutional vocabulary in EU texts. Nothing else. Dates, clock, decimal separator, units and the whole banlist stay identical in both modes, which is what makes the switch safe to flip late in a draft.
+**What the switch controls**: spelling family, quotation punctuation placement, the thousands separator, and institutional vocabulary in EU texts. Nothing else. Dates, clock, decimal separator, units and the whole banlist stay identical in both modes, which is what makes the switch safe to flip late in a draft.
 
 **In both modes**:
 
@@ -63,11 +63,12 @@ The reason for the default is collision, not popularity. The technical vocabular
 
 ### Numbers, dates, units
 
-Identical in both variants. These cost more with an international readership than any spelling variant, and German habits collide with English ones:
+Identical in both variants, except the thousands separator. These cost more with an international readership than any spelling variant, and German habits collide with English ones:
 
-- Dates in ISO 8601: 2026-08-18. Never `08/18/2026` and never `18.08.2026`, which are read differently on either side of the Atlantic. A spelled-out month (18 August 2026) is acceptable in running prose; a numeric date is always ISO.
-- 24-hour clock, and name the time zone (CET, CEST, UTC) whenever a time appears. 14:30 CEST, never 2:30 pm.
-- Decimal separator is a point, thousands separator a comma or a narrow gap: 1,000 or 1 000 for a thousand, 3.5 for drei Komma fünf. German `1.000` reads as one.
+- Dates in ISO 8601: 2026-08-18. Never `08/18/2026` and never `18.08.2026`, which are read differently on either side of the Atlantic. A spelled-out month (18 August 2026) is acceptable in running prose, and it is what the Commission uses there; a numeric date is always ISO. Official Journal citations keep their published form (OJ L 119, 4.5.2016, p. 1); the scanner skips their dates.
+- 24-hour clock with two digits for the hour, and name the time zone (CET, CEST, UTC) whenever a time appears. 09:30 CET, 14:30 CEST, never 2:30 pm.
+- Decimal separator is a point: 3.5 for drei Komma fünf. Thousands separator: a comma or a space in US mode (1,000 or 1 000); in EU mode a space, preferably a no-break space, also in four-digit numbers (3 000), as the Commission prescribes. In EU mode the scanner lists a no-break space next to a figure for checking and does not count it. German `1.000` reads as one.
+- Percent sign closed up: 25%. Where the word is needed, "percent" in US mode and "per cent" in EU mode.
 - Milliarde is billion (10^9); German Billion is trillion (10^12).
 - Space between number and unit: 4 GB, 25 ms, 10 Gbit/s. Binary prefixes where they are meant: GiB, MiB.
 
@@ -81,6 +82,8 @@ Prevention beats repair. While writing, keep off the four constructions that pro
 4. **Value-claim filler.** "this matters", "worth considering", "the right way", "the useful thing here". Telling the reader what to value before they decided. Let the substance make the case.
 
 Also keep off placement and agency metaphors ("shape", "lives", "holds", "carries", "moves", "points", "hands you", "vouches for", "the engine", "doing the work") and off hype adjectives ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge").
+
+Rewrite an em dash rather than swapping in another character. A comma, a full stop, parentheses or two sentences usually fit; keep " - " for the rare aside. One substitute in every slot keeps the habit, and the simple-english skill counts a spaced hyphen between two statements as a dash.
 
 ## The pass
 
@@ -100,7 +103,7 @@ bash "$SKILL_DIR/scripts/scan.sh" --eu tender.md
 
 The scanner also reports leaked scaffolding: citation and tool-call tokens, prompt-format tags, stamped URL parameters and chatbot boilerplate ("As an AI language model", knowledge-cutoff disclaimers, compliance openers). These convict where a style tell only suggests, and the token is pure noise, so a hit is always a removal. Tokens inside code spans are ignored, so a document that documents them stays clean.
 
-The scanner also reports invisible characters: zero-width spaces and joiners, bidi controls, byte order marks, soft hyphens, non-breaking and exotic spaces, and their HTML entity spellings. None of these have a use in a plain-text technical document, and none show up in an editor, so a hit is always a paste artifact and always gets removed. Two are reported but never counted: the zero-width joiner and non-joiner carry meaning in Arabic and Indic shaping, and removing them corrupts the text.
+The scanner also reports invisible characters: zero-width spaces and joiners, bidi controls, byte order marks, soft hyphens, non-breaking and exotic spaces, and their HTML entity spellings. None of these have a use in a plain-text technical document, and none show up in an editor, so a hit is always a paste artifact and always gets removed. Two are reported but never counted: the zero-width joiner and non-joiner carry meaning in Arabic and Indic shaping, and removing them corrupts the text. In EU mode a no-break space next to a figure (3 000, EUR 15 000) is the Commission's prescribed form, so it is listed for checking and not counted either.
 
 Without a flag the scanner reads a `variant:` marker in the file, and falls back
 to a tally of the spellings it finds. `--us` and `--eu` override both and list
@@ -121,7 +124,7 @@ A text search matches literal strings. The same move with a different noun or ve
 - "the whole [X]" and "the only [X] that [verb]" with any noun in the slot.
 - Negative parallelism and staccato negation in any wording.
 - Section announcers and staged epiphany: any sentence that promises an insight instead of stating it.
-- Preemptive defence: any sentence answering an objection nobody raised ("That is not a turf claim", "rather than pretending otherwise"). Delete it and check whether anything was lost; usually the sentence before it already carried the argument.
+- Preemptive defense: any sentence answering an objection nobody raised ("That is not a turf claim", "rather than pretending otherwise"). Delete it and check whether anything was lost; usually the sentence before it already carried the argument.
 - The trailing moral: a fact followed by a clause explaining why the reader should approve of it ("..., because a judgment call is not a gate", "..., which keeps the floor honest"). State the fact and stop.
 - Discovery-arc framing: "I didn't set out to ..., but", "what I didn't expect to find".
 - Invented observations: "most people I've talked to", "everyone I've worked with". If the conversation or the source material does not contain it, it did not happen and cannot go in.
@@ -140,12 +143,14 @@ Append a short report under the delivered text. The report is editor metadata, s
 - variant: US (default; no EU trigger in this text)
 - "leverage the build service" -> "use the build service" (corporate verb)
 - section 2 crowned one option as the best -> gave the reason instead of the ranking
-- 3 em dashes -> " - "
+- 3 em dashes -> 2 commas, 1 full stop
 - FLAG: "attack surface" kept, term of art, not the banned verb use
 - FLAG: "eventually" in paragraph 4 - if "possibly" was meant, this says the opposite
 ```
 
 One line per hit. If unsure whether something counts, flag it rather than guessing or silently rewriting. If the draft came back clean, say so in one line.
+
+When the simple-english skill is active in the same session, its reply rules flag headings and bullets in chat. Then write the report as plain lines: first "Claudism pass (variant: US, default)", then one change per line, without a heading or bullets.
 
 ## Carve-outs
 
@@ -164,6 +169,7 @@ Several banned words are terms of art in IT. Leave them alone in their technical
 | "load-bearing" (metaphor) | an actual wall |
 | "points" (directional metaphor) | a pointer, symlink, DNS record or reference that points to a target |
 | "moves" (abstract motion) | a literal move: a file, a service, data to another host |
+| "underscore" (verb) | the `_` character, as in `snake_case` names |
 
 "Robust" and "seamless" have no technical carve-out. Replace them with the measurable claim: "survives a node failure without data loss", "no manual step between build and deployment".
 

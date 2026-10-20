@@ -58,11 +58,11 @@ ppl-ai-file-upload
 # --- chatbot register, hard grade: conversation pasted into a document
 [Aa]s an? (AI|artificial intelligence|large language model|language model)
 I('m| am) (just )?an? (AI|large language model|language model)
-^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|I('ve| have) (created|drafted|outlined|prepared))
+^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|Below (is|are)|I('ve| have) (created|drafted|outlined|prepared))
 ^Here('s| is) an? (draft|outline|version|summary|example|overview|template) (of|for)
 I('m| am) sorry,? but I (can('t|not)|am unable to)
 I (can('t|not)|am unable to) (fulfill|fulfil|comply with|assist with|help with) (that|this) request
 (against|violates?|contrary to) my (safety |ethical |core )?(guidelines|policies|principles|programming)
 I (do not|don't) have (access to real.time|the ability to browse|personal (opinions|experiences|feelings))
-(my|the) knowledge cut.?off
-as of my (last|latest|most recent) (knowledge )?(update|training)
+([Mm]y|the) knowledge cut.?off
+([Aa]s of|[Uu]p to) my (last|latest|most recent) (knowledge |training )?(update|training|cut.?off)

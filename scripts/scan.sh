@@ -216,6 +216,17 @@ strip_code() {
     ' "$1"
 }
 
+# Typographic quotes, as word processors and chat windows produce them. The lists
+# are written with ASCII quotes, so the phrase and scaffolding checks read a copy
+# with U+2018 and U+2019 folded to ' and U+201C and U+201D to ". The
+# decorative-punctuation check reads the original and still reports them.
+lsq="$(printf '\342\200\230')"; rsq="$(printf '\342\200\231')"
+ldq="$(printf '\342\200\234')"; rdq="$(printf '\342\200\235')"
+fold_quotes() {
+    LC_ALL=C sed -e "s/${lsq}/'/g" -e "s/${rsq}/'/g" \
+                 -e "s/${ldq}/\"/g" -e "s/${rdq}/\"/g" "$1"
+}
+
 # Blank the contents of double-quoted spans. A document that quotes a chatbot is
 # a human writing about a machine, so the self-identification patterns must not
 # fire inside quotation marks.
@@ -309,7 +320,9 @@ for target in "${files[@]}"; do
         strip_code "$target" > "$tmp_prose"
         check_src="$target"
     fi
-    join_paragraphs "$tmp_prose" > "$tmp_join"
+    tmp_qprose="$(tmpfile)"
+    fold_quotes "$tmp_prose" > "$tmp_qprose"
+    join_paragraphs "$tmp_qprose" > "$tmp_join"
     cp "$tmp_join" "$tmp_join2"
     scan_list "$tmp_join" "$strict" > "$tmp_strict"
     scan_list "$tmp_join" "$loose" > "$tmp_loose"
@@ -336,17 +349,17 @@ for target in "${files[@]}"; do
             [ -n "$hit" ] || continue
             printf '  line %-6s %-30s [%s]\n' \
                 "${hit%%:*}" "$(printf '%s' "${hit#*:}" | cut -c1-30)" "$pat" >> "$tmp_art"
-        done < <("$GREP" -n -o -E "$(port "$pat")" "$tmp_prose" 2> /dev/null)
+        done < <("$GREP" -n -o -E "$(port "$pat")" "$tmp_qprose" 2> /dev/null)
     done < "$artifacts"
     # A line-start "Assistant:" is ordinary human writing (film credits, staff
     # rosters). It counts only when a line-start "Human:" appears as well.
-    if "$GREP" -q -E '^[[:space:]]*Human:' "$tmp_prose" 2> /dev/null \
-       && "$GREP" -q -E '^[[:space:]]*Assistant:' "$tmp_prose" 2> /dev/null; then
+    if "$GREP" -q -E '^[[:space:]]*Human:' "$tmp_qprose" 2> /dev/null \
+       && "$GREP" -q -E '^[[:space:]]*Assistant:' "$tmp_qprose" 2> /dev/null; then
         echo "  Human:/Assistant: transcript markers, both present" >> "$tmp_art"
     fi
     # Self-identification convicts only outside quotation marks.
     tmp_unq="$(tmpfile)"
-    strip_quoted "$tmp_prose" > "$tmp_unq"
+    strip_quoted "$tmp_qprose" > "$tmp_unq"
     selfid="$("$GREP" -n -o -E -i "(I am|I'm) (Grok|Claude|ChatGPT|Gemini)( built by| made by| trained by| created by)|built by (xAI|Anthropic|OpenAI)|trained by (Google|OpenAI|Anthropic)" "$tmp_unq" 2> /dev/null || true)"
     if [ -n "$selfid" ]; then
         printf '%s\n' "$selfid" | sed 's|^|  line |; s|$|   [self-identification, outside quotes]|' >> "$tmp_art"
@@ -360,6 +373,17 @@ for target in "${files[@]}"; do
     fi
     rm -f "$tmp_art"
     gate_n=$((gate_n + n_art))
+
+    # The variant is settled here, before the character checks, because EU mode
+    # changes what the no-break space check counts. An explicit flag beats a
+    # marker in the file; the tally in the spelling section only reports.
+    marker="$(head -20 "$check_src" 2> /dev/null \
+        | "$GREP" -i -o -m1 -E '^[[:space:]]*(<!--|%|#|//)?[[:space:]]*variant:[[:space:]]*(us|eu|gb|uk|british)' \
+        | "$GREP" -i -o -E 'variant:[[:space:]]*(us|eu|gb|uk|british)' | tr 'A-Z' 'a-z')"
+    eff="$variant"
+    if [ -n "$marker" ] && [ "$eff" = "auto" ]; then
+        case "$marker" in *us*) eff="us" ;; *) eff="eu" ;; esac
+    fi
 
     # Invisible characters. Nothing here has a legitimate use in a plain-text
     # technical document, and none of it shows up in an editor. Matched as
@@ -375,9 +399,29 @@ for target in "${files[@]}"; do
             '?'*) ctx="yes"; esc="${esc#?}" ;;
         esac
         ch="$(printf '%b' "$esc")"
-        found="$(LC_ALL=C "$GREP" -c -F "$ch" "$check_src" 2> /dev/null || true)"
+        src="$check_src"
+        tmp_nb=""
+        # EU mode: the Commission's style guide puts a hard space in 3 000,
+        # EUR 15 000 and 50 km. Next to a figure it is the prescribed form, so
+        # it is listed for checking and not counted.
+        if [ "$eff" = "eu" ]; then
+            case "$esc" in
+                '\302\240'|'\342\200\257')
+                    near="$(LC_ALL=C "$GREP" -n -E "[0-9]${ch}|${ch}[0-9]" "$check_src" 2> /dev/null \
+                            | cut -d: -f1 | tr '\n' ' ')"
+                    near="${near% }"
+                    if [ -n "$near" ]; then
+                        nn="$(printf '%s\n' $near | "$GREP" -c .)"
+                        printf '  check: %-31s x%-4s line %s (EU mode, next to a figure)\n' "$name" "$nn" "$near"
+                    fi
+                    tmp_nb="$(tmpfile)"
+                    LC_ALL=C sed -e "s/\([0-9]\)${ch}/\1 /g" -e "s/${ch}\([0-9]\)/ \1/g" "$check_src" > "$tmp_nb"
+                    src="$tmp_nb" ;;
+            esac
+        fi
+        found="$(LC_ALL=C "$GREP" -c -F "$ch" "$src" 2> /dev/null || true)"
         if [ "${found:-0}" -gt 0 ]; then
-            lines="$(LC_ALL=C "$GREP" -n -F "$ch" "$check_src" | cut -d: -f1 | tr '\n' ' ')"
+            lines="$(LC_ALL=C "$GREP" -n -F "$ch" "$src" | cut -d: -f1 | tr '\n' ' ')"
             lines="${lines% }"
             if [ "$ctx" = "yes" ]; then
                 printf '  check: %-31s x%-4s line %s\n' "$name" "$found" "$lines"
@@ -386,6 +430,7 @@ for target in "${files[@]}"; do
                 hid=$((hid + found))
             fi
         fi
+        [ -n "$tmp_nb" ] && rm -f "$tmp_nb"
     done < "$hidden"
     # Ranges, which a literal list cannot express. Tag characters are both
     # invisible and a known channel for hidden instructions; the private-use
@@ -452,7 +497,12 @@ for target in "${files[@]}"; do
         printf '%s\n' "$div" | sed 's/^/  divider, line /'
         struct=1
     fi
-    bold="$("$GREP" -n -E '^[[:space:]]*[-*][[:space:]]+\*\*[^*]+\*\*[[:space:]]*[:-]' "$check_src" || true)"
+    # Bold-term bullets: the colon after or inside the bold, numbered items, and
+    # the U+2022 and U+2013 bullets of pasted text (as bytes, so this script
+    # stays ASCII). Read from the copy with code blanked, so a fenced example
+    # is not reported.
+    bul="$(printf '\342\200\242')|$(printf '\342\200\223')"
+    bold="$(LC_ALL=C "$GREP" -n -E "^[[:space:]]*([-*+]|${bul}|[0-9]+[.)])[[:space:]]+\*\*[^*]+(\*\*[[:space:]]*[:-]|:\*\*)" "$tmp_prose" || true)"
     if [ -n "$bold" ]; then
         printf '%s\n' "$bold" | cut -c1-70 | sed 's/^/  bold-term bullet, line /'
         struct=1
@@ -464,9 +514,6 @@ for target in "${files[@]}"; do
     # the tally. Detection from content is a judgment call and stays with the
     # reader of this output.
     echo "--- spelling variant"
-    marker="$(head -20 "$check_src" 2> /dev/null \
-        | "$GREP" -i -o -m1 -E '^[[:space:]]*(<!--|%|#|//)?[[:space:]]*variant:[[:space:]]*(us|eu|gb|uk|british)' \
-        | "$GREP" -i -o -E 'variant:[[:space:]]*(us|eu|gb|uk|british)' | tr 'A-Z' 'a-z')"
     us_hits=""
     gb_hits=""
     while IFS='|' read -r us gb; do
@@ -486,13 +533,7 @@ for target in "${files[@]}"; do
     n_us="$(printf '%s' "$us_hits" | "$GREP" -c . || true)"
     n_gb="$(printf '%s' "$gb_hits" | "$GREP" -c . || true)"
 
-    eff="$variant"
-    if [ -n "$marker" ]; then
-        echo "  file marker: $marker"
-        if [ "$eff" = "auto" ]; then
-            case "$marker" in *us*) eff="us" ;; *) eff="eu" ;; esac
-        fi
-    fi
+    [ -n "$marker" ] && echo "  file marker: $marker"
     echo "  US markers: $n_us   EU/British markers: $n_gb   (variant: $eff)"
     # One flipped word is a quotation, a proper noun or a package name. Two or
     # more is a mixed document.
@@ -508,9 +549,13 @@ for target in "${files[@]}"; do
         printf '%s' "$us_hits" | sort -u -f | sed 's/^/  convert to EU: /'
     fi
 
-    # Dates, clock and units. Identical in both variants.
+    # Dates, clock and units. Identical in both variants. Official Journal
+    # citations are quoted as published (OJ L 119, 4.5.2016, p. 1), so their
+    # dates are blanked first.
     echo "--- dates, clock, units"
     loc=0
+    tmp_dates="$(tmpfile)"
+    LC_ALL=C sed -E 's/(OJ [A-Z]+[^()]{0,30})[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}/\1(OJ date)/g' "$check_src" > "$tmp_dates"
     for check in \
         '[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}::ambiguous numeric date, use YYYY-MM-DD' \
         '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{2,4}::German numeric date, use YYYY-MM-DD' \
@@ -519,12 +564,13 @@ for target in "${files[@]}"; do
         '\b[0-9]+(GB|MB|TB|KB|MHz|GHz|ms|Gbit)\b::missing space between number and unit'
     do
         pat="${check%%::*}"; note="${check##*::}"
-        hit="$("$GREP" -n -o $WB_FLAG -E "$(port "$pat")" "$check_src" 2> /dev/null)"
+        hit="$("$GREP" -n -o $WB_FLAG -E "$(port "$pat")" "$tmp_dates" 2> /dev/null)"
         if [ -n "$hit" ]; then
             printf '%s\n' "$hit" | sed "s/^/  line /; s/$/   <- $note/"
             loc=1
         fi
     done
+    rm -f "$tmp_dates"
     # A time with no zone. Matching the optional zone greedily and then keeping
     # only the matches that stopped at the minutes avoids a negative lookahead,
     # which BSD grep has no way to express.
@@ -595,7 +641,7 @@ for target in "${files[@]}"; do
         [ "$n_e" -eq 0 ] && [ "$n_f" -eq 0 ] && echo "  clean"
         rm -f "$tmp_e" "$tmp_f"
     fi
-    rm -f "$tmp_join2" "$tmp_prose"
+    rm -f "$tmp_join2" "$tmp_prose" "$tmp_qprose"
 
     total=$((total + n_strict + n_loose))
     [ "$gate_n" -gt 0 ] && printf '%s %s\n' "$gate_n" "$target" >> "$gate_counts"

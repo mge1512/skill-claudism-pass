@@ -1,8 +1,9 @@
 === tests/docs/dirty.md
---- banlist hits, rewrite these: 24
+--- banlist hits, rewrite these: 25
+  line 3      Here's where it gets           [\bhere('s| is) where it gets\b]
   line 3      It's worth noting              [\bit(')?s worth noting\b]
   line 3      leverage                       [\bleverag(e|es|ed|ing)\b]
-  line 3      not just a technical problem,  [\bnot just .{1,40}(it(')?s|but)\b]
+  line 3      not just a technical problem,  [\bnot (just|merely|simply) .{1,40}(it(')?s|it is|they('re| are)|but)\b]
   line 3      surprised me most              [\b(surprised|struck) me (the )?(most|hardest)\b]
   line 3      the one thing that             [\bthe one (thing|part|piece|example|line|idea) that\b]
   line 3      worth noting                   [\bworth (sitting|noting|talking|asking|drawing|making|examining|considering|exploring|a look)\b]
@@ -11,8 +12,8 @@
   line 12     Let's break it down            [\blet(')?s (break it down|explore|dive|turn|look at)\b]
   line 12     Most people I                  [\bmost people( i)?\b]
   line 12     compounds                      [\b(compound|compounds|compounding)\b]
-  line 12     robust                         [\brobust\b]
-  line 12     seamless                       [\bseamless\b]
+  line 12     robust                         [\brobust(ly)?\b]
+  line 12     seamless                       [\bseamless(ly)?\b]
   line 12     the tell                       [\bthe tell\b]
   line 12     the whole game                 [\bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b]
   line 16     Here,                          [\bhere,]
@@ -53,6 +54,6 @@
 --- second-language interference
   clean
 
-total phrase hits: 30
-gate hits (unambiguous, ratchetable): 26
+total phrase hits: 31
+gate hits (unambiguous, ratchetable): 27
 Now read the draft for the constructions grep cannot see (SKILL.md, step 2).
