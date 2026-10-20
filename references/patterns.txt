@@ -167,7 +167,7 @@
 \ba testament to\b
 \btapestry\b
 \btreasure trove\b
-\bin today'?s (world|era|fast)\b
+\bin today'?s (world|era|fast|rapidly|ever|digital|modern|increasingly)\b
 \bworth (knowing|naming)\b
 \bwhat [a-z].{0,60} is worth\b
 \bmoving on to\b
@@ -317,3 +317,49 @@
 \bthe numbers (are stark|back (it|this|that))\b
 \b(that|this|it)('s| is) ?(not|no|n't)( an)? accident(al)?\b
 \bdeserves a (moment|closer look)\b
+
+# --- press-release vocabulary from Will Francis's before-and-after examples
+# ("How to Make Claude Sound More Human", page of 2026-09)
+\b(delighted|thrilled|excited) to (announce|share|introduce|unveil)\b
+\bexciting (opportunity|opportunities|news|times|journey)\b
+\bempower(s|ed|ing|ment)?\b
+\binnovative\b
+\b(rapidly|ever|constantly)[ -]evolving\b|\bever-changing\b
+
+# --- from the slop list of the simple-english skill (2.1.1), MIT, see LICENSE
+\bthat being said\b
+\bembark(s|ed|ing)? on\b
+
+# --- excess vocabulary: words that occur in model output many times more often
+# than in human text of the same kind (Kobak et al., Juzek and Ward, Reinhart et
+# al., Wikipedia's word lists, simple-english). At most two hits in 7.7 million
+# words of human documentation.
+\bmeticulous(ly)?\b
+\bgarner(s|ed|ing)?\b
+\bbolster(s|ed|ing)?\b
+\brenowned\b
+\bcommendable\b
+\brevolutioni[sz](e|es|ed|ing)\b
+\belucidat(e|es|ed|ing)\b
+\bshowcas(ed|ing)\b
+\bnestled\b
+\bboast(s|ed|ing)?\b
+\bin the heart of\b
+\bexemplif(y|ies|ied|ying)\b
+\bdiverse array\b
+\bunderpin(s|ned|ning)?\b
+\bvaluable insights?\b
+\bresonat(e|es|ed|ing) with\b
+\bunparalleled\b
+\bbustling\b
+\beffortless(ly)?\b
+\bgrappl(e|es|ed|ing)\b
+\bamidst\b
+# weaker evidence: a Kobak excess ratio of 2.2 to 3.9 and no second source
+\bformidable\b
+\badept\b
+\bburgeoning\b
+\buncharted\b
+\bunderexplored\b
+\binterconnectedness\b
+\bpoised to\b

@@ -81,7 +81,7 @@ Prevention beats repair. While writing, keep off the four constructions that pro
 3. **Announcing instead of delivering.** "Here's where it gets interesting", "Let's break it down", "I'm going to make three points", "It's worth noting that". Deliver the point; the announcement adds nothing.
 4. **Value-claim filler.** "this matters", "worth considering", "the right way", "the useful thing here". Telling the reader what to value before they decided. Let the substance make the case.
 
-Also keep off placement and agency metaphors ("shape", "lives", "holds", "carries", "moves", "points", "hands you", "vouches for", "the engine", "doing the work") and off hype adjectives ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge").
+Also keep off placement and agency metaphors ("shape", "lives", "holds", "carries", "moves", "points", "hands you", "vouches for", "the engine", "doing the work") and off hype adjectives and verbs ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge", "innovative", "empower").
 
 Rewrite an em dash rather than swapping in another character. A comma, a full stop, parentheses or two sentences usually fit; keep " - " for the rare aside. One substitute in every slot keeps the habit, and the simple-english skill counts a spaced hyphen between two statements as a dash.
 
@@ -129,7 +129,7 @@ A text search matches literal strings. The same move with a different noun or ve
 - Discovery-arc framing: "I didn't set out to ..., but", "what I didn't expect to find".
 - Invented observations: "most people I've talked to", "everyone I've worked with". If the conversation or the source material does not contain it, it did not happen and cannot go in.
 - Invented reactions: "it stuck with me", "the thing that got me". Name the actual reaction or leave it out.
-- "Bold term: explanation sentence" bullet lists, `---` as a section divider, and a neat bullet summary at the end.
+- "Bold term: explanation sentence" bullet lists, `---` as a section divider, and a neat bullet summary or closing recap at the end that repeats the text instead of giving a next step.
 - Four or more short declarative sentences in a row. Vary the length.
 - Triplets by reflex: three adjectives, phrases or examples where the content has two or four.
 - Headings: Title Case where the house style is sentence case, a first heading that repeats the title, a heading with only sub-headings under it, skipped levels, and "X and Y" headings such as "Challenges and Outlook".
@@ -141,6 +141,8 @@ A text search matches literal strings. The same move with a different noun or ve
 - The symmetric closer: a last line with a balanced, philosophical cadence that nobody uses in speech.
 - A sentence that could have come from anyone. Rewrite it with the specific fact, or cut it.
 - Every number, quote and reference in the draft has a source that someone checked.
+- A benefit claim without a measurement ("saves hours every week"). Give the figure and its source, or drop the claim.
+- The same opening for several sentences in a row.
 
 Consult `references/banlist.md` for the full list with the reasoning behind each entry, and to check anything that looks borderline. The file is grouped into confirmed entries, structural and framing tics, register tics, spoken-word tells, imported vocabulary, and local additions caught in review.
 
@@ -180,6 +182,9 @@ Several banned words are terms of art in IT. Leave them alone in their technical
 | "points" (directional metaphor) | a pointer, symlink, DNS record or reference that points to a target |
 | "moves" (abstract motion) | a literal move: a file, a service, data to another host |
 | "underscore" (verb) | the `_` character, as in `snake_case` names |
+| "elevate" | elevated privileges, as with `sudo` |
+| "paradigm" | a programming paradigm |
+| "focal point" | the focal point of a lens or camera |
 
 "Robust" and "seamless" have no technical carve-out. Replace them with the measurable claim: "survives a node failure without data loss", "no manual step between build and deployment".
 

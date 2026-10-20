@@ -11,7 +11,7 @@
 \bthe real\b
 \breach(es|ing)? for\b
 \blandscape\b
-\brealm\b
+\brealms?\b
 \bshape(s|d)?\b
 \bsurface\b
 \bharness\b
@@ -142,3 +142,42 @@
 # --- Wes Pomeroy, "You Valued Sending More Than Writing" (2026-04-25): a stock
 # closer in unreviewed AI mail
 \bif anything (is|was) unclear\b
+
+# --- press-release vocabulary with literal uses ("elevated privileges")
+\belevat(e|es|ed|ing)\b
+\bto sum up\b
+\b(save|saves|saving) (you )?(hours|days|weeks)\b
+
+# --- simple-english 2.1.1: a participle clause selling the feature, and
+# studies nobody names. Human documentation uses the first about 3 times per
+# million words, so it is a judgment call.
+, (making it (easy|easier|simple|simpler|possible)|allowing (you|users|teams|developers|them)|enabling (you|users|teams|developers|them))\b
+\b(studies|research) (show|shows|suggest|suggests|has shown|have shown)\b
+
+# --- excess vocabulary with literal senses or ordinary human use: the
+# Synergistic Processor Element of the Cell processor, the HiFive Unleashed
+# board, "no discernible overhead", "security is paramount", "programming
+# paradigm"
+\bsynerg(y|ies|istic)\b
+\bunleash(es|ed|ing)?\b
+\bdiscernible\b
+\bnuanced\b
+\binterplay\b
+\bprofound(ly)?\b
+\benduring\b
+\bvibrant\b
+\bcrucial(ly)?\b
+\bparamount\b
+\bvital\b
+\bshowcases?\b
+\bunprecedented\b
+\bparadigm\b
+\b(incredibly|immense)\b
+\bunravel(s|ed|ing)?\b
+\bsurpass(es|ed|ing)?\b
+\bnecessitat(e|es|ed|ing)\b
+\badvancements?\b
+\bunveil(s|ed|ing)?\b
+\bignit(e|es|ed|ing)\b
+\bcommitment to\b
+\brich (history|heritage|tradition|ecosystem)\b

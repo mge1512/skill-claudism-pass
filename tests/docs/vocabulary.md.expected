@@ -1,0 +1,96 @@
+=== tests/docs/vocabulary.md
+--- banlist hits, rewrite these: 39
+  line 3      delighted to announce          [\b(delighted|thrilled|excited) to (announce|share|introduce|unveil)\b]
+  line 3      empower                        [\bempower(s|ed|ing|ment)?\b]
+  line 3      exciting opportunity           [\bexciting (opportunity|opportunities|news|times|journey)\b]
+  line 3      innovative                     [\binnovative\b]
+  line 6      In today's digital             [\bin today'?s (world|era|fast|rapidly|ever|digital|modern|increasingly)\b]
+  line 6      ever-changing                  [\b(rapidly|ever|constantly)[ -]evolving\b|\bever-changing\b]
+  line 6      rapidly evolving               [\b(rapidly|ever|constantly)[ -]evolving\b|\bever-changing\b]
+  line 8      That being said                [\bthat being said\b]
+  line 8      embark on                      [\bembark(s|ed|ing)? on\b]
+  line 10     , showcasing                   [, (further |thereby |thus )?(highlighting|emphasizing|emphasising|underscoring|reflecting|symbolizing|symbolising|showcasing|demonstrating|fostering|cultivating|encompassing|enhancing|bolstering|paving|contributing to)\b]
+  line 10     bolster                        [\bbolster(s|ed|ing)?\b]
+  line 10     commendable                    [\bcommendable\b]
+  line 10     elucidate                      [\belucidat(e|es|ed|ing)\b]
+  line 10     garner                         [\bgarner(s|ed|ing)?\b]
+  line 10     meticulously                   [\bmeticulous(ly)?\b]
+  line 10     renowned                       [\brenowned\b]
+  line 10     revolutionize                  [\brevolutioni[sz](e|es|ed|ing)\b]
+  line 10     showcased                      [\bshowcas(ed|ing)\b]
+  line 10     showcasing                     [\bshowcas(ed|ing)\b]
+  line 14     boasts                         [\bboast(s|ed|ing)?\b]
+  line 14     diverse array                  [\bdiverse array\b]
+  line 14     in the heart of                [\bin the heart of\b]
+  line 14     nestled                        [\bnestled\b]
+  line 17     exemplify                      [\bexemplif(y|ies|ied|ying)\b]
+  line 17     resonate with                  [\bresonat(e|es|ed|ing) with\b]
+  line 17     underpin                       [\bunderpin(s|ned|ning)?\b]
+  line 17     valuable insights              [\bvaluable insights?\b]
+  line 20     amidst                         [\bamidst\b]
+  line 20     bustling                       [\bbustling\b]
+  line 20     effortless                     [\beffortless(ly)?\b]
+  line 20     grapple                        [\bgrappl(e|es|ed|ing)\b]
+  line 20     unparalleled                   [\bunparalleled\b]
+  line 23     adept                          [\badept\b]
+  line 23     burgeoning                     [\bburgeoning\b]
+  line 23     formidable                     [\bformidable\b]
+  line 23     interconnectedness             [\binterconnectedness\b]
+  line 23     poised to                      [\bpoised to\b]
+  line 23     uncharted                      [\buncharted\b]
+  line 23     underexplored                  [\bunderexplored\b]
+--- needs judgment, check the carve-outs in SKILL.md: 31
+  line 6      landscape                      [\blandscape\b]
+  line 41     realm                          [\brealms?\b]
+  line 29     elevated                       [\belevat(e|es|ed|ing)\b]
+  line 29     To sum up                      [\bto sum up\b]
+  line 29     saves you hours                [\b(save|saves|saving) (you )?(hours|days|weeks)\b]
+  line 31     , making it easy               [, (making it (easy|easier|simple|simpler|possible)|allowing (you|users|teams|developers|them)|enabling (you|users|teams|developers|them))\b]
+  line 31     Studies show                   [\b(studies|research) (show|shows|suggest|suggests|has shown|have shown)\b]
+  line 34     synergy                        [\bsynerg(y|ies|istic)\b]
+  line 34     unleashed                      [\bunleash(es|ed|ing)?\b]
+  line 34     discernible                    [\bdiscernible\b]
+  line 36     nuanced                        [\bnuanced\b]
+  line 36     interplay                      [\binterplay\b]
+  line 36     profound                       [\bprofound(ly)?\b]
+  line 36     enduring                       [\benduring\b]
+  line 36     vibrant                        [\bvibrant\b]
+  line 39     crucial                        [\bcrucial(ly)?\b]
+  line 39     paramount                      [\bparamount\b]
+  line 39     vital                          [\bvital\b]
+  line 39     showcases                      [\bshowcases?\b]
+  line 41     unprecedented                  [\bunprecedented\b]
+  line 39     paradigm                       [\bparadigm\b]
+  line 41     incredibly                     [\b(incredibly|immense)\b]
+  line 41     immense                        [\b(incredibly|immense)\b]
+  line 41     unravel                        [\bunravel(s|ed|ing)?\b]
+  line 41     surpass                        [\bsurpass(es|ed|ing)?\b]
+  line 41     necessitate                    [\bnecessitat(e|es|ed|ing)\b]
+  line 41     advancements                   [\badvancements?\b]
+  line 41     unveil                         [\bunveil(s|ed|ing)?\b]
+  line 41     ignite                         [\bignit(e|es|ed|ing)\b]
+  line 41     commitment to                  [\bcommitment to\b]
+  line 41     rich history                   [\brich (history|heritage|tradition|ecosystem)\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 1   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  line 25      26 words   It is a formidable task for an adept team in...
+--- terminology consistency
+  clean
+--- second-language interference
+  false friends, check against the L1 file: 1
+  line 34     delay                          [\bdelay\b]
+
+total phrase hits: 70
+gate hits (unambiguous, ratchetable): 39
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).
