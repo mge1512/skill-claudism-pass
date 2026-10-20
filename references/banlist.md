@@ -230,3 +230,25 @@ The page describes what AI text on Wikipedia looks like; the bans below are this
 - **Article announcements** ("In this section, we will explore") - same family as signposting. Start with the content.
 - **Unfilled template slots** ("[Your Name]", "[Insert date]", "[Company Name]", "2025-XX-XX") - the placeholder survived the paste. Fill it or delete it. Note: "[name]" alone is a syntax placeholder in command references and is not matched.
 - **Profile and travel-guide puffery** ("maintains an active social media presence", "natural beauty") - press-release filler in a profile. Say what the person did or what the place has.
+
+### Claude-era frames (2026)
+
+Measured in Claude Opus 5 and 5.5 output against human text (Graphite, "AI Tells", 2026; Pangram for "genuinely"). Most extend the "this matters" and negative-parallelism families above.
+
+- **"genuinely" / "is genuinely" / "genuine"** (as a self-qualifier: "this is genuinely useful", "a genuine improvement") - same family as "honest" / "honestly". The writer marks their own claim as sincere, which implies that the unmarked claims are worth less. Measured as a Claude habit in 2026 (see `references/detection.md`). Delete it; if the degree matters, give the number. Note: "genuine" as a plain property ("genuine parts", "a genuine Intel CPU") is fine, so the bare adjective is only reported. Caught in review, 2026-10.
+- **"matters because" / "why X matters" / "matters more than" / "matters most"** - the 2026 form of "this matters": the text tells the reader that something is important, then explains. Give the consequence first; the reader will see that it matters.
+- **Definition by contrast** ("less like an X and more like a Y", "more than an X, it is a Y", "rather than merely X", "not only about") - negative parallelism that defines a thing by what it is not. Say what it is.
+- **"Looking ahead" / "what comes next"** - a closer that announces the future instead of stating a plan. Give the next step, its owner and its date, or end the text.
+- **"enormously" / "an enormous amount" / "the single most" / "arguably the most"** - intensifier and crowned superlative. Give the figure, or the reason for the ranking.
+
+### From claudisms.ai pull requests #1 and #2 (not merged at 852854b)
+
+Phrases from 153 hand-labeled posts written with Claude Opus 5 (Jim Bennett, 2026-09-28). The entries here are short; take the upstream wording once the pull requests are merged.
+
+- **"bites everyone" / "the uncomfortable part"** - a plain caveat staged as a warning. State the caveat. Note: "the catch is" and "the trap is" are only reported, since a shell trap is literal.
+- **"actually matters" / "what it actually does"** - "actually" implies a misconception nobody stated. Drop the word, or name the misconception and who holds it. The second form is only reported.
+- **"read that again" / "think about what that means"** - tells the reader how to react. Say what follows from the fact.
+- **"the headline number" / "the headline result"** - newsroom framing of one figure. Give the number.
+- **"a structural consequence" / "best structural decisions" / "it's structural"** - sounds fixed but says nothing about the structure. Name the cause. "it's structural" and "structurally," are only reported.
+- **"earns its keep" / "earns its place"** - an object treated as an employee who proves its worth. Say what it is good for, and for whom.
+- **"the numbers are stark" / "that's no accident" / "deserves a closer look"** - a verdict before the evidence. Show the data, then give a specific verdict. "is itself a signal" and "that's the point" are only reported.

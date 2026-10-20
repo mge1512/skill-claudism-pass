@@ -32,7 +32,7 @@ That audience decides the register:
 - Keep terminology constant. Use the same word for the same thing every time. Elegant variation ("the image", "the artifact", "the payload" for one object) costs the reader more than the repetition does.
 - Cut sports, war, poker and film metaphors outright: "we've seen this movie before", "the whole ballgame", "the tell", "moving the needle", "hits hardest".
 - Prefer a plain verb to a phrasal verb where one exists: "meet" over "come along with", "found" over "bumped into", "focus on" over "lean into".
-- Expand an abbreviation at first use. A reader who guesses wrong stops reading.
+- Expand an abbreviation at first use in a document for a wide audience. A reader who guesses wrong stops reading. In a mail to peers, expand only what that reader may not know; explaining a term to someone who uses it daily reads as unreviewed machine text.
 
 None of this licenses simplified or broken English. The grammar, spelling and punctuation stay correct throughout. Plain and correct, not simplified.
 
@@ -135,6 +135,12 @@ A text search matches literal strings. The same move with a different noun or ve
 - Headings: Title Case where the house style is sentence case, a first heading that repeats the title, a heading with only sub-headings under it, skipped levels, and "X and Y" headings such as "Challenges and Outlook".
 - Boldface on every mention of a term, a small table that a sentence would say better, and Markdown (`**`, `##`, `---`) pasted into a plain-text target such as a LinkedIn post or a text mail.
 - "Little-known, yet important": the text admits that the subject is minor, then stresses its importance anyway.
+- A trailing participle clause that adds an evaluation or a consequence ("..., paving the way for ...") with a verb the scanner does not list.
+- Contrast definitions and importance flags in new wordings: "less a policy than a habit", "this is what decides it".
+- An echo of a prompt the reader never saw: "the text", "the passage", "the document you shared".
+- The symmetric closer: a last line with a balanced, philosophical cadence that nobody uses in speech.
+- A sentence that could have come from anyone. Rewrite it with the specific fact, or cut it.
+- Every number, quote and reference in the draft has a source that someone checked.
 
 Consult `references/banlist.md` for the full list with the reasoning behind each entry, and to check anything that looks borderline. The file is grouped into confirmed entries, structural and framing tics, register tics, spoken-word tells, imported vocabulary, and local additions caught in review.
 

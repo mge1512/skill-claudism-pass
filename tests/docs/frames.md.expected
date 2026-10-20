@@ -1,0 +1,81 @@
+=== tests/docs/frames.md
+--- banlist hits, rewrite these: 28
+  line 3      genuinely                      [\bgenuinely\b]
+  line 3      less like a library and more l [\bless like an? .{1,40} and more like\b]
+  line 3      rather than merely             [\brather than merely\b]
+  line 6      matters because                [\bmatters (because|more than|most|enormously)\b]
+  line 6      why the cache matters          [\bwhy [a-z' ]{1,40} matters\b]
+  line 8      is more than a linter, it      [\b(is|are|was|were) more than (a|an|just) [a-z-]+[,;] (it|they)\b]
+  line 10     Looking ahead                  [\blooking ahead\b]
+  line 10     What comes next                [\bwhat comes next\b]
+  line 12     an enormous amount             [\ban enormous amount\b]
+  line 12     arguably the most              [\barguably the most\b]
+  line 12     enormously                     [\benormously\b]
+  line 12     the single most                [\bthe single most\b]
+  line 15     The honest answer              [\bthe honest (version|answer)\b]
+  line 15     not only about                 [\bnot only about\b]
+  line 17     The uncomfortable part         [\bthe uncomfortable part\b]
+  line 17     actually matters               [\bactually matters\b]
+  line 17     bites everyone                 [\bbites (everyone|everybody)\b]
+  line 20     Read that again                [\bread (that|this) (again|the other way round|the other way around)\b]
+  line 20     Think about what that means    [\bthink about what (that|this) means\b]
+  line 22     The headline number            [\bthe headline (number|result|cost|finding)s?\b]
+  line 22     a structural consequence       [\b(a|the) structural consequences?\b]
+  line 22     best structural decisions      [\bbest structural decisions?\b]
+  line 25     earned its place               [\bearn(s|ed|ing)? (its|their) (keep|place|spot|counter space)\b]
+  line 25     earns its keep                 [\bearn(s|ed|ing)? (its|their) (keep|place|spot|counter space)\b]
+  line 27     It deserves                    [\bit deserves\b]
+  line 27     That's no accident             [\b(that|this|it)('s| is) ?(not|no|n't)( an)? accident(al)?\b]
+  line 27     The numbers are stark          [\bthe numbers (are stark|back (it|this|that))\b]
+  line 27     deserves a closer look         [\bdeserves a (moment|closer look)\b]
+--- needs judgment, check the carve-outs in SKILL.md: 23
+  line 6      matters                        [\bmatters?\b]
+  line 6      matters                        [\bmatters?\b]
+  line 17     matters                        [\bmatters?\b]
+  line 31     rather than simply             [\brather than simply\b]
+  line 31     less about speed and more abou [\bless (about|a|an) .{1,40},? (and )?more (about|a|an)\b]
+  line 31     Every single                   [\bevery single\b]
+  line 31     Perhaps the most               [\bperhaps the most\b]
+  line 31     just as important              [\bjust as important\b]
+  line 31     adds another layer             [\badds another (layer|dimension)\b]
+  line 31     absolutely essential           [\babsolutely essential\b]
+  line 36     According to the text          [\b(according to|based on) the (text|passage|excerpt|document|article)\b]
+  line 36     genuine                        [\bgenuine\b]
+  line 36     thoughtful                     [\b(thoughtful|dependable)\b]
+  line 36     dependable                     [\b(thoughtful|dependable)\b]
+  line 39     The catch is                   [\b(the|migration) (catch|trap) is\b]
+  line 39     the ragged edge                [\bthe ragged edge\b]
+  line 39     What it actually does          [\bwhat('s| it| this| that| the [a-z]+)? actually (happen(s|ed|ing)?|does|did|shows?|showed|means|works)\b]
+  line 39     Notice what happens            [\bnotice what (the|this|that|happens)\b]
+  line 42     It's structural                [\b(it|that|this)('s| is) structural\b]
+  line 42     Structurally,                  [\bstructurally[,.]]
+  line 42     is itself a signal             [\b(is|are) (itself|themselves) an? signal\b]
+  line 42     That's the point               [\bthat('s| is) the point\b]
+  line 45     If anything is unclear         [\bif anything (is|was) unclear\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  false friends, check against the L1 file: 5
+  line 12     important                      [\bimportant\b]
+  line 17     actually                       [\bactual(ly)?\b]
+  line 31     important                      [\bimportant\b]
+  line 39     actually                       [\bactual(ly)?\b]
+  line 42     delay                          [\bdelay\b]
+
+total phrase hits: 51
+gate hits (unambiguous, ratchetable): 28
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

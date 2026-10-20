@@ -118,7 +118,7 @@
 \bnobody i know\b
 \bwe('?ve| have) (seen this movie|been here|stood here) before\b
 \bseen this one before\b
-\bthe honest version\b
+\bthe honest (version|answer)\b
 \bhonestly,
 \bin my experience, most\b
 
@@ -157,7 +157,7 @@
 \bthe one (thing|part|piece|example|line|idea) that\b
 
 # --- imported from a deterministic docs gate (colleague of the author, 2026-08)
-\bearns its keep\b
+\bearn(s|ed|ing)? (its|their) (keep|place|spot|counter space)\b
 \b(bar is (high|low|higher|lower)|rais(e|es|ed|ing) the bar)\b
 \bphysically cannot\b
 \bdeep[ -]dive\b
@@ -285,3 +285,35 @@
 # Puffery in profiles and travel-guide prose
 \b(active|strong) (social media|digital|online) presence\b
 \bnatural beauty\b
+
+# --- Claude-era frames, measured in Opus 5 and 5.5 output against human text
+# (Graphite, "AI Tells", 2026-09 and 2026-10; Pangram for "genuinely"). Each
+# had at most one hit per million words of human documentation.
+\bgenuinely\b
+\bless like an? .{1,40} and more like\b
+\brather than merely\b
+\bmatters (because|more than|most|enormously)\b
+\bwhy [a-z' ]{1,40} matters\b
+\b(is|are|was|were) more than (a|an|just) [a-z-]+[,;] (it|they)\b
+\blooking ahead\b
+\bwhat comes next\b
+\benormously\b
+\ban enormous amount\b
+\bthe single most\b
+\barguably the most\b
+\bnot only about\b
+
+# --- claudisms.ai pull requests #1 and #2 (Jim Bennett, 2026-09-28, not merged
+# at 852854b): phrases from 153 hand-labeled posts written with Claude Opus 5.
+# The banlist wording will follow upstream once the entries are merged.
+\bbites (everyone|everybody)\b
+\bthe uncomfortable part\b
+\bactually matters\b
+\bread (that|this) (again|the other way round|the other way around)\b
+\bthink about what (that|this) means\b
+\bthe headline (number|result|cost|finding)s?\b
+\b(a|the) structural consequences?\b
+\bbest structural decisions?\b
+\bthe numbers (are stark|back (it|this|that))\b
+\b(that|this|it)('s| is) ?(not|no|n't)( an)? accident(al)?\b
+\bdeserves a (moment|closer look)\b

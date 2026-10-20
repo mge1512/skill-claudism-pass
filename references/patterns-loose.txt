@@ -114,3 +114,31 @@
 \b(refined|improved|enhanced|streamlined) (the )?(clarity|flow|readability|tone|wording|language)\b
 \bensured (factual )?(accuracy|neutrality|consistency|compliance)\b
 \bwell-structured\b
+
+# --- Claude-era frames with ordinary uses (Graphite 2026, Pangram; Sun et al.
+# for "according to the text", a Claude 3.5 Sonnet habit)
+\brather than simply\b
+\bless (about|a|an) .{1,40},? (and )?more (about|a|an)\b
+\bevery single\b
+\bperhaps the most\b
+\bjust as important\b
+\badds another (layer|dimension)\b
+\babsolutely essential\b
+\b(according to|based on) the (text|passage|excerpt|document|article)\b
+\bgenuine\b
+\b(thoughtful|dependable)\b
+
+# --- claudisms.ai pull requests #1 and #2, forms with literal uses ("the trap
+# is executed on exit" in a shell script, "SIGHUP is itself a signal")
+\b(the|migration) (catch|trap) is\b
+\bthe ragged edge\b
+\bwhat('s| it| this| that| the [a-z]+)? actually (happen(s|ed|ing)?|does|did|shows?|showed|means|works)\b
+\bnotice what (the|this|that|happens)\b
+\b(it|that|this)('s| is) structural\b
+\bstructurally[,.]
+\b(is|are) (itself|themselves) an? signal\b
+\bthat('s| is) the point\b
+
+# --- Wes Pomeroy, "You Valued Sending More Than Writing" (2026-04-25): a stock
+# closer in unreviewed AI mail
+\bif anything (is|was) unclear\b
