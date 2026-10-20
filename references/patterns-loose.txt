@@ -46,9 +46,9 @@
 
 # --- chatbot closers, soft grade. Humans write these too, so they are signal
 # only in bulk and never a conviction on their own (Lolly field notes).
-\bI hope this (helps|email finds you well)\b
+\bI hope this (helps|(email|message|note) finds you well)\b
 \blet me know if you('d like| have any| need| want)\b
-\b[Ww]ould you like me to\b
+\b[Ww]ould you like (me to|a|an|more|the)\b
 \bfeel free to (reach out|ask|adjust|modify|tweak)\b
 \b[Yy]ou('re| are) absolutely right\b
 \bnot (meant as )?a substitute for professional (medical|legal|financial) advice\b
@@ -69,9 +69,10 @@
 # --- moved from patterns.txt (review, 2026-10). The bare word also names the
 # _ character ("names may contain underscores"); the verb with an object stays
 # strict. Past forms of "serves as" are ordinary in biographies ("served as
-# chair"), and "functions as well as" is a plural noun.
+# chair"), and "functions as well as" is a plural noun. "operates as", from
+# Wikipedia's copulative list, also describes what a daemon does.
 \bunderscor(e|es|ed|ing)\b
-\b(served|serving|functions|functioned|functioning) as\b
+\b(served|serving|functions|functioned|functioning|operates|operated|operating) as\b
 
 # --- upstream sync 2026-10-20: published aliases that also have literal uses
 # ("the boot loader hands over control to the kernel", "the update failed,
@@ -83,3 +84,33 @@
 \bleaving you with\b
 \bhonestly [a-z]
 \ban honest (snapshot|breakdown|assessment|take|look|summary)\b
+
+# --- Wikipedia, "Signs of AI writing", page of 2026-10: forms with literal or
+# ordinary human uses ("the focal point of the camera", "marks the end of the
+# section", "In summary, the RX ring is used for ...").
+\bfocal point\b
+\bdistinction is important\b
+\bis an? (stark |powerful |timely |constant )?reminder\b
+\b(marks|marked) the (first|beginning|start|end|culmination)\b
+\bventur(e|es|ed|ing) into\b
+, ensuring\b
+\b(it|this|that|they)('s not| is not| isn't| was not| wasn't| are not| aren't| were not| weren't) [^.]{1,40}\. (it|this|that|they)('s|'re| is| are| was| were)\b
+\bnot [^.,;]{1,30}[,.] not [^.,;]{1,30}[,.] (and )?(certainly )?not\b
+\bfac(e|es|ed|ing) (several|numerous|many|significant|a number of) challenges\b
+\bfuture (outlook|prospects)\b
+\bin (summary|conclusion)\b
+\bis there anything else (i|you)\b
+\bmore detailed breakdown\b
+\bbased on (the )?available information\b
+(\bnot|n't) (widely|extensively) (documented|available|disclosed)\b
+\bshould be (treated|presented|read|understood|seen|viewed|taken) as [^.]{1,60}rather than\b
+\b(does|do|did) not (by itself|on its own|alone) (establish|prove|confirm|demonstrate|show)\b
+\bkeeps? (his|her|their) personal (details|life|information) private\b
+\b(media|news|tech|business|trade|industry) outlets\b
+\bleading experts?\b
+\b(widely|particularly) (associated|connected) with\b
+\bfrom [^,.;]{1,40} to [^,.;]{1,40}, (and )?from\b
+# Change descriptions in edit summaries, commit messages and release notes
+\b(refined|improved|enhanced|streamlined) (the )?(clarity|flow|readability|tone|wording|language)\b
+\bensured (factual )?(accuracy|neutrality|consistency|compliance)\b
+\bwell-structured\b

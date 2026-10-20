@@ -1,7 +1,7 @@
 === tests/docs/pasted.md
 --- banlist hits, rewrite these: 0
 --- needs judgment, check the carve-outs in SKILL.md: 1
-  line 9      Would you like me to           [\b[Ww]ould you like me to\b]
+  line 9      Would you like me to           [\b[Ww]ould you like (me to|a|an|more|the)\b]
 --- leaked scaffolding and chatbot boilerplate
   line 1      Certainly! Here's              [^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|Below (is|are)|I('ve| have) (created|drafted|outlined|prepared))]
   line 3      As an AI                       [[Aa]s an? (AI|artificial intelligence|large language model|language model)]

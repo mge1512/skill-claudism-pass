@@ -122,7 +122,7 @@ A text search matches literal strings. The same move with a different noun or ve
 
 - Crowned superlatives with a novel noun: "the layer that pays off most", "the argument that lands hardest".
 - "the whole [X]" and "the only [X] that [verb]" with any noun in the slot.
-- Negative parallelism and staccato negation in any wording.
+- Negative parallelism and staccato negation in any wording, including the reversed "Y rather than X" and hedges such as "should be read as a summary rather than a verdict".
 - Section announcers and staged epiphany: any sentence that promises an insight instead of stating it.
 - Preemptive defense: any sentence answering an objection nobody raised ("That is not a turf claim", "rather than pretending otherwise"). Delete it and check whether anything was lost; usually the sentence before it already carried the argument.
 - The trailing moral: a fact followed by a clause explaining why the reader should approve of it ("..., because a judgment call is not a gate", "..., which keeps the floor honest"). State the fact and stop.
@@ -131,6 +131,10 @@ A text search matches literal strings. The same move with a different noun or ve
 - Invented reactions: "it stuck with me", "the thing that got me". Name the actual reaction or leave it out.
 - "Bold term: explanation sentence" bullet lists, `---` as a section divider, and a neat bullet summary at the end.
 - Four or more short declarative sentences in a row. Vary the length.
+- Triplets by reflex: three adjectives, phrases or examples where the content has two or four.
+- Headings: Title Case where the house style is sentence case, a first heading that repeats the title, a heading with only sub-headings under it, skipped levels, and "X and Y" headings such as "Challenges and Outlook".
+- Boldface on every mention of a term, a small table that a sentence would say better, and Markdown (`**`, `##`, `---`) pasted into a plain-text target such as a LinkedIn post or a text mail.
+- "Little-known, yet important": the text admits that the subject is minor, then stresses its importance anyway.
 
 Consult `references/banlist.md` for the full list with the reasoning behind each entry, and to check anything that looks borderline. The file is grouped into confirmed entries, structural and framing tics, register tics, spoken-word tells, imported vocabulary, and local additions caught in review.
 

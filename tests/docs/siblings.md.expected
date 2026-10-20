@@ -1,6 +1,6 @@
 === tests/docs/siblings.md
 --- banlist hits, rewrite these: 15
-  line 1      It is important to note        [\bit( i|')?s important to note\b]
+  line 1      It is important to note        [\bit( i|')?s (important|critical|crucial|essential|vital) to (note|remember|consider|recognize|recognise)\b]
   line 3      not just a bug, it is          [\bnot (just|merely|simply) .{1,40}(it(')?s|it is|they('re| are)|but)\b]
   line 5      is not about speed, it is abou [\b(is|are) ?n(o|')t about .{1,40} (it(')?s|it is|they('re| are)) about\b]
   line 7      diving into                    [\bdiv(e|es|ing) into\b]
@@ -18,7 +18,7 @@
 --- needs judgment, check the carve-outs in SKILL.md: 3
   line 12     underscored                    [\bunderscor(e|es|ed|ing)\b]
   line 14     underscores                    [\bunderscor(e|es|ed|ing)\b]
-  line 14     served as                      [\b(served|serving|functions|functioned|functioning) as\b]
+  line 14     served as                      [\b(served|serving|functions|functioned|functioning|operates|operated|operating) as\b]
 --- leaked scaffolding and chatbot boilerplate
   clean
 --- hidden characters

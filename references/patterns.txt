@@ -92,7 +92,7 @@
 \bthe useful (thing|part)\b
 \bwhat i (want|keep wanting) (you|people) to (see|know|take)\b
 \bit(')?s worth noting\b
-\bit( i|')?s important to note\b
+\bit( i|')?s (important|critical|crucial|essential|vital) to (note|remember|consider|recognize|recognise)\b
 \bwhen it comes to\b
 \bat its core\b
 \bthis is where .{1,30} comes in\b
@@ -183,7 +183,7 @@
 # --- from the Lolly field notes (Andy Fitzsimon, SUSE), 2026-08
 \bwhether you('re| are) an? .{2,30} or an? \b
 \b(serves|stands) as\b
-, (highlighting|emphasizing|emphasising|underscoring|reflecting|showcasing|demonstrating|ensuring|fostering|enhancing) 
+, (further |thereby |thus )?(highlighting|emphasizing|emphasising|underscoring|reflecting|symbolizing|symbolising|showcasing|demonstrating|fostering|cultivating|encompassing|enhancing|bolstering|paving|contributing to)\b
 \b(foundationally|fundamentally) [a-z]+\b
 \bhere'?s the kicker\b
 \bwant me to .{3,80}\?
@@ -245,3 +245,43 @@
 \bis designed to\b
 \baims to\b
 \bfacilitat(e|es|ed|ing)\b
+
+# --- Wikipedia, "Signs of AI writing", page of 2026-10: signs the lines above
+# miss. Each had at most one hit in 7.7 million words of human documentation.
+# Inflated significance
+\ban? (vital|significant|crucial|pivotal|key) (role|moment)\b
+\b(highlight(s|ed|ing)?|emphasi[sz](e|es|ed|ing)|stress(es|ed|ing)?) (its|their|the) (importance|significance|role)\b
+\breflect(s|ed|ing)? (a )?broader\b
+\b(mark|marks|marked|marking|represent|represents|represented|representing) an? (significant |major |fundamental |pivotal )?(shift|turning point)\b
+\bset(s|ting)? the stage for\b
+\b(key|pivotal) turning point\b
+\bevolving landscape\b
+\bindelible mark\b
+\bdeeply rooted\b
+\blasting (legacy|impact|influence)\b
+\bdistinction matters\b
+# Negative parallelism without "just": "It's not a bug, it's a feature." and
+# "no meetings, no tickets, just code". The sentence start keeps "Since this
+# is not a socket error, it is counted" out. The scanner prefixes each joined
+# paragraph with its line number and a colon, so "[0-9]:" is a paragraph start.
+(^|[0-9]:|[.!?] )(it|this|that)('s not| is not| isn't) (a|an|the|only) [^.,;]{1,40}[,;] (it|this|that)('s| is)\b
+\bno [a-z]+( [a-z]+)?, no [a-z]+( [a-z]+)?, (just|only)\b
+# Unnamed authorities
+\b(industry reports|observers have (cited|noted)|experts (argue|agree|say|note|believe)|(some )?critics (argue|say|note|contend))\b
+\b(is|are|was|were) widely (regarded|considered|seen|recognized|recognised) as\b
+# The challenges-and-prospects closer
+\bdespite (these|the|such|its|their|all) ([a-z]+ ){0,2}challenges\b
+# Article announcements
+\bin this (section|article|post|guide|document),? (we|i)('ll| will) (discuss|explore|examine|look at|cover|delve)\b
+# Hedges about sources a chatbot could not find
+\bspecific (details|information) [^.]{0,60}(is|are) (limited|scarce)\b
+\b(in|from) the provided (search results|sources|documents)\b
+\b(maintains|keeps) a low profile\b
+# Unfilled template slots: "[Your Name]", "[Insert date]", "2025-XX-XX". A
+# Markdown link "[add a link](url)" is skipped; "[name]" alone is a syntax
+# placeholder in technical text and is not matched.
+\[(your|insert|enter|add|describe) [^]]{0,40}\]([^(]|$)|\[(company|client|customer|recipient|author|contact|first|last|full|product|project|team|manager) name\]([^(]|$)
+\b(19|20)[0-9]{2}-xx(-xx)?\b
+# Puffery in profiles and travel-guide prose
+\b(active|strong) (social media|digital|online) presence\b
+\bnatural beauty\b

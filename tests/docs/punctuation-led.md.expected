@@ -1,6 +1,6 @@
 === tests/docs/punctuation-led.md
 --- banlist hits, rewrite these: 1
-  line 1      , highlighting                 [, (highlighting|emphasizing|emphasising|underscoring|reflecting|showcasing|demonstrating|ensuring|fostering|enhancing) ]
+  line 1      , highlighting                 [, (further |thereby |thus )?(highlighting|emphasizing|emphasising|underscoring|reflecting|symbolizing|symbolising|showcasing|demonstrating|fostering|cultivating|encompassing|enhancing|bolstering|paving|contributing to)\b]
 --- needs judgment, check the carve-outs in SKILL.md: 2
   line 1      , because a judgment call is n [, because [a-z ]{1,30} is (not )?(a|an|the) [a-z]+\b]
   line 1      , which keeps                  [, which (keeps|makes|forces|ensures|means|is what)\b]
