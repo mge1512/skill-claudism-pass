@@ -44,10 +44,14 @@
 \302\247	SECTION SIGN (say "section 4" instead)
 
 # Context-dependent: invisible, but they carry meaning in Arabic and Indic
-# shaping and in emoji sequences, so removing them corrupts non-Latin text.
-# Reported separately and never counted towards the gate.
+# shaping, in right-to-left text and in emoji sequences, so removing them
+# corrupts non-Latin text. Reported separately and never counted toward the
+# gate.
 ?\342\200\214	ZERO WIDTH NON-JOINER (required in Arabic and Indic text)
 ?\342\200\215	ZERO WIDTH JOINER (required in Arabic, Indic and emoji sequences)
+?\342\200\216	LEFT-TO-RIGHT MARK (required in mixed-direction text)
+?\342\200\217	RIGHT-TO-LEFT MARK (required in mixed-direction text)
+?\330\234	ARABIC LETTER MARK (required in Arabic text)
 \015	CARRIAGE RETURN (CRLF line ending)
 \013	VERTICAL TAB
 \014	FORM FEED

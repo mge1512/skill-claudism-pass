@@ -1,0 +1,70 @@
+=== tests/docs/scaffolding.md
+--- banlist hits, rewrite these: 0
+--- needs judgment, check the carve-outs in SKILL.md: 0
+--- leaked scaffolding and chatbot boilerplate
+  line 3      turn0file3                     [turn[0-9]+(search|news|view|image|forecast|fetch|file|product|business|sports|finance|time|video|youtube|reddit)[0-9]+]
+  line 3      turn2fetch1                    [turn[0-9]+(search|news|view|image|forecast|fetch|file|product|business|sports|finance|time|video|youtube|reddit)[0-9]+]
+  line 5      entity["city", "               [entity\[ *"[a-z_0-9]+", *"]
+  line 5      image_group{"                  [image_group\{ *"]
+  line 7      sandbox:/mnt/data/             [sandbox:/{1,3}mnt/(data|agents)/]
+  line 9      ::git-create-branch{           [::(created-thread|code-comment|git-[a-z-]+)\{]
+  line 11     <|channel|>                    [<\|(start|end|message|channel|return|call|constrain)\|>]
+  line 11     <|end|>                        [<\|(start|end|message|channel|return|call|constrain)\|>]
+  line 11     <|message|>                    [<\|(start|end|message|channel|return|call|constrain)\|>]
+  line 11     <|start|>                      [<\|(start|end|message|channel|return|call|constrain)\|>]
+  line 13     <start_of_turn>                [<(start|end)_of_turn>]
+  line 13     <turn|>                        [<\|turn>|<turn\|>]
+  line 13     <|turn>                        [<\|turn>|<turn\|>]
+  line 15     [cite: 3, 12, 13]              [\[cite: *[0-9]+( *, *[0-9]+)*\]]
+  line 17     <Elicitation label=            [<Elicitation label=]
+  line 17     <ElicitationsGroup>            [<(ElicitationsGroup|FollowUp|GenerateWidget)[ >/]]
+  line 19     src="image_agent_tag_          [src="image_agent_tag_]
+  line 21     vertexaisearch.cloud.google.co [vertexaisearch\.cloud\.google\.com/grounding-api-redirect]
+  line 23     utm_source=gemini              [utm_source=gemini]
+  line 25     "action": "image_generation"   ["action": *"image_generation"]
+  line 27     </TeamsMessage>                [</?TeamsMessage>]
+  line 27     <KIMI_REF                      [<KIMI_REF]
+  line 27     <TeamsMessage>                 [</?TeamsMessage>]
+  line 29     grok-card                      [grok[-_](render_citation_)?card]
+  line 29     grok_render_citation_card      [grok[-_](render_citation_)?card]
+  line 31     </grok:render                  [</?grok:render]
+  line 31     <grok type="render_inline_cita [<grok type="render_[a-z_]+"]
+  line 31     <xai:function_call             [<xai:function_call]
+  line 31     render_inline_citation         [render_inline_citation]
+  line 33     [memory:2]                     [\[(web|post|collection|page|file|memory|chart|email|calendar_event|conversation_history|code_file|generated_image|generated_video):[0-9]+\]]
+  line 33     [web:1]                        [\[(web|post|collection|page|file|memory|chart|email|calendar_event|conversation_history|code_file|generated_image|generated_video):[0-9]+\]]
+  line 33     ](claim:4)                     [\]\(claim:[0-9]+\)]
+  line 35     [citation:3]                   [\[citation:[0-9]+\]]
+  line 37     <cite index="2-5               [<[c]ite index="[0-9]+-[0-9]+]
+  line 39     <invoke name="web_search">     [<[i]nvoke name="[A-Za-z_]+">]
+  line 41     <parameter name="query">       [<[p]arameter name="[a-z_]+">]
+  line 43     (ctrl+o to expand)             [\(ctrl\+[a-z] to expand\)]
+  line 45     turn2news1                     [turn[0-9]+(search|news|view|image|forecast|fetch|file|product|business|sports|finance|time|video|youtube|reddit)[0-9]+]
+  line 45     turn2search5                   [turn[0-9]+(search|news|view|image|forecast|fetch|file|product|business|sports|finance|time|video|youtube|reddit)[0-9]+]
+  line 45     【cite|                       [reference in U+3010 brackets]
+  line 47     【85†                       [dagger citation (U+3010, U+2020)]
+  line 49     【post-12】                  [post citation in U+3010 brackets]
+--- hidden characters
+  check: LEFT-TO-RIGHT MARK (required in mixed-direction text) x1    line 51
+  check: RIGHT-TO-LEFT MARK (required in mixed-direction text) x1    line 51
+  check: ARABIC LETTER MARK (required in Arabic text) x1    line 51
+  check: VARIATION SELECTOR (U+FE00-FE0E) x1
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 0
+gate hits (unambiguous, ratchetable): 42
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

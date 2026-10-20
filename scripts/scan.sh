@@ -351,6 +351,22 @@ for target in "${files[@]}"; do
                 "${hit%%:*}" "$(printf '%s' "${hit#*:}" | cut -c1-30)" "$pat" >> "$tmp_art"
         done < <("$GREP" -n -o -E "$(port "$pat")" "$tmp_qprose" 2> /dev/null)
     done < "$artifacts"
+    # Visible tokens outside ASCII, written here as octal bytes so that
+    # artifacts.txt stays ASCII: the U+3010 reference wrapper of 2026 ChatGPT
+    # output ("cite|turn0search0|..."), and dagger citations (U+2020) from
+    # DeepSeek, file search and Meta AI.
+    for vt in \
+        '\343\200\220(cite|filecite|navlist|filenavlist|entity|image_group|url|link_title|products?|video|genui|finance|schedule|standing|forecast|i)[|]::reference in U+3010 brackets' \
+        '\343\200\220[0-9]+(:[0-9]+)?\342\200\240::dagger citation (U+3010, U+2020)' \
+        '\343\200\220post-[0-9]+\343\200\221::post citation in U+3010 brackets'
+    do
+        vpat="${vt%%::*}"; vname="${vt##*::}"
+        while IFS= read -r hit; do
+            [ -n "$hit" ] || continue
+            printf '  line %-6s %-30s [%s]\n' \
+                "${hit%%:*}" "$(printf '%s' "${hit#*:}" | cut -c1-30)" "$vname" >> "$tmp_art"
+        done < <(LC_ALL=C "$GREP" -n -o -E "$(printf '%b' "$vpat")" "$tmp_qprose" 2> /dev/null)
+    done
     # A line-start "Assistant:" is ordinary human writing (film credits, staff
     # rosters). It counts only when a line-start "Human:" appears as well.
     if "$GREP" -q -E '^[[:space:]]*Human:' "$tmp_qprose" 2> /dev/null \
@@ -435,17 +451,28 @@ for target in "${files[@]}"; do
     # Ranges, which a literal list cannot express. Tag characters are both
     # invisible and a known channel for hidden instructions; the private-use
     # block wraps ChatGPT citation tokens, so finding it convicts even when the
-    # visible token has already been stripped.
+    # visible token has already been stripped. A leading "?" marks a range
+    # that is reported and never counted, as in hidden-unicode.txt: the
+    # variation selectors U+FE00 to U+FE0E are part of CJK and emoji text.
     for rng in \
         '\363\240[\200\201][\200-\277]::TAG CHARACTERS (U+E0000-E007F, hidden-instruction channel)' \
         '\363\240[\204-\207][\200-\277]::VARIATION SELECTOR SUPPLEMENT (U+E0100-E01EF)' \
-        '\356\210[\200-\206]::PRIVATE USE (U+E200-E206, wraps chat citation tokens)'
+        '\356\210[\200-\206]::PRIVATE USE (U+E200-E206, wraps chat citation tokens)' \
+        '?\357\270[\200-\216]::VARIATION SELECTOR (U+FE00-FE0E)'
     do
+        rctx="no"
+        case "$rng" in
+            '?'*) rctx="yes"; rng="${rng#?}" ;;
+        esac
         rpat="${rng%%::*}"; rname="${rng##*::}"
         rhit="$(LC_ALL=C "$GREP" -c -E "$(printf '%b' "$rpat")" "$check_src" 2> /dev/null || true)"
         if [ "${rhit:-0}" -gt 0 ]; then
-            printf '  %-38s x%s\n' "$rname" "$rhit"
-            hid=$((hid + rhit))
+            if [ "$rctx" = "yes" ]; then
+                printf '  check: %-31s x%s\n' "$rname" "$rhit"
+            else
+                printf '  %-38s x%s\n' "$rname" "$rhit"
+                hid=$((hid + rhit))
+            fi
         fi
     done
     ent="$("$GREP" -n -i -o -E '&(mdash|ndash|nbsp|ensp|emsp|thinsp|shy|#8212|#x2014|#160|#8194|#8195|#8201|#8239|#173|#8203);' "$check_src" 2> /dev/null || true)"

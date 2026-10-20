@@ -197,6 +197,15 @@ self-identification strings convict only outside quotation marks, since an
 article quoting a chatbot is a human writing about a machine. Tokens inside code
 spans are ignored, so a document that documents these tokens stays clean.
 
+The 2026 families, among them the U+3010 reference brackets of ChatGPT, the
+Gemini UI components, the Grok render tags, the Harmony and Gemma prompt
+formats and Claude tags without their namespace, come from collections of
+leaked system prompts and from Wikipedia's "Signs of AI writing". Most of them
+show what a model is told to emit, not what has been seen in pasted text.
+`tests/docs/scaffolding.md` has one sample of each, so the patterns are
+tested for recall. Tokens outside ASCII are matched in `scripts/scan.sh`, so
+`artifacts.txt` stays ASCII.
+
 ## Sentence length and terminology
 
 Two notices, neither of which gates a build.
@@ -347,7 +356,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Eighty-three cases in nine classes:
+Eighty-five cases in nine classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
@@ -427,8 +436,10 @@ observed in the field:
   the scanner, it just matches less, so the damage is silent. Verify, or clone.
 - `references/artifacts.txt` lists prompt-format tags and citation tokens, so it
   reads like an injection payload and some content filters quarantine it. Fetch
-  it through the GitHub contents API in base64 form, or clone. Obfuscating the
-  file would defeat the reason everything here is plain text. Where the file is
+  it through the GitHub contents API in base64 form, or clone. Tag patterns
+  write their first letter as a bracket class (`<[i]nvoke`), which matches the
+  same text and keeps the literal tag out of the file. Obfuscating more than
+  that would defeat the reason everything here is plain text. Where the file is
   blocked, the leaked-scaffolding check goes missing without saying so.
 
 ## Source and license
@@ -449,6 +460,9 @@ Authors: Matthias Georg Eckermann (mge1512), with Claude (Anthropic) as co-autho
 The leaked-scaffolding list, the chatbot-register patterns, the detection notes
 and several corrections to the variant pairs and the invisible-character list
 come from the Lolly project (Andy Fitzsimon, SUSE), contributed under CC0 1.0.
+The 2026 additions to the scaffolding list come from public collections of
+leaked system prompts and from Wikipedia's "Signs of AI writing"; the header
+of `references/artifacts.txt` names them.
 
 CC0 removes the obligation to give credit. Credit is given here anyway, and anyone
 reusing this is asked, not required, to do the same.
