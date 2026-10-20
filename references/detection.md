@@ -31,12 +31,29 @@ Never present grade 3 as grade 1.
 - **Leave the common words out.** `key`, `additionally` and `valuable` are
   over-represented in machine text and still far too common in human prose.
   Only the distinctive tail counts: `delve`, `tapestry`, `testament`,
-  `multifaceted`. Even that tail dates: the first three mark output from 2023
-  to 2024 and are rarer in current models. Date every lean.
+  `multifaceted`. Even that tail dates: Wikipedia's "Signs of AI writing" lists
+  the first three for 2023 to mid-2024 output and `multifaceted` for GPT-6
+  output from mid-2026. Date every lean.
 - **Version the lists.** `references/VERSION` stamps them, the ratchet baseline
   records the stamp, and the scanner says so when they differ. Counts move when
   the lists change, and an unversioned stored verdict goes stale without saying
   so.
+
+## Not evidence of machine origin
+
+The register rules are not. Wikipedia's "Signs of AI writing" (October 2026)
+lists "in order to", "the fact that", "as a result of", "is the only" and "was
+the first" among the constructions that are more common in human Wikipedia
+text than in AI text. In 4.3 million words of human technical documentation
+written before 2023, "in order to" occurs 236 times per million words, "prior
+to" 65, "allows users to" and its variants 40, "here," 34 and "utilize" 31.
+Leave the ASD-STE100 block and the "here," rule out of any detection score:
+they enforce a register.
+
+Curly quotes are not, least of all from Claude. ChatGPT and DeepSeek typically
+emit them, Claude and Gemini typically do not, and Word, macOS, iOS and
+LanguageTool produce them on their own (Wikipedia, October 2026). The scanner
+counts them as house style.
 
 ## Attribution leans
 
@@ -53,7 +70,9 @@ Treat all of this as a lean and never as proof.
 
 ## Sources to track
 
-- Wikipedia, "Signs of AI writing", actively maintained.
+- Wikipedia, "Signs of AI writing", actively maintained. It describes rather
+  than bans, dates its word lists by model era and lists signs of human
+  writing as well.
 - Reinhart et al., PNAS 2025: grammatical and lexical profiles of GPT-4o,
   GPT-4o Mini and Llama 3. No Claude model was tested.
 - Sun et al., "Idiosyncrasies in Large Language Models", ICML 2025: words and
