@@ -356,12 +356,12 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Eighty-seven cases in nine classes:
+Eighty-nine cases in nine classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
-  the portable path strips
-  `\b` and relies on `grep -w`.
+  the portable path replaces `\b` with `grep -w`, or with a character class
+  where a pattern has a boundary on one side only.
 - **The lexer**, via `tests/lexer/<lang>.<ext>`, run directly against
   `comments.awk` so a regression there is isolated. `AWK=gawk bash tests/run.sh`
   runs the same cases against another implementation.

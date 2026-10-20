@@ -83,12 +83,34 @@ if [ "$has_wb" != "yes" ]; then
     WB_FLAG="-w"
 fi
 
+# A pattern bounded by \b on one side only gets grep -w on neither side (see
+# wflag below), so the one boundary is spelled out instead: "\bhere," must not
+# match "there," or "everywhere,". The class consumes the neighboring
+# character, which trim_hit removes again before the hit is printed.
 port() {
     if [ "$has_wb" = "yes" ]; then
         printf '%s' "$1"
-    else
-        printf '%s' "$1" | sed 's/\\b//g'
+        return
     fi
+    case "$1" in
+        '\b'*'\b') printf '%s' "$1" | sed 's/\\b//g' ;;
+        '\b'*) printf '(^|[^[:alnum:]_])%s' "$(printf '%s' "${1#??}" | sed 's/\\b//g')" ;;
+        *'\b') printf '%s([^[:alnum:]_]|$)' "$(printf '%s' "${1%??}" | sed 's/\\b//g')" ;;
+        *) printf '%s' "$1" | sed 's/\\b//g' ;;
+    esac
+}
+
+# $1 = original pattern, $2 = matched text from the ported pattern.
+trim_hit() {
+    local h="$2"
+    if [ "$has_wb" != "yes" ]; then
+        case "$1" in
+            '\b'*'\b') ;;
+            '\b'*) h="${h#[^[:alnum:]_]}" ;;
+            *'\b') h="${h%[^[:alnum:]_]}" ;;
+        esac
+    fi
+    printf '%s' "$h"
 }
 
 # grep -w enforces a word boundary at BOTH ends of the match, unconditionally.
@@ -96,8 +118,8 @@ port() {
 # starts with punctuation (", because ...", ", highlighting ...") would be
 # rejected, because the character before the comma is a letter, and it would
 # silently never match. So -w is applied per pattern, only where the original
-# was bounded on both sides. One-sided patterns lose their single boundary on
-# the portable path, which can add a hit but never removes one.
+# was bounded on both sides. port() spells out the boundary of a one-sided
+# pattern instead.
 wflag() {
     [ "$has_wb" = "yes" ] && return 0
     case "$1" in
@@ -277,6 +299,7 @@ scan_list() {
             text="${para#*:}"
             while IFS= read -r hit; do
                 [ -n "$hit" ] || continue
+                hit="$(trim_hit "$pat" "$hit")"
                 printf '  line %-6s %-30s [%s]\n' \
                     "$start" "$(printf '%s' "$hit" | cut -c1-30)" "$pat"
             done < <(printf '%s\n' "$text" | "$GREP" -i -o $wf -E "$rx" 2> /dev/null)

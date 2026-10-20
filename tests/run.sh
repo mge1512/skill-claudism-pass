@@ -99,10 +99,17 @@ for pf in patterns.txt patterns-loose.txt artifacts.txt l1/errors.txt l1/false-f
             echo "          bad ERE in $pf: $pat"
             badpat=$((badpat + 1))
         fi
-        # the portable path strips \b and relies on grep -w, so check that form too
-        stripped="$(printf '%s' "$pat" | sed 's/\\b//g')"
+        # the portable path rewrites \b: grep -w for a pattern bounded on both
+        # sides, a character class for one bounded on one side (see port in
+        # scan.sh), so check that form too
+        case "$pat" in
+            '\b'*'\b') stripped="$(printf '%s' "$pat" | sed 's/\\b//g')" ;;
+            '\b'*) stripped="(^|[^[:alnum:]_])$(printf '%s' "${pat#??}" | sed 's/\\b//g')" ;;
+            *'\b') stripped="$(printf '%s' "${pat%??}" | sed 's/\\b//g')([^[:alnum:]_]|$)" ;;
+            *) stripped="$(printf '%s' "$pat" | sed 's/\\b//g')" ;;
+        esac
         if ! compiles "$stripped"; then
-            echo "          bad ERE in $pf after \\b removal: $stripped"
+            echo "          bad ERE in $pf on the portable path: $stripped"
             badpat=$((badpat + 1))
         fi
     done < "${root}/references/${pf}"
