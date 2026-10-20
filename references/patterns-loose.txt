@@ -33,7 +33,7 @@
 # that moves and a symlink that points to a target are literal, so only the
 # usual abstract subjects and the "toward a conclusion" forms are matched.
 \b(attention|argument|conversation|discussion|focus|emphasis|burden|weight|risk|question|debate|center of gravity|centre of gravity) (moves|moved|moving|shifts|shifted)\b
-\bpoint(s|ed|ing)? (toward|towards|in the same direction|the same direction|at the same)\b
+\bpoint(s|ed|ing)? (toward|towards|in the same( direction)?|the same direction|at the same)\b
 \bthe (shift|unlock) is\b
 # The copula flourish: a clause that redefines its subject and hedges with a
 # trailing "here". Approximated without lookbehind, so "there is a X here" and
@@ -72,3 +72,14 @@
 # chair"), and "functions as well as" is a plural noun.
 \bunderscor(e|es|ed|ing)\b
 \b(served|serving|functions|functioned|functioning) as\b
+
+# --- upstream sync 2026-10-20: published aliases that also have literal uses
+# ("the boot loader hands over control to the kernel", "the update failed,
+# leaving you with a broken initrd", "what is useful for debugging").
+\bthe thing that (moved|shifted)\b
+\bhands (over|something back)\b
+\bmov(es|ed|ing) onto\b
+\bwhat('s| is) useful\b
+\bleaving you with\b
+\bhonestly [a-z]
+\ban honest (snapshot|breakdown|assessment|take|look|summary)\b

@@ -182,6 +182,16 @@ upstream list grows; re-fetch it before assuming this file is current. Local
 additions belong below and, where a regular expression can catch them, in
 `patterns.txt`.
 
+The pattern files match the phrase aliases in `claudisms.json` at 852854b;
+those with a literal sense are in `patterns-loose.txt`. Three kinds of alias
+are left to the by-eye step in `SKILL.md`: entry titles such as "Hyping",
+aliases with a placeholder such as "the one that [verb]", and single words
+whose literal sense dominates in technical text (names, moves, turns, useful,
+real, navigate). "what moved here" and "what actually moved" match only before
+"is" or "was". To compare after an upstream change, extract the aliases with
+`jq -r '.terms[].aliases[]' claudisms.json` and run each one through both
+files with `grep -i -E -f`.
+
 The list is dedicated to the public domain under CC0 1.0. The upstream
 repository's LICENSE, the `license` field in `claudisms.json`, the site footer
 and the About page all say so. Only the footer of the Markdown file leaves the

@@ -6,7 +6,9 @@
 \bsit(s|ting)? with\b
 \bworth (sitting|noting|talking|asking|drawing|making|examining|considering|exploring|a look)\b
 \bworth [a-z]+ing\b
-\barriv(e|es|ed|ing) at (the|a|an) (question|answer|conclusion|point|idea)
+\bworth (it|the)\b
+\barriv(e|es|ed|ing) at (the|a|an) (same )?(question|answer|conclusion|point|idea)
+\bkeep arriving at\b
 \b(keep|keeps|kept) coming back to\b
 \bcoming back to\b
 \bbrings (me|us) back to\b
@@ -24,11 +26,13 @@
 \bstayed with me\b
 \bstruck a (chord|nerve)\b
 \bhit a nerve\b
-\bthe thing that (got|hooked) me\b
+\blanded for me\b
+\bthe thing that (got|got to|hooked) me\b
 \bwhat got me\b
 
-# --- crowned superlatives and totalising claims
+# --- crowned superlatives and totalizing claims
 \bthe best thing you can do\b
+\bthe most [a-z]+( [a-z]+)? (you|we) can get\b
 \b(helps|pays off|works) (the )?most\b
 \bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b
 \bthe entire point\b
@@ -41,12 +45,13 @@
 \b(different |the )?physics of\b
 \brules of physics\b
 \bthe engine (of|behind|is)\b
-\bload-bearing\b
+\bload[ -]?bearing\b
 \bturns on\b
 \b(compound|compounds|compounding)\b
-\brides (along|on)\b
+\brid(es|ing) (along|on)\b
 \bdoing the (work|heavy lifting)\b
 \bheavy lifting\b
+\ball the lifting\b
 \bthe tell\b
 \bthroughline\b
 \bparadigm shift\b
@@ -57,9 +62,12 @@
 \b(risk|work|tension|value|problem|complexity|difference|answer|logic|truth|config|file|code|data) lives\b
 \bhold(s|ing)? (that thought|the line|the tension|both|two things)\b
 \bcarry (this|it|that) (with you|forward)\b
+\bi('d|'ll| would| will| want to) leave you with\b
 \bin (my|the same|the) chest\b
 \bstay(s)? yours\b
 \byours to (keep|own|decide)\b
+\bthe rest is yours\b
+\bthe part that stayed\b
 
 # --- pseudo-elevated diction
 \bnames (the|what|a) (move|question|thing|problem|stake)
@@ -105,9 +113,10 @@
 \bi can(')?t stop thinking about\b
 \bmost people( i)?\b
 \beveryone i(')?(ve| have) worked with\b
+\bthe people i('ve| have) watched\b
 \ba lot of folks\b
 \bnobody i know\b
-\bwe(')?ve (seen this movie|been here) before\b
+\bwe('?ve| have) (seen this movie|been here|stood here) before\b
 \bseen this one before\b
 \bthe honest version\b
 \bhonestly,
@@ -199,17 +208,18 @@
 # --- upstream sync 2026-09-28: claudisms.ai entries added since 2026-08-18
 \bhands (you|me|us|them|it|back)\b
 \bhanded back\b
-\b(nobody|no one|no-one) (handed|gave) (you|me|us|him|her|them|it|that)\b
+\b(nobody|no one|no-one) (handed|gave (you|me|us|him|her|them|it|that))\b
 \bhand[ -]?wav(e|es|ed|ing)\b
-\bwave of the hand\b
-\bwav(e|es|ed|ing) (it|that|them|the [a-z]+) away\b
-\bwhat i keep (running into|noticing|seeing|finding)\b
+\bwave of (a|the) hand\b
+\bwav(e|es|ed|ing) ((it|that|them|the [a-z]+) )?away\b
+\b(what|the thing) i keep (running into|noticing|seeing|finding|hitting|landing on)\b
 \bwhere i keep landing\b
-\bwhat (actually )?moved (is|was)\b
+\bwhat (actually )?(moved|moves|shifted)( here)? (is|was)\b
 \bwhat changed is the\b
 \b(nobody|no one|no-one) has settled\b
 \b(is|are|was|were) ?n(o|')t settled\b
 \bnot settled yet\b
+\bback into an open (one|question)\b
 
 # --- preemptive defence: answering an objection nobody raised
 \b(that|this) is n(o|')t an? [a-z]+ (claim|criticism|complaint|attack|dig|swipe|judgment)\b
