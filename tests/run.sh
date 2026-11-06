@@ -300,6 +300,28 @@ if [ $? -eq 2 ]; then ok; else bad "missing sentences.awk must exit 2"; fi
 
 rm -rf "$work"
 
+# The single-file edition must contain every file it copies. A build that stops
+# early loses the end of a file without an error, so the last line of each file
+# must be in it. The YAML front matter of SKILL.md must not. The custom
+# instructions must stay within 5,000 characters, since the instruction fields
+# of notebooks and chat assistants have limits of their own.
+sf="$(mktemp "${TMPDIR:-/tmp}/claudism-sf.XXXXXX")"
+sffail=""
+if bash "${root}/scripts/build-single-file.sh" > "$sf" 2> /dev/null; then
+    for f in "${root}/SKILL.md" "${root}/LICENSE" "${root}"/references/*.md \
+             "${root}"/references/*.txt "${root}"/references/l1/*.md \
+             "${root}"/references/l1/*.txt "${root}/scripts/single-file-instructions.txt"; do
+        last="$("${GREP:-grep}" -v '^[[:space:]]*$' "$f" | tail -n 1)"
+        "${GREP:-grep}" -q -F -- "$last" "$sf" || sffail="${sffail} ${f#"${root}"/}"
+    done
+    "${GREP:-grep}" -q '^name: claudism-pass$' "$sf" && sffail="${sffail} front-matter"
+else
+    sffail=" build failed"
+fi
+[ "$(wc -c < "${root}/scripts/single-file-instructions.txt")" -le 5000 ] || sffail="${sffail} instructions-too-long"
+rm -f "$sf"
+if [ -z "$sffail" ]; then ok; else bad "single-file edition:${sffail}"; fi
+
 # Recorded output must carry no trailing whitespace. Editors strip it on save
 # and git apply --whitespace=fix strips it from patches, and a golden file that
 # depends on it then fails for no reason.

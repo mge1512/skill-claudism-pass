@@ -97,6 +97,27 @@ The skill is a plain directory in the Agent Skills format, so copy it wherever t
 agent looks. `.agents/skills/<name>/` is becoming the shared project-level
 convention across tools.
 
+**The single-file edition, for tools without a shell**
+
+Some tools take documents but can neither extract an archive nor run the
+scanner. Examples are Gemini Notebook (formerly NotebookLM) and chat
+assistants that only read their knowledge files. They get the single-file
+edition, `claudism-pass-single-file.md`: SKILL.md, the references and the
+license in one Markdown file. It is attached to each release and built with
+`bash scripts/build-single-file.sh > claudism-pass-single-file.md`. Give the
+file to the tool as a document (a source in a notebook, a knowledge file in an
+assistant). Paste the text under "Custom instructions" in it into the tool's
+field for instructions that apply to every chat. In Gemini Notebook, that is
+Configure chat, Custom. Without the instructions, the rules apply only when a
+question happens to bring them up. Then ask for a Claudism pass and paste the
+draft with the request. Other requests get a normal answer, and English
+answers follow the rules.
+
+The scanner does not run there, so the pass works by reading. Banned phrases
+and leaked chat tokens are found that way; invisible characters and curly
+quotes mostly are not. Where the final text must be free of them, run the
+scanner on it.
+
 ## Use
 
 Write as usual. The skill applies itself when a draft is an English deliverable:
@@ -285,7 +306,8 @@ claudism-pass/
 │       ├── errors.txt             interference the scanner can match
 │       └── false-friends.txt      words that usually mean something else
 └── scripts/
-    └── scan.sh                    the mechanical pass
+    ├── scan.sh                    the mechanical pass
+    └── build-single-file.sh       the skill as one Markdown file
 ```
 
 ## Using it with simple-english
@@ -356,7 +378,7 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Ninety-three cases in nine classes:
+Ninety-four cases in ten classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
@@ -389,6 +411,9 @@ Ninety-three cases in nine classes:
 - **The ratchet**, in all three drift directions plus a stale lexicon stamp.
 - **The variant switch and comments mode**, including the two-flip threshold and
   the rule that a marker inside a code span does not count.
+- **The single-file edition.** The build must contain the last line of every
+  file it copies and no YAML front matter. The custom instructions must stay
+  within 5,000 characters.
 
 The division-before-a-line-comment fixture exists because the obvious one,
 `a / b / c`, blanks identically whether the slash is read as division or as a

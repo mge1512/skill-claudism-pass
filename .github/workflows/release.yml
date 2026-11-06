@@ -1,6 +1,6 @@
-# Build the packaged .skill on a version tag and attach it to the release.
-# The repository tree stays unpacked; this produces the archive that the
-# claude.ai upload path needs.
+# Build the packaged .skill and the single-file edition on a version tag and
+# attach both to the release. The repository tree stays a plain directory; the
+# .skill is the archive that the claude.ai upload path needs.
 name: release
 
 on:
@@ -40,6 +40,9 @@ jobs:
           (cd build && zip -q -r ../claudism-pass.skill claudism-pass)
           unzip -l claudism-pass.skill
 
+      - name: Build the single-file edition
+        run: bash scripts/build-single-file.sh > claudism-pass-single-file.md
+
       - name: Checksums
         run: |
           find . -type f -not -path './.git/*' -not -name '*.skill' \
@@ -51,6 +54,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" claudism-pass.skill SHA256SUMS \
+          gh release create "${GITHUB_REF_NAME}" claudism-pass.skill claudism-pass-single-file.md SHA256SUMS \
             --title "${GITHUB_REF_NAME}" \
             --generate-notes
