@@ -2,7 +2,7 @@
 name: claudism-pass
 description: 'Remove AI-writing tells ("Claudisms") from ENGLISH text and write in a register that suits fluent non-native readers. Use whenever an English deliverable is drafted, rewritten or reviewed: article, blog or LinkedIn post, mail, README, documentation, abstract, talk proposal, slide text, customer-facing copy. Apply before delivering longer English text, even unasked. Also on request: "Claudism pass", "AI tells". NOT for German, code, diffs, config, logs or short chat replies.'
 metadata:
-  version: "2026-11-05-02"
+  version: "2026-11-06-01"
 ---
 
 # Claudism pass
