@@ -88,8 +88,6 @@ AI models overuse the same words. This is a running catalog of them: the phrases
 
 ---
 
-- **Preemptive defence** - "That is not a turf claim." "Not that anyone asked." "rather than pretending otherwise." "I'm not saying X, but". Answering an objection nobody raised. The move invents a critic so the text can be seen defeating one, and it tells the reader the writer expected resistance, which plants the doubt it was meant to remove. If the point needs defending, the defence belongs where the objection actually appears. Delete the sentence and check whether anything was lost; usually the sentence before it already carried the argument.
-- **The trailing moral** - a factual sentence followed by a clause saying why the reader should approve: "..., because a judgment call is not a gate", "..., which keeps the floor honest and forces each win to be locked in", "..., and that is the point". The clause adds no information and instructs the reader how to feel about the sentence it is attached to. State the fact and stop. Related to value-claim filler, but the shape rather than the vocabulary is the tell, so a word search does not find it.
 ## Structural / framing tics
 
 - **Announcing the structure before delivering it** - "I'm going to make three points" instead of just making them. Trust the reader to follow.
@@ -176,17 +174,90 @@ When drafting, check against this list before producing. If a candidate phrase a
 
 ---
 
-Source: https://claudisms.ai/ (Markdown at https://claudisms.ai/claudisms.md).
-This copy was taken on 2026-09-28. The upstream list grows; re-fetch it before
-assuming this file is current. Local additions belong here and, where a regular
-expression can catch them, in `patterns.txt`.
+Source: https://claudisms.ai/ (Markdown at https://claudisms.ai/claudisms.md),
+built from https://github.com/wespomeroyny/claudisms, whose `claudisms.json`
+has the same entries with a list of aliases for each. This copy was taken on
+2026-09-28 and still matched upstream `main` (852854b) on 2026-10-20. The
+upstream list grows; re-fetch it before assuming this file is current. Local
+additions belong below and, where a regular expression can catch them, in
+`patterns.txt`.
 
-The copy taken on 2026-08-18 ended with a CC0 1.0 dedication. The upstream
-footer now says "Free to copy and adapt." and names no license; for the entries
-added upstream between the two dates, that sentence is the only statement.
+The pattern files match the phrase aliases in `claudisms.json` at 852854b;
+those with a literal sense are in `patterns-loose.txt`. Three kinds of alias
+are left to the by-eye step in `SKILL.md`: entry titles such as "Hyping",
+aliases with a placeholder such as "the one that [verb]", and single words
+whose literal sense dominates in technical text (names, moves, turns, useful,
+real, navigate). "what moved here" and "what actually moved" match only before
+"is" or "was". To compare after an upstream change, extract the aliases with
+`jq -r '.terms[].aliases[]' claudisms.json` and run each one through both
+files with `grep -i -E -f`.
+
+The list is dedicated to the public domain under CC0 1.0. The upstream
+repository's LICENSE, the `license` field in `claudisms.json`, the site footer
+and the About page all say so. Only the footer of the Markdown file leaves the
+dedication out ("Free to copy and adapt."), and it has done so since the first
+upstream commit.
+
+## Notes on the upstream text
+
+The entries above are kept as upstream wrote them. Checked on 2026-10-20, some
+of their attributions no longer match the sources:
+
+- "Imported from external AI-writing references" cites Will Francis, "How to Stop Claude Writing Like an AI". The article is now titled "How to Make Claude Sound More Human" (published 2026-03-13, page modified 2026-09-11). Its current text names neither negative parallelism nor the bold-label list, and of the imported vocabulary only pivotal, robust and seamless.
+- The negative-parallelism entry says Wikipedia, Francis and the Washington Post all flag it as the most recognizable AI structure, at 6% of July 2025 ChatGPT messages. The Post reports about 6% of chats in July 2025 and ranks nothing. Wikipedia's "Signs of AI writing", as of October 2026, names five other signs as the most common in new AI text on Wikipedia (Markdown, AI edit summaries, hedging about sources, vague connection or association, emphasis on media coverage), and says that negative parallelism is common among human writers too.
+- The vocabulary block was checked against Wikipedia's page as it stood at the time. As of October 2026, underscore, foster, pivotal, robust, intricate, groundbreaking, landscape, testament and delve are on the page's word lists; seamless, comprehensive, holistic, navigate, realm, harness, transformative, game-changing, cutting-edge, "shed light on" and "pave the way" are on none of them. The bans stand on their own.
+- Wikipedia's page calls itself descriptive, not prescriptive ("observations, not rules"), and asks editors not to treat the signs as the problems to fix. The entries above cite it in support of bans; the bans are this list's own decision.
+- The em-dash entry puts " - " in place of every em dash. One substitute in every slot keeps the habit, so `SKILL.md` asks for a rewrite instead (a comma, a full stop, parentheses or two sentences) and keeps " - " for the rare aside.
 
 ## Local additions
 
-Entries caught in review after the upstream copy was taken. The matching expressions are in `patterns.txt`.
+Entries added here; upstream does not have them. The matching expressions are in `patterns.txt`, and in `patterns-loose.txt` where a match needs judgment.
 
+- **Preemptive defense** - "That is not a turf claim." "Not that anyone asked." "rather than pretending otherwise." "I'm not saying X, but". Answering an objection nobody raised. The move invents a critic so the text can be seen defeating one, and it tells the reader the writer expected resistance, which plants the doubt it was meant to remove. If the point needs defending, the defense belongs where the objection actually appears. Delete the sentence and check whether anything was lost; usually the sentence before it already carried the argument.
+- **The trailing moral** - a factual sentence followed by a clause saying why the reader should approve: "..., because a judgment call is not a gate", "..., which keeps the floor honest and forces each win to be locked in", "..., and that is the point". The clause adds no information and instructs the reader how to feel about the sentence it is attached to. State the fact and stop. Related to value-claim filler, but the shape rather than the vocabulary is the tell, so a word search does not find it.
 - **"here,"** (the word "here" directly before a comma - "The difference here, is that ...", "What we see here, is ...", "Here, the service reads its configuration") - deictic hedge plus a spoken pause. "Here" refers to the current case without saying which case it is; the comma is the pause a speaker makes before the verb, and in the mid-sentence form it also cuts the subject off from its verb. The sentence is better without both nearly every time: "The difference is that ...", "The service reads its configuration". If the case has to be named, name it: "In this configuration, ...", "After the upgrade, ...". Same family as "I want to be careful here" and the trailing "here" in "X is the problem here". Note: "Here, m is the mass" after a formula and "From here, the installer takes over" in a procedure are the legitimate uses, and even those read as well as "where m is the mass" and "The installer then takes over". Caught in review, 2026-09.
+- **"vouch for" / "vouches for" / "cannot vouch for"** (with a mechanism as the subject - "a block the decoder cannot vouch for is never returned", "the checksum vouches for the block", "a test suite that vouches for the release") - testimony metaphor. Vouching is a human act: a person gives a personal guarantee for a claim someone else makes. A decoder, a checksum or a test suite does no such thing. It runs a defined check, and the check passes or fails. The metaphor hides which check that is, and in storage and security text the reader needs exactly that information: a CRC detects corruption, a Reed-Solomon decoder corrects up to a stated number of symbol errors, a signature shows that a named key signed exactly these bytes. Say what the mechanism checks and what happens on failure: "a read that fails decoding returns -EIO", "the block checksum matches", "the release passes the test suite". Where the field has a term, use it: "verify", "detect", "correct", "attest" (TPM, remote attestation). Same agency family as "lives", "holds", "carries" and "doing the work"; "testify" and "swear to" fail the same way when the subject is a machine. Note: a person or a project vouching for someone ("two maintainers vouch for the new committer") is literal, and so is the PKI sense, where a certificate authority vouches for the binding of a key to an identity. The loose pattern reports those for a judgment call. Caught in review, 2026-10.
+
+### From Wikipedia's "Signs of AI writing" (page of 2026-10)
+
+The page describes what AI text on Wikipedia looks like; the bans below are this list's own decision. Its signs about citations, wikitext and notability are left out.
+
+- **Inflated significance** ("plays a pivotal role", "a key moment", "marks a significant shift", "sets the stage for", "an indelible mark", "deeply rooted", "the evolving landscape", "reflects a broader", "highlights the importance of", "that distinction matters") - the text tells the reader that something is important instead of saying what follows from it. State the consequence, or cut the sentence. Note: "the focal point of the camera" and "this marks the end of the list" are literal and only reported.
+- **Negative parallelism without "just"** ("It's not a bug, it's a feature.", "no meetings, no tickets, just code") - the same move as the upstream entry, in the forms the older lines did not match. The page dates the reversed form, "Y rather than X", and the hedge "should be treated as X rather than Y" to recent output. The first is checked by eye; the second is reported for a judgment call.
+- **Unnamed authorities** ("experts argue", "observers have noted", "industry reports", "is widely regarded as") - a claim borrows weight from people who are never named. Name the source and cite it, or state the claim as your own.
+- **The challenges-and-prospects closer** ("Despite these challenges", "faces several challenges", "future outlook") - a formula that ends a piece with a vague problem and a vague hope. Say which problem, and what is being done about it. Note: "faces several challenges" and "future outlook" also occur in plain reporting and are only reported.
+- **Source hedges** ("specific details are limited", "in the provided sources", "not widely documented", "does not by itself establish", "maintains a low profile") - a chatbot that found nothing says so in prose and then guesses. If the information is missing, leave it out or find it. Note: "not widely documented" and "does not by itself establish" are also plain statements of fact and are only reported.
+- **Article announcements** ("In this section, we will explore") - same family as signposting. Start with the content.
+- **Unfilled template slots** ("[Your Name]", "[Insert date]", "[Company Name]", "2025-XX-XX") - the placeholder survived the paste. Fill it or delete it. Note: "[name]" alone is a syntax placeholder in command references and is not matched.
+- **Profile and travel-guide puffery** ("maintains an active social media presence", "natural beauty") - press-release filler in a profile. Say what the person did or what the place has.
+
+### Claude-era frames (2026)
+
+Measured in Claude Opus 5 and 5.5 output against human text (Graphite, "AI Tells", 2026; Pangram for "genuinely"). Most extend the "this matters" and negative-parallelism families above.
+
+- **"genuinely" / "is genuinely" / "genuine"** (as a self-qualifier: "this is genuinely useful", "a genuine improvement") - same family as "honest" / "honestly". The writer marks their own claim as sincere, which implies that the unmarked claims are worth less. Measured as a Claude habit in 2026 (see `references/detection.md`). Delete it; if the degree matters, give the number. Note: "genuine" as a plain property ("genuine parts", "a genuine Intel CPU") is fine, so the bare adjective is only reported. Caught in review, 2026-10.
+- **"matters because" / "why X matters" / "matters more than" / "matters most"** - the 2026 form of "this matters": the text tells the reader that something is important, then explains. Give the consequence first; the reader will see that it matters.
+- **Definition by contrast** ("less like an X and more like a Y", "more than an X, it is a Y", "rather than merely X", "not only about") - negative parallelism that defines a thing by what it is not. Say what it is.
+- **"Looking ahead" / "what comes next"** - a closer that announces the future instead of stating a plan. Give the next step, its owner and its date, or end the text.
+- **"enormously" / "an enormous amount" / "the single most" / "arguably the most"** - intensifier and crowned superlative. Give the figure, or the reason for the ranking.
+
+### From claudisms.ai pull requests #1 and #2 (not merged at 852854b)
+
+Phrases from 153 hand-labeled posts written with Claude Opus 5 (Jim Bennett, 2026-09-28). The entries here are short; take the upstream wording once the pull requests are merged.
+
+- **"bites everyone" / "the uncomfortable part"** - a plain caveat staged as a warning. State the caveat. Note: "the catch is" and "the trap is" are only reported, since a shell trap is literal.
+- **"actually matters" / "what it actually does"** - "actually" implies a misconception nobody stated. Drop the word, or name the misconception and who holds it. The second form is only reported.
+- **"read that again" / "think about what that means"** - tells the reader how to react. Say what follows from the fact.
+- **"the headline number" / "the headline result"** - newsroom framing of one figure. Give the number.
+- **"a structural consequence" / "best structural decisions" / "it's structural"** - sounds fixed but says nothing about the structure. Name the cause. "it's structural" and "structurally," are only reported.
+- **"earns its keep" / "earns its place"** - an object treated as an employee who proves its worth. Say what it is good for, and for whom.
+- **"the numbers are stark" / "that's no accident" / "deserves a closer look"** - a verdict before the evidence. Show the data, then give a specific verdict. "is itself a signal" and "that's the point" are only reported.
+
+### Press-release and excess vocabulary (2026)
+
+- **"delighted to announce" / "excited to share" / "an exciting opportunity"** - press-release opener: the reader learns the writer's mood before the news. Start with the news. From Will Francis's before-and-after examples.
+- **"empower" / "elevate" / "innovative"** - claims an effect without saying what it is. Say what the reader can now do, or what is new. Note: "elevate" is only reported, since "elevated privileges" is literal.
+- **"in today's digital world" / "rapidly evolving" / "ever-changing"** - the sweeping contextual opener in its 2026 forms. Start with the subject.
+- **Unsupported benefit claims** ("saves hours every week") - a promise with no measurement behind it. Give the figure and its source, or drop the claim. Reported for a judgment call, because the figure may be in the next sentence.
+- **"that being said" / "embark on"** - a filler transition and a travel metaphor, both on the slop list of the simple-english skill. Use "but" or nothing; "start".
+- **Excess vocabulary** - words that occur in model output many times more often than in human text of the same kind (Kobak et al., Juzek and Ward, Reinhart et al., Wikipedia's word lists). Each has a plain word: meticulous (careful), garner (get, win), bolster (support), renowned (known), commendable (good), revolutionize (change), elucidate (explain), showcased and showcasing (shown, showing), nestled (lies, is), boast (has), "in the heart of" (in), exemplify (show), "diverse array" (many), underpin (support), "valuable insights" (findings), "resonate with" (suit, appeal to), unparalleled (say what it beats), bustling (busy), effortless (easy), grapple (deal with), amidst (among, during), formidable (hard), adept (skilled), burgeoning (growing), uncharted (new), underexplored (little studied), interconnectedness (links), "poised to" (about to). Note: words that are as common in human documentation, or have a literal sense, are only reported: vital, crucial, paramount, paradigm, synergy, discernible, realm and others.

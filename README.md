@@ -43,7 +43,7 @@ https://support.claude.com if the menu has moved.
 **Antigravity CLI (`agy`) and the Antigravity IDE**
 
 ```bash
-# per workspace, recognised by every Antigravity surface
+# per workspace, recognized by every Antigravity surface
 git clone https://github.com/mge1512/skill-claudism-pass.git \
     .agents/skills/claudism-pass
 
@@ -52,7 +52,7 @@ git clone https://github.com/mge1512/skill-claudism-pass.git \
     ~/.gemini/config/skills/claudism-pass
 ```
 
-Antigravity comes in three flavours (`agy`, the CLI and the IDE) and they do not
+Antigravity comes in three flavors (`agy`, the CLI and the IDE) and they do not
 search the same global locations. The workspace path is the one all of them agree
 on, and it travels with the repository, so prefer it. Run `/skills` in a session
 to see which locations the installed version reads; the published
@@ -97,6 +97,27 @@ The skill is a plain directory in the Agent Skills format, so copy it wherever t
 agent looks. `.agents/skills/<name>/` is becoming the shared project-level
 convention across tools.
 
+**The single-file edition, for tools without a shell**
+
+Some tools take documents but can neither extract an archive nor run the
+scanner. Examples are Gemini Notebook (formerly NotebookLM) and chat
+assistants that only read their knowledge files. They get the single-file
+edition, `claudism-pass-single-file.md`: SKILL.md, the references and the
+license in one Markdown file. It is attached to each release and built with
+`bash scripts/build-single-file.sh > claudism-pass-single-file.md`. Give the
+file to the tool as a document (a source in a notebook, a knowledge file in an
+assistant). Paste the text under "Custom instructions" in it into the tool's
+field for instructions that apply to every chat. In Gemini Notebook, that is
+Configure chat, Custom. Without the instructions, the rules apply only when a
+question happens to bring them up. Then ask for a Claudism pass and paste the
+draft with the request. Other requests get a normal answer, and English
+answers follow the rules.
+
+The scanner does not run there, so the pass works by reading. Banned phrases
+and leaked chat tokens are found that way; invisible characters and curly
+quotes mostly are not. Where the final text must be free of them, run the
+scanner on it.
+
 ## Use
 
 Write as usual. The skill applies itself when a draft is an English deliverable:
@@ -127,7 +148,11 @@ setting, only the shared file applies, which already covers the traps common to
 all of them.
 
 Dates, clock and numbers are the same in both variants: `YYYY-MM-DD`, 24-hour
-with the time zone named, decimal point, a space before the unit.
+with two-digit hours and the time zone named, decimal point, a space before the
+unit. The thousands separator is the exception: EU mode follows the European
+Commission's style guide and writes 3 000 with a no-break space, which the
+scanner then lists for checking instead of counting. Official Journal
+citations keep their published dates (OJ L 119, 4.5.2016) in both modes.
 
 ## The scanner
 
@@ -140,7 +165,9 @@ bash "$SKILL_DIR/scripts/scan.sh" --eu --no-l1 tender.md
 It reports banlist phrases, decorative punctuation and emoji, `---` dividers,
 mixed spelling variants, date and unit problems, and second-language
 interference. Phrases are matched against whole paragraphs, so hard-wrapped mail
-text is scanned correctly.
+text is scanned correctly. Typographic quotes and apostrophes are folded to
+ASCII before the phrase and scaffolding checks, so "Let's" typed with U+2019
+still matches; the decorative-punctuation check reports the character itself.
 
 Requirements: bash and grep. GNU grep is used when present, including Homebrew's
 `ggrep`. macOS ships the BSD grep, which has neither PCRE (`-P`) nor GNU word
@@ -190,6 +217,15 @@ firing on honest text: a line-start `Assistant:` counts only when a line-start
 self-identification strings convict only outside quotation marks, since an
 article quoting a chatbot is a human writing about a machine. Tokens inside code
 spans are ignored, so a document that documents these tokens stays clean.
+
+The 2026 families, among them the U+3010 reference brackets of ChatGPT, the
+Gemini UI components, the Grok render tags, the Harmony and Gemma prompt
+formats and Claude tags without their namespace, come from collections of
+leaked system prompts and from Wikipedia's "Signs of AI writing". Most of them
+show what a model is told to emit, not what has been seen in pasted text.
+`tests/docs/scaffolding.md` has one sample of each, so the patterns are
+tested for recall. Tokens outside ASCII are matched in `scripts/scan.sh`, so
+`artifacts.txt` stays ASCII.
 
 ## Sentence length and terminology
 
@@ -270,22 +306,28 @@ claudism-pass/
 │       ├── errors.txt             interference the scanner can match
 │       └── false-friends.txt      words that usually mean something else
 └── scripts/
-    └── scan.sh                    the mechanical pass
+    ├── scan.sh                    the mechanical pass
+    └── build-single-file.sh       the skill as one Markdown file
 ```
 
 ## Using it with simple-english
 
-[simple-english](https://github.com/AminBlg/SimpleEnglish) implements ASD-STE100
-Simplified Technical English. That is the controlled language aerospace and
-defence manufacturers use for maintenance documentation. It has 53 rules:
-sentence limits, one word one meaning, approved modals, condition before
-command. MIT licensed.
+[simple-english](https://github.com/AminBlg/SimpleEnglish) (MIT, by AminBlg,
+checked at 2.1.1) writes plain English in the spirit of ASD-STE100 Simplified
+Technical English, the controlled language that aerospace and defense
+manufacturers use for maintenance documentation. Since 2.0.0, Plain is its
+default mode: sentence limits, one word one meaning, approved modals, condition
+before command. Strict mode applies the STE vocabulary and the 53 writing rules
+of STE Issue 9, and runs only when you name STE, ASD-STE100 or compliance. A
+reply register covers chat as well: the answer first, prose only, no headings,
+bullets, bold or tables.
 
-The two do different jobs and compose well. STE is constructive and tells you how
-to write a sentence. This skill is subtractive and mechanical: a banlist, a
-scanner, a gate. STE has no scanner; this has no rule catalogue. Three things
-here have no counterpart there: first-language interference, leaked scaffolding,
-and the spelling variant switch.
+The two do different jobs and compose well. simple-english is constructive and
+tells you how to write a sentence. This skill is subtractive and mechanical: a
+banlist, a scanner, a gate. simple-english lints too, through plugin hooks that
+warn, but it has no CI gate and no ratchet; this skill has no rule catalog.
+Three things here have no counterpart there: first-language interference,
+leaked scaffolding, and the spelling variant switch.
 
 Run simple-english first, because it restructures sentences.
 Run the Claudism pass last, because it is the final check and its list is the
@@ -296,24 +338,38 @@ and upgrade procedures, error messages, release notes, incident reports, API
 guides, and agent instructions such as `AGENTS.md`.
 
 **Use this one alone** on anything written to persuade or to keep a reader
-reading. Blog
-and LinkedIn posts, conference abstracts and talk proposals, mails, slide text,
-customer-facing and marketing prose. The simple-english skill says the same in
-its own Limits section: STE removes persuasion by design, so applying it to blog
-voice deletes the persuasion.
+reading. Blog and LinkedIn posts, conference abstracts and talk proposals,
+mails, slide text, customer-facing and marketing prose. The simple-english
+skill says the same in its own Limits section: its rules delete persuasion, so
+they are not for marketing or brand writing.
 
-**One conflict.** STE rule 1.14 mandates American spelling. The EU mode here
-exists for tenders and submissions to EU institutions. Those are exactly the
-procedural documents STE targets. When both apply, the audience wins over the
-standard. If STE compliance is contractually required, say so in the document and
-let the standard win. Smaller frictions in the same direction: STE bans "should", "may",
-"might" and "could", bans semicolons and contractions, and restricts `-ing` forms
-to technical nouns. Correct in a maintenance manual, stilted in an abstract.
+**Spelling.** STE rule 1.14 asks for American spelling unless another official
+directive says otherwise, and simple-english applies it without that exception.
+The EU mode here exists for tenders and submissions to EU institutions. Those
+are exactly the procedural documents STE targets, and an EU contracting
+authority's style requirement is such a directive. When both apply, the
+audience wins over the standard. If STE compliance is contractually required,
+say so in the document and let the standard win. Smaller frictions in the same
+direction: simple-english bans "should", "would", "may", "might" and "could",
+contractions, semicolons, and an "-ing" verb after a comma. Correct in a
+maintenance manual, stilted in an abstract.
 
-**If both are installed**, their descriptions overlap enough to compete for
-triggering, since both mention documentation and removing AI slop. Narrow one of
-them, or state the rule plainly: procedural documentation goes to
-simple-english first, everything else starts here.
+**Dashes.** simple-english counts a spaced or double hyphen between two
+statements as an em dash. The Claudism pass therefore rewrites an em dash as a
+comma, a full stop, parentheses or two sentences, and keeps " - " for the rare
+aside, so running it last does not bring dashes back.
+
+**The report.** simple-english's reply rules flag the headings and bullets that
+the Claudism pass report uses. When both are active in one session, the pass
+writes its report as plain lines (`SKILL.md`, step 3).
+
+**If both are installed.** The simple-english plugins for Claude Code and Codex
+load its rules through a SessionStart hook at every session start, resume,
+clear and compaction, so narrowing a description no longer keeps it out of a
+session. Its other hooks lint written Markdown files and replies; all of them
+only warn. State the rule in the request instead: procedural documentation goes
+to simple-english first, everything else starts here. `npx skills add
+AminBlg/SimpleEnglish` installs the skill without the hooks.
 
 ## Tests
 
@@ -322,12 +378,12 @@ bash tests/run.sh              # exit 1 on any difference
 bash tests/run.sh --update     # re-record after an intended change
 ```
 
-Seventy-one cases in nine classes:
+Ninety-four cases in ten classes:
 
 - **Pattern validity.** Every expression in every list is compiled. A malformed
   regex matches nothing and reports a file clean. Both forms are checked, since
-  the portable path strips
-  `\b` and relies on `grep -w`.
+  the portable path replaces `\b` with `grep -w`, or with a character class
+  where a pattern has a boundary on one side only.
 - **The lexer**, via `tests/lexer/<lang>.<ext>`, run directly against
   `comments.awk` so a regression there is isolated. `AWK=gawk bash tests/run.sh`
   runs the same cases against another implementation.
@@ -355,6 +411,9 @@ Seventy-one cases in nine classes:
 - **The ratchet**, in all three drift directions plus a stale lexicon stamp.
 - **The variant switch and comments mode**, including the two-flip threshold and
   the rule that a marker inside a code span does not count.
+- **The single-file edition.** The build must contain the last line of every
+  file it copies and no YAML front matter. The custom instructions must stay
+  within 5,000 characters.
 
 The division-before-a-line-comment fixture exists because the obvious one,
 `a / b / c`, blanks identically whether the slash is read as division or as a
@@ -402,15 +461,18 @@ observed in the field:
   the scanner, it just matches less, so the damage is silent. Verify, or clone.
 - `references/artifacts.txt` lists prompt-format tags and citation tokens, so it
   reads like an injection payload and some content filters quarantine it. Fetch
-  it through the GitHub contents API in base64 form, or clone. Obfuscating the
-  file would defeat the reason everything here is plain text. Where the file is
+  it through the GitHub contents API in base64 form, or clone. Tag patterns
+  write their first letter as a bracket class (`<[i]nvoke`), which matches the
+  same text and keeps the literal tag out of the file. Obfuscating more than
+  that would defeat the reason everything here is plain text. Where the file is
   blocked, the leaked-scaffolding check goes missing without saying so.
 
 ## Source and license
 
 `references/banlist.md` is the Claudisms banlist from https://claudisms.ai/
-(Markdown at https://claudisms.ai/claudisms.md), which its publisher released into
-the public domain under CC0 1.0. The article behind the list is "Your Name Is Still
+(Markdown at https://claudisms.ai/claudisms.md), kept by Wes Pomeroy in
+https://github.com/wespomeroyny/claudisms and released into the public domain
+under CC0 1.0. The article behind the list is "Your Name Is Still
 on It" (https://wespomeroy.substack.com/p/your-name-is-still-on-it). The local copy
 records the date it was taken; the upstream list grows, so re-fetch it now and
 then. Entries caught in review are added locally.
@@ -423,6 +485,9 @@ Authors: Matthias Georg Eckermann (mge1512), with Claude (Anthropic) as co-autho
 The leaked-scaffolding list, the chatbot-register patterns, the detection notes
 and several corrections to the variant pairs and the invisible-character list
 come from the Lolly project (Andy Fitzsimon, SUSE), contributed under CC0 1.0.
+The 2026 additions to the scaffolding list come from public collections of
+leaked system prompts and from Wikipedia's "Signs of AI writing"; the header
+of `references/artifacts.txt` names them.
 
 CC0 removes the obligation to give credit. Credit is given here anyway, and anyone
 reusing this is asked, not required, to do the same.

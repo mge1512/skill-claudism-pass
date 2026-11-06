@@ -6,63 +6,103 @@
 # writes into a document on purpose. A style tell suggests; these convict, and
 # the token itself is noise, so a hit is always a removal.
 #
-# Contributed by Andy Fitzsimon (SUSE) from the Lolly project, CC0 1.0.
+# Contributed by Andy Fitzsimon (SUSE) from the Lolly project, CC0 1.0. The
+# 2026 additions come from leaked system prompts
+# (https://github.com/asgeirtj/system_prompts_leaks,
+# https://github.com/elder-plinius/CL4R1T4S) and Wikipedia's "Signs of AI
+# writing". Most of them show what a model is told to emit; few have been
+# reported in pasted text yet. tests/docs/scaffolding.md has one sample of
+# each.
 #
 # Two patterns deliberately keep their bracket context: bare "contentReference"
 # and bare "attached_file" are ordinary identifiers in hand-written code.
+#
+# Tags are written with the first letter in brackets ("<[i]nvoke"). The class
+# matches the same text and keeps the literal tag out of this file, which some
+# content filters would otherwise quarantine. Tokens outside ASCII (the U+3010
+# reference brackets of 2026 ChatGPT output, dagger citations) are matched in
+# scripts/scan.sh, so this file stays ASCII.
 
 # --- OpenAI / ChatGPT
 oaicite
 oai_citation
 contentReference\[oaicite
-turn[0-9]+(search|news|view|image|forecast)[0-9]+
+turn[0-9]+(search|news|view|image|forecast|fetch|file|product|business|sports|finance|time|video|youtube|reddit)[0-9]+
 (cite|video|navlist)turn[0-9]+
 attributableIndex
 filecite
 :::writing\{
 utm_source=(chatgpt\.com|openai)
+entity\[ *"[a-z_0-9]+", *"
+image_group\{ *"
+sandbox:/{1,3}mnt/(data|agents)/
+# Codex app directives
+::(created-thread|code-comment|git-[a-z-]+)\{
 
-# --- ChatML and open-weight prompt formats
+# --- ChatML and open-weight prompt formats (Llama, Harmony for gpt-oss, Gemma)
 <\|im_(start|sep|end)\|>
 <\|endoftext\|>
 \[/?INST\]
 <<SYS>>
 <\|start_header_id\|>
 <\|eot_id\|>
+<\|(start|end|message|channel|return|call|constrain)\|>
+<(start|end)_of_turn>
+<\|turn>|<turn\|>
 
 # --- Google / Gemini
-\[cite: *[0-9]+\]
+\[cite: *[0-9]+( *, *[0-9]+)*\]
 \[cite_start\]
 \[span_[0-9]+\]
 googleusercontent\.com/[a-z_]*content/[0-9]
 ^[[:space:]]*```(tool_code|tool_outputs)
+<(ElicitationsGroup|FollowUp|GenerateWidget)[ >/]
+<Elicitation label=
+src="image_agent_tag_
+vertexaisearch\.cloud\.google\.com/grounding-api-redirect
+utm_source=gemini
+# reported in answer text, not reproduced by Google staff
+"action": *"image_generation"
 
-# --- Microsoft Copilot
+# --- Microsoft Copilot, and Moonshot Kimi for the footnote marker
 \[\^[0-9]+\^\]
 utm_source=copilot\.com
+</?TeamsMessage>
+<KIMI_REF
 
 # --- xAI / Grok
-grok_card
+grok[-_](render_citation_)?card
 render_inline_citation
 <xaiArtifact
 referrer=grok\.com
+</?grok:render
+<grok type="render_[a-z_]+"
+<xai:function_call
 
-# --- Perplexity
+# --- Perplexity, Grok tool-result IDs, DeepSeek
 ppl-ai-file-upload
 \[attached_file
+\[(web|post|collection|page|file|memory|chart|email|calendar_event|conversation_history|code_file|generated_image|generated_video):[0-9]+\]
+\]\(claim:[0-9]+\)
+\[citation:[0-9]+\]
 
-# --- reasoning traces and other namespaces
+# --- reasoning traces, Claude tags with and without the namespace prefix
 </?think>
-</?antml:
+</?[a]ntml:
+<[c]ite index="[0-9]+-[0-9]+
+<[i]nvoke name="[A-Za-z_]+">
+<[p]arameter name="[a-z_]+">
+# Claude Code terminal output pasted with its fold marker
+\(ctrl\+[a-z] to expand\)
 
 # --- chatbot register, hard grade: conversation pasted into a document
 [Aa]s an? (AI|artificial intelligence|large language model|language model)
 I('m| am) (just )?an? (AI|large language model|language model)
-^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|I('ve| have) (created|drafted|outlined|prepared))
+^(Sure|Certainly|Absolutely|Of course)[!,.] *(Here('s| is| are)|Below (is|are)|I('ve| have) (created|drafted|outlined|prepared))
 ^Here('s| is) an? (draft|outline|version|summary|example|overview|template) (of|for)
 I('m| am) sorry,? but I (can('t|not)|am unable to)
 I (can('t|not)|am unable to) (fulfill|fulfil|comply with|assist with|help with) (that|this) request
 (against|violates?|contrary to) my (safety |ethical |core )?(guidelines|policies|principles|programming)
 I (do not|don't) have (access to real.time|the ability to browse|personal (opinions|experiences|feelings))
-(my|the) knowledge cut.?off
-as of my (last|latest|most recent) (knowledge )?(update|training)
+([Mm]y|the) knowledge cut.?off
+([Aa]s of|[Uu]p to) my (last|latest|most recent) (knowledge |training )?(update|training|cut.?off)

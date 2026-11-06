@@ -1,0 +1,32 @@
+=== tests/docs/apostrophe.md
+--- banlist hits, rewrite these: 4
+  line 1      It's worth noting              [\bit(')?s worth noting\b]
+  line 1      Let's break it down            [\blet(')?s (break it down|explore|dive|turn|look at)\b]
+  line 1      worth noting                   [\bworth (sitting|noting|talking|asking|drawing|making|examining|considering|exploring|a look)\b]
+  line 1      worth noting                   [\bworth [a-z]+ing\b]
+--- needs judgment, check the carve-outs in SKILL.md: 0
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  line 1:’
+  line 1:’
+  line 3:“
+  line 3:”
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 4
+gate hits (unambiguous, ratchetable): 8
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

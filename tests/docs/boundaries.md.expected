@@ -1,0 +1,28 @@
+=== tests/docs/boundaries.md
+--- banlist hits, rewrite these: 2
+  line 6      Here,                          [\bhere,]
+  line 6      here,                          [\bhere,]
+--- needs judgment, check the carve-outs in SKILL.md: 1
+  line 1      hold                           [\bhold(s|ing)?\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 3
+gate hits (unambiguous, ratchetable): 2
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

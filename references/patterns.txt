@@ -6,12 +6,14 @@
 \bsit(s|ting)? with\b
 \bworth (sitting|noting|talking|asking|drawing|making|examining|considering|exploring|a look)\b
 \bworth [a-z]+ing\b
-\barriv(e|es|ed|ing) at (the|a|an) (question|answer|conclusion|point|idea)
+\bworth (it|the)\b
+\barriv(e|es|ed|ing) at (the|a|an) (same )?(question|answer|conclusion|point|idea)
+\bkeep arriving at\b
 \b(keep|keeps|kept) coming back to\b
 \bcoming back to\b
 \bbrings (me|us) back to\b
 \bthe question (that |i )?(kept|keeps|keep) (coming up|coming back)
-\bhere (is|'s) where i (landed|come down)\b
+\bhere('s| is) where i (landed|come down)\b
 \bwhere i landed\b
 
 # --- discovery arc and manufactured emphasis
@@ -24,11 +26,13 @@
 \bstayed with me\b
 \bstruck a (chord|nerve)\b
 \bhit a nerve\b
-\bthe thing that (got|hooked) me\b
+\blanded for me\b
+\bthe thing that (got|got to|hooked) me\b
 \bwhat got me\b
 
-# --- crowned superlatives and totalising claims
+# --- crowned superlatives and totalizing claims
 \bthe best thing you can do\b
+\bthe most [a-z]+( [a-z]+)? (you|we) can get\b
 \b(helps|pays off|works) (the )?most\b
 \bthe whole (game|ballgame|point|story|thing|job|lesson|metric|idea)\b
 \bthe entire point\b
@@ -41,12 +45,13 @@
 \b(different |the )?physics of\b
 \brules of physics\b
 \bthe engine (of|behind|is)\b
-\bload-bearing\b
+\bload[ -]?bearing\b
 \bturns on\b
 \b(compound|compounds|compounding)\b
-\brides (along|on)\b
+\brid(es|ing) (along|on)\b
 \bdoing the (work|heavy lifting)\b
 \bheavy lifting\b
+\ball the lifting\b
 \bthe tell\b
 \bthroughline\b
 \bparadigm shift\b
@@ -57,9 +62,12 @@
 \b(risk|work|tension|value|problem|complexity|difference|answer|logic|truth|config|file|code|data) lives\b
 \bhold(s|ing)? (that thought|the line|the tension|both|two things)\b
 \bcarry (this|it|that) (with you|forward)\b
+\bi('d|'ll| would| will| want to) leave you with\b
 \bin (my|the same|the) chest\b
 \bstay(s)? yours\b
 \byours to (keep|own|decide)\b
+\bthe rest is yours\b
+\bthe part that stayed\b
 
 # --- pseudo-elevated diction
 \bnames (the|what|a) (move|question|thing|problem|stake)
@@ -76,15 +84,15 @@
 
 # --- announcing instead of delivering
 \bthe point is\b
-\bhere (is|'s) where it gets\b
-\bhere (is|'s) the (analogy|moment|thing|part) that\b
+\bhere('s| is) where it gets\b
+\bhere('s| is) the (analogy|moment|thing|part) that\b
 \b(this|that|it) matters\b
 \bbecause it matters\b
 \bthe right (time|question|way|answer|tool|thing|approach|level|mindset)\b
 \bthe useful (thing|part)\b
 \bwhat i (want|keep wanting) (you|people) to (see|know|take)\b
 \bit(')?s worth noting\b
-\bit(')?s important to note\b
+\bit( i|')?s (important|critical|crucial|essential|vital) to (note|remember|consider|recognize|recognise)\b
 \bwhen it comes to\b
 \bat its core\b
 \bthis is where .{1,30} comes in\b
@@ -96,20 +104,21 @@
 \bi love that you asked\b
 
 # --- negative parallelism and staccato negation
-\bnot just .{1,40}(it(')?s|but)\b
+\bnot (just|merely|simply) .{1,40}(it(')?s|it is|they('re| are)|but)\b
 \bnot only .{1,40} but\b
-\bis ?n(o|')t about .{1,40} it(')?s about\b
+\b(is|are) ?n(o|')t about .{1,40} (it(')?s|it is|they('re| are)) about\b
 \bno .{1,20}\. no .{1,20}\. just\b
 
 # --- false intimacy and invented observation
 \bi can(')?t stop thinking about\b
 \bmost people( i)?\b
 \beveryone i(')?(ve| have) worked with\b
+\bthe people i('ve| have) watched\b
 \ba lot of folks\b
 \bnobody i know\b
-\bwe(')?ve (seen this movie|been here) before\b
+\bwe('?ve| have) (seen this movie|been here|stood here) before\b
 \bseen this one before\b
-\bthe honest version\b
+\bthe honest (version|answer)\b
 \bhonestly,
 \bin my experience, most\b
 
@@ -119,24 +128,24 @@
 \bfirst wave of a multi-year\b
 \bdispatches from\b
 \bfield notes\b
-\bunderscor(e|es|ing)\b
 \bfoster(s|ing|ed)?\b
-\bshed light on\b
-\bpave the way\b
+\bshed(s|ding)? light on\b
+\bpav(e|es|ed|ing) the way\b
 \bpivotal\b
 \btransformative\b
-\bgame.chang(er|ing)\b
+\bgame.chang(er|ers|ing)\b
 \bgroundbreaking\b
 \bcutting.edge\b
-\brobust\b
-\bseamless\b
-\bintricate\b
-\bcomprehensive\b
-\bholistic\b
+\brobust(ly)?\b
+\bseamless(ly)?\b
+\bintrica(te|tely|cy|cies)\b
+\bcomprehensive(ly)?\b
+\bholistic(ally)?\b
 \bnavigat(e|ing) the\b
 \btestament\b
 \bdelv(e|es|ing|ed)\b
-\bdive into\b
+\bmultifaceted\b
+\bdiv(e|es|ing) into\b
 \bharness(es|ing|ed)?\b
 \bpressure-test\b
 \bright-size\b
@@ -148,7 +157,7 @@
 \bthe one (thing|part|piece|example|line|idea) that\b
 
 # --- imported from a deterministic docs gate (colleague of the author, 2026-08)
-\bearns its keep\b
+\bearn(s|ed|ing)? (its|their) (keep|place|spot|counter space)\b
 \b(bar is (high|low|higher|lower)|rais(e|es|ed|ing) the bar)\b
 \bphysically cannot\b
 \bdeep[ -]dive\b
@@ -158,7 +167,7 @@
 \ba testament to\b
 \btapestry\b
 \btreasure trove\b
-\bin today'?s (world|era|fast)\b
+\bin today'?s (world|era|fast|rapidly|ever|digital|modern|increasingly)\b
 \bworth (knowing|naming)\b
 \bwhat [a-z].{0,60} is worth\b
 \bmoving on to\b
@@ -168,13 +177,13 @@
 \bsurvivab[a-z]*\b
 \bsmoke[ -]test\b
 \bin (the )?(existing|wider|current|competitive) landscape\b
-\bunderscor(es|ing) (the|how|that|a|an)\b
+\bunderscor(es|ed|ing) (the|how|that|a|an|its|their|our)\b
 \bleverag(e|es|ed|ing) (the|its|our|your|their|a|an)\b
 
 # --- from the Lolly field notes (Andy Fitzsimon, SUSE), 2026-08
 \bwhether you('re| are) an? .{2,30} or an? \b
-\b(serves|stands|functions) as\b
-, (highlighting|emphasizing|emphasising|underscoring|reflecting|showcasing|demonstrating|ensuring|fostering|enhancing) 
+\b(serves|stands) as\b
+, (further |thereby |thus )?(highlighting|emphasizing|emphasising|underscoring|reflecting|symbolizing|symbolising|showcasing|demonstrating|fostering|cultivating|encompassing|enhancing|bolstering|paving|contributing to)\b
 \b(foundationally|fundamentally) [a-z]+\b
 \bhere'?s the kicker\b
 \bwant me to .{3,80}\?
@@ -189,20 +198,28 @@
 # sentence is nearly always better with both cut.
 \bhere,
 
+# --- caught in review, 2026-10
+# "vouch for" with a mechanism as the subject: "a block the decoder cannot vouch
+# for is never returned". People vouch; a decoder corrects or fails. A person, a
+# project or a certificate authority vouching is literal, so only mechanism
+# nouns are matched here; patterns-loose.txt reports every other use.
+\b(decoders?|checksums?|hash(es)?|digests?|crcs?|parity|codewords?|tests?|suites?|scanners?|verifiers?|compilers?|kernel|file ?systems?|pipelines?|builds?) (can(no|')t |could(n't| not) |can |will )?vouch(es|ed|ing)? for\b
+
 # --- upstream sync 2026-09-28: claudisms.ai entries added since 2026-08-18
 \bhands (you|me|us|them|it|back)\b
 \bhanded back\b
-\b(nobody|no one|no-one) (handed|gave) (you|me|us|him|her|them|it|that)\b
+\b(nobody|no one|no-one) (handed|gave (you|me|us|him|her|them|it|that))\b
 \bhand[ -]?wav(e|es|ed|ing)\b
-\bwave of the hand\b
-\bwav(e|es|ed|ing) (it|that|them|the [a-z]+) away\b
-\bwhat i keep (running into|noticing|seeing|finding)\b
+\bwave of (a|the) hand\b
+\bwav(e|es|ed|ing) ((it|that|them|the [a-z]+) )?away\b
+\b(what|the thing) i keep (running into|noticing|seeing|finding|hitting|landing on)\b
 \bwhere i keep landing\b
-\bwhat (actually )?moved (is|was)\b
+\bwhat (actually )?(moved|moves|shifted)( here)? (is|was)\b
 \bwhat changed is the\b
 \b(nobody|no one|no-one) has settled\b
 \b(is|are|was|were) ?n(o|')t settled\b
 \bnot settled yet\b
+\bback into an open (one|question)\b
 
 # --- preemptive defence: answering an objection nobody raised
 \b(that|this) is n(o|')t an? [a-z]+ (claim|criticism|complaint|attack|dig|swipe|judgment)\b
@@ -211,7 +228,7 @@
 \blest anyone\b
 
 # --- from the simple-english skill (ASD-STE100), MIT, see LICENSE
-\butiliz(e|es|ed|ing)\b
+\butili[sz](e|es|ed|ing)\b
 \bin order to\b
 \bprior to\b
 \bin the event that\b
@@ -228,3 +245,121 @@
 \bis designed to\b
 \baims to\b
 \bfacilitat(e|es|ed|ing)\b
+
+# --- Wikipedia, "Signs of AI writing", page of 2026-10: signs the lines above
+# miss. Each had at most one hit in 7.7 million words of human documentation.
+# Inflated significance
+\ban? (vital|significant|crucial|pivotal|key) (role|moment)\b
+\b(highlight(s|ed|ing)?|emphasi[sz](e|es|ed|ing)|stress(es|ed|ing)?) (its|their|the) (importance|significance|role)\b
+\breflect(s|ed|ing)? (a )?broader\b
+\b(mark|marks|marked|marking|represent|represents|represented|representing) an? (significant |major |fundamental |pivotal )?(shift|turning point)\b
+\bset(s|ting)? the stage for\b
+\b(key|pivotal) turning point\b
+\bevolving landscape\b
+\bindelible mark\b
+\bdeeply rooted\b
+\blasting (legacy|impact|influence)\b
+\bdistinction matters\b
+# Negative parallelism without "just": "It's not a bug, it's a feature." and
+# "no meetings, no tickets, just code". The sentence start keeps "Since this
+# is not a socket error, it is counted" out. The scanner prefixes each joined
+# paragraph with its line number and a colon, so "[0-9]:" is a paragraph start.
+(^|[0-9]:|[.!?] )(it|this|that)('s not| is not| isn't) (a|an|the|only) [^.,;]{1,40}[,;] (it|this|that)('s| is)\b
+\bno [a-z]+( [a-z]+)?, no [a-z]+( [a-z]+)?, (just|only)\b
+# Unnamed authorities
+\b(industry reports|observers have (cited|noted)|experts (argue|agree|say|note|believe)|(some )?critics (argue|say|note|contend))\b
+\b(is|are|was|were) widely (regarded|considered|seen|recognized|recognised) as\b
+# The challenges-and-prospects closer
+\bdespite (these|the|such|its|their|all) ([a-z]+ ){0,2}challenges\b
+# Article announcements
+\bin this (section|article|post|guide|document),? (we|i)('ll| will) (discuss|explore|examine|look at|cover|delve)\b
+# Hedges about sources a chatbot could not find
+\bspecific (details|information) [^.]{0,60}(is|are) (limited|scarce)\b
+\b(in|from) the provided (search results|sources|documents)\b
+\b(maintains|keeps) a low profile\b
+# Unfilled template slots: "[Your Name]", "[Insert date]", "2025-XX-XX". A
+# Markdown link "[add a link](url)" is skipped; "[name]" alone is a syntax
+# placeholder in technical text and is not matched.
+\[(your|insert|enter|add|describe) [^]]{0,40}\]([^(]|$)|\[(company|client|customer|recipient|author|contact|first|last|full|product|project|team|manager) name\]([^(]|$)
+\b(19|20)[0-9]{2}-xx(-xx)?\b
+# Puffery in profiles and travel-guide prose
+\b(active|strong) (social media|digital|online) presence\b
+\bnatural beauty\b
+
+# --- Claude-era frames, measured in Opus 5 and 5.5 output against human text
+# (Graphite, "AI Tells", 2026-09 and 2026-10; Pangram for "genuinely"). Each
+# had at most one hit per million words of human documentation.
+\bgenuinely\b
+\bless like an? .{1,40} and more like\b
+\brather than merely\b
+\bmatters (because|more than|most|enormously)\b
+\bwhy [a-z' ]{1,40} matters\b
+\b(is|are|was|were) more than (a|an|just) [a-z-]+[,;] (it|they)\b
+\blooking ahead\b
+\bwhat comes next\b
+\benormously\b
+\ban enormous amount\b
+\bthe single most\b
+\barguably the most\b
+\bnot only about\b
+
+# --- claudisms.ai pull requests #1 and #2 (Jim Bennett, 2026-09-28, not merged
+# at 852854b): phrases from 153 hand-labeled posts written with Claude Opus 5.
+# The banlist wording will follow upstream once the entries are merged.
+\bbites (everyone|everybody)\b
+\bthe uncomfortable part\b
+\bactually matters\b
+\bread (that|this) (again|the other way round|the other way around)\b
+\bthink about what (that|this) means\b
+\bthe headline (number|result|cost|finding)s?\b
+\b(a|the) structural consequences?\b
+\bbest structural decisions?\b
+\bthe numbers (are stark|back (it|this|that))\b
+\b(that|this|it)('s| is) ?(not|no|n't)( an)? accident(al)?\b
+\bdeserves a (moment|closer look)\b
+
+# --- press-release vocabulary from Will Francis's before-and-after examples
+# ("How to Make Claude Sound More Human", page of 2026-09)
+\b(delighted|thrilled|excited) to (announce|share|introduce|unveil)\b
+\bexciting (opportunity|opportunities|news|times|journey)\b
+\bempower(s|ed|ing|ment)?\b
+\binnovative\b
+\b(rapidly|ever|constantly)[ -]evolving\b|\bever-changing\b
+
+# --- from the slop list of the simple-english skill (2.1.1), MIT, see LICENSE
+\bthat being said\b
+\bembark(s|ed|ing)? on\b
+
+# --- excess vocabulary: words that occur in model output many times more often
+# than in human text of the same kind (Kobak et al., Juzek and Ward, Reinhart et
+# al., Wikipedia's word lists, simple-english). At most two hits in 7.7 million
+# words of human documentation.
+\bmeticulous(ly)?\b
+\bgarner(s|ed|ing)?\b
+\bbolster(s|ed|ing)?\b
+\brenowned\b
+\bcommendable\b
+\brevolutioni[sz](e|es|ed|ing)\b
+\belucidat(e|es|ed|ing)\b
+\bshowcas(ed|ing)\b
+\bnestled\b
+\bboast(s|ed|ing)?\b
+\bin the heart of\b
+\bexemplif(y|ies|ied|ying)\b
+\bdiverse array\b
+\bunderpin(s|ned|ning)?\b
+\bvaluable insights?\b
+\bresonat(e|es|ed|ing) with\b
+\bunparalleled\b
+\bbustling\b
+\beffortless(ly)?\b
+\bgrappl(e|es|ed|ing)\b
+\bamidst\b
+# weaker evidence: a Kobak excess ratio of 2.2 to 3.9 and no second source
+\bformidable\b
+\badept\b
+\bburgeoning\b
+\buncharted\b
+\bunderexplored\b
+\binterconnectedness\b
+\bpoised to\b

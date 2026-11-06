@@ -3,7 +3,9 @@
 #
 # Deliberately absent, because British English splits them by part of speech or
 # keeps the US form for a technical sense, so the pair would flag correct
-# writing: licence/license, practice/practise, program/programme.
+# writing: licence/license, practice/practise, program/programme. Also absent:
+# judgment/judgement, because the European Commission style guide keeps
+# "judgment" in legal contexts (3.13), so the pair would flag a court citation.
 color|colour
 behavior|behaviour
 favor|favour
@@ -31,7 +33,7 @@ labeled|labelled
 traveled|travelled
 signaling|signalling
 aging|ageing
-judgment|judgement
 acknowledgment|acknowledgement
 analyze|analyse
 paralyze|paralyse
+percent|per cent

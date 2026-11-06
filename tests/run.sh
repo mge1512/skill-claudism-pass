@@ -99,10 +99,17 @@ for pf in patterns.txt patterns-loose.txt artifacts.txt l1/errors.txt l1/false-f
             echo "          bad ERE in $pf: $pat"
             badpat=$((badpat + 1))
         fi
-        # the portable path strips \b and relies on grep -w, so check that form too
-        stripped="$(printf '%s' "$pat" | sed 's/\\b//g')"
+        # the portable path rewrites \b: grep -w for a pattern bounded on both
+        # sides, a character class for one bounded on one side (see port in
+        # scan.sh), so check that form too
+        case "$pat" in
+            '\b'*'\b') stripped="$(printf '%s' "$pat" | sed 's/\\b//g')" ;;
+            '\b'*) stripped="(^|[^[:alnum:]_])$(printf '%s' "${pat#??}" | sed 's/\\b//g')" ;;
+            *'\b') stripped="$(printf '%s' "${pat%??}" | sed 's/\\b//g')([^[:alnum:]_]|$)" ;;
+            *) stripped="$(printf '%s' "$pat" | sed 's/\\b//g')" ;;
+        esac
         if ! compiles "$stripped"; then
-            echo "          bad ERE in $pf after \\b removal: $stripped"
+            echo "          bad ERE in $pf on the portable path: $stripped"
             badpat=$((badpat + 1))
         fi
     done < "${root}/references/${pf}"
@@ -292,6 +299,28 @@ SCAN_FORCE_POSIX=0 bash "${copy}/scripts/scan.sh" "${work}/short.md" > /dev/null
 if [ $? -eq 2 ]; then ok; else bad "missing sentences.awk must exit 2"; fi
 
 rm -rf "$work"
+
+# The single-file edition must contain every file it copies. A build that stops
+# early loses the end of a file without an error, so the last line of each file
+# must be in it. The YAML front matter of SKILL.md must not. The custom
+# instructions must stay within 5,000 characters, since the instruction fields
+# of notebooks and chat assistants have limits of their own.
+sf="$(mktemp "${TMPDIR:-/tmp}/claudism-sf.XXXXXX")"
+sffail=""
+if bash "${root}/scripts/build-single-file.sh" > "$sf" 2> /dev/null; then
+    for f in "${root}/SKILL.md" "${root}/LICENSE" "${root}"/references/*.md \
+             "${root}"/references/*.txt "${root}"/references/l1/*.md \
+             "${root}"/references/l1/*.txt "${root}/scripts/single-file-instructions.txt"; do
+        last="$("${GREP:-grep}" -v '^[[:space:]]*$' "$f" | tail -n 1)"
+        "${GREP:-grep}" -q -F -- "$last" "$sf" || sffail="${sffail} ${f#"${root}"/}"
+    done
+    "${GREP:-grep}" -q '^name: claudism-pass$' "$sf" && sffail="${sffail} front-matter"
+else
+    sffail=" build failed"
+fi
+[ "$(wc -c < "${root}/scripts/single-file-instructions.txt")" -le 5000 ] || sffail="${sffail} instructions-too-long"
+rm -f "$sf"
+if [ -z "$sffail" ]; then ok; else bad "single-file edition:${sffail}"; fi
 
 # Recorded output must carry no trailing whitespace. Editors strip it on save
 # and git apply --whitespace=fix strips it from patches, and a golden file that

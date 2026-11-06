@@ -1,0 +1,29 @@
+=== tests/docs/eu.md
+--- banlist hits, rewrite these: 1
+  line 6      utilise                        [\butili[sz](e|es|ed|ing)\b]
+--- needs judgment, check the carve-outs in SKILL.md: 0
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  check: NO-BREAK SPACE                  x1    line 4 (EU mode, next to a figure)
+  NO-BREAK SPACE                         x1    line 4
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  file marker: variant: eu
+  US markers: 1   EU/British markers: 1   (variant: eu)
+  convert to EU: percent
+--- dates, clock, units
+  line 4:4.5.2016   <- German numeric date, use YYYY-MM-DD
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 1
+gate hits (unambiguous, ratchetable): 2
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

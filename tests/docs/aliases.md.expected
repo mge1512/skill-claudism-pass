@@ -1,0 +1,60 @@
+=== tests/docs/aliases.md
+--- banlist hits, rewrite these: 25
+  line 1      arriving at the same question  [\barriv(e|es|ed|ing) at (the|a|an) (same )?(question|answer|conclusion|point|idea)]
+  line 1      keep arriving at               [\bkeep arriving at\b]
+  line 3      The thing that got to me       [\bthe thing that (got|got to|hooked) me\b]
+  line 3      landed for me                  [\blanded for me\b]
+  line 5      the most stable setup you can  [\bthe most [a-z]+( [a-z]+)? (you|we) can get\b]
+  line 7      riding along                   [\brid(es|ing) (along|on)\b]
+  line 9      all the lifting                [\ball the lifting\b]
+  line 11     The part that stayed           [\bthe part that stayed\b]
+  line 11     the rest is yours              [\bthe rest is yours\b]
+  line 13     The people I've watched        [\bthe people i('ve| have) watched\b]
+  line 15     We have seen this movie before [\bwe('?ve| have) (seen this movie|been here|stood here) before\b]
+  line 15     We have stood here before      [\bwe('?ve| have) (seen this movie|been here|stood here) before\b]
+  line 17     Worth the                      [\bworth (it|the)\b]
+  line 17     worth it                       [\bworth (it|the)\b]
+  line 19     Nobody handed                  [\b(nobody|no one|no-one) (handed|gave (you|me|us|him|her|them|it|that))\b]
+  line 19     wave of a hand                 [\bwave of (a|the) hand\b]
+  line 19     waved away                     [\bwav(e|es|ed|ing) ((it|that|them|the [a-z]+) )?away\b]
+  line 21     The thing I keep running into  [\b(what|the thing) i keep (running into|noticing|seeing|finding|hitting|landing on)\b]
+  line 21     What I keep hitting            [\b(what|the thing) i keep (running into|noticing|seeing|finding|hitting|landing on)\b]
+  line 21     What I keep landing on         [\b(what|the thing) i keep (running into|noticing|seeing|finding|hitting|landing on)\b]
+  line 24     What moved here was            [\bwhat (actually )?(moved|moves|shifted)( here)? (is|was)\b]
+  line 24     What moves is                  [\bwhat (actually )?(moved|moves|shifted)( here)? (is|was)\b]
+  line 24     What shifted is                [\bwhat (actually )?(moved|moves|shifted)( here)? (is|was)\b]
+  line 27     I'll leave you with            [\bi('d|'ll| would| will| want to) leave you with\b]
+  line 29     back into an open one          [\bback into an open (one|question)\b]
+--- needs judgment, check the carve-outs in SKILL.md: 9
+  line 33     discussion moves               [\b(attention|argument|conversation|discussion|focus|emphasis|burden|weight|risk|question|debate|center of gravity|centre of gravity) (moves|moved|moving|shifts|shifted)\b]
+  line 33     pointing in the same           [\bpoint(s|ed|ing)? (toward|towards|in the same( direction)?|the same direction|at the same)\b]
+  line 35     The thing that moved           [\bthe thing that (moved|shifted)\b]
+  line 37     hands over                     [\bhands (over|something back)\b]
+  line 33     moves onto                     [\bmov(es|ed|ing) onto\b]
+  line 39     What is useful                 [\bwhat('s| is) useful\b]
+  line 41     leaving you with               [\bleaving you with\b]
+  line 43     honestly b                     [\bhonestly [a-z]]
+  line 43     An honest assessment           [\ban honest (snapshot|breakdown|assessment|take|look|summary)\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  false friends, check against the L1 file: 1
+  line 37     control                        [\bcontrol(s|led|ling)?\b]
+
+total phrase hits: 34
+gate hits (unambiguous, ratchetable): 25
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

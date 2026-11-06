@@ -1,0 +1,84 @@
+=== tests/docs/wikipedia.md
+--- banlist hits, rewrite these: 28
+  line 3      It is critical to remember     [\bit( i|')?s (important|critical|crucial|essential|vital) to (note|remember|consider|recognize|recognise)\b]
+  line 5      , contributing to              [, (further |thereby |thus )?(highlighting|emphasizing|emphasising|underscoring|reflecting|symbolizing|symbolising|showcasing|demonstrating|fostering|cultivating|encompassing|enhancing|bolstering|paving|contributing to)\b]
+  line 7      a key role                     [\ban? (vital|significant|crucial|pivotal|key) (role|moment)\b]
+  line 7      highlights the importance      [\b(highlight(s|ed|ing)?|emphasi[sz](e|es|ed|ing)|stress(es|ed|ing)?) (its|their|the) (importance|significance|role)\b]
+  line 7      reflects a broader             [\breflect(s|ed|ing)? (a )?broader\b]
+  line 10     key turning point              [\b(key|pivotal) turning point\b]
+  line 10     marks a significant shift      [\b(mark|marks|marked|marking|represent|represents|represented|representing) an? (significant |major |fundamental |pivotal )?(shift|turning point)\b]
+  line 10     sets the stage for             [\bset(s|ting)? the stage for\b]
+  line 13     deeply rooted                  [\bdeeply rooted\b]
+  line 13     evolving landscape             [\bevolving landscape\b]
+  line 13     indelible mark                 [\bindelible mark\b]
+  line 13     lasting impact                 [\blasting (legacy|impact|influence)\b]
+  line 16     distinction matters            [\bdistinction matters\b]
+  line 18     It's not a bug, it's           [(^|[0-9]:|[.!?] )(it|this|that)('s not| is not| isn't) (a|an|the|only) [^.,;]{1,40}[,;] (it|this|that)('s| is)\b]
+  line 18     no meetings, no tickets, just  [\bno [a-z]+( [a-z]+)?, no [a-z]+( [a-z]+)?, (just|only)\b]
+  line 20     Experts argue                  [\b(industry reports|observers have (cited|noted)|experts (argue|agree|say|note|believe)|(some )?critics (argue|say|note|contend))\b]
+  line 20     is widely regarded as          [\b(is|are|was|were) widely (regarded|considered|seen|recognized|recognised) as\b]
+  line 23     Despite these challenges       [\bdespite (these|the|such|its|their|all) ([a-z]+ ){0,2}challenges\b]
+  line 25     In this section, we will explo [\bin this (section|article|post|guide|document),? (we|i)('ll| will) (discuss|explore|examine|look at|cover|delve)\b]
+  line 27     In the provided sources        [\b(in|from) the provided (search results|sources|documents)\b]
+  line 27     Specific details about the ven [\bspecific (details|information) [^.]{0,60}(is|are) (limited|scarce)\b]
+  line 27     maintains a low profile        [\b(maintains|keeps) a low profile\b]
+  line 30     2025-XX-XX                     [\b(19|20)[0-9]{2}-xx(-xx)?\b]
+  line 30     [Company Name].                [\[(your|insert|enter|add|describe) [^]]{0,40}\]([^(]|$)|\[(company|client|customer|recipient|author|contact|first|last|full|product|project|team|manager) name\]([^(]|$)]
+  line 30     [Insert date]                  [\[(your|insert|enter|add|describe) [^]]{0,40}\]([^(]|$)|\[(company|client|customer|recipient|author|contact|first|last|full|product|project|team|manager) name\]([^(]|$)]
+  line 30     [Your Name],                   [\[(your|insert|enter|add|describe) [^]]{0,40}\]([^(]|$)|\[(company|client|customer|recipient|author|contact|first|last|full|product|project|team|manager) name\]([^(]|$)]
+  line 33     active social media presence   [\b(active|strong) (social media|digital|online) presence\b]
+  line 33     natural beauty                 [\bnatural beauty\b]
+--- needs judgment, check the carve-outs in SKILL.md: 30
+  line 13     landscape                      [\blandscape\b]
+  line 16     matters                        [\bmatters?\b]
+  line 50     I hope this message finds you  [\bI hope this (helps|(email|message|note) finds you well)\b]
+  line 50     Would you like a               [\b[Ww]ould you like (me to|a|an|more|the)\b]
+  line 38     operates as                    [\b(served|serving|functions|functioned|functioning|operates|operated|operating) as\b]
+  line 38     focal point                    [\bfocal point\b]
+  line 38     distinction is important       [\bdistinction is important\b]
+  line 38     is a stark reminder            [\bis an? (stark |powerful |timely |constant )?reminder\b]
+  line 38     marks the end                  [\b(marks|marked) the (first|beginning|start|end|culmination)\b]
+  line 38     ventured into                  [\bventur(e|es|ed|ing) into\b]
+  line 42     , ensuring                     [, ensuring\b]
+  line 44     It wasn't a bug. It was        [\b(it|this|that|they)('s not| is not| isn't| was not| wasn't| are not| aren't| were not| weren't) [^.]{1,40}\. (it|this|that|they)('s|'re| is| are| was| were)\b]
+  line 44     Not fast, not cheap, and not   [\bnot [^.,;]{1,30}[,.] not [^.,;]{1,30}[,.] (and )?(certainly )?not\b]
+  line 46     faces several challenges       [\bfac(e|es|ed|ing) (several|numerous|many|significant|a number of) challenges\b]
+  line 46     Future outlook                 [\bfuture (outlook|prospects)\b]
+  line 48     In summary                     [\bin (summary|conclusion)\b]
+  line 50     Is there anything else you     [\bis there anything else (i|you)\b]
+  line 50     more detailed breakdown        [\bmore detailed breakdown\b]
+  line 53     Based on available information [\bbased on (the )?available information\b]
+  line 53     not widely documented          [(\bnot|n't) (widely|extensively) (documented|available|disclosed)\b]
+  line 53     should be treated as an estima [\bshould be (treated|presented|read|understood|seen|viewed|taken) as [^.]{1,60}rather than\b]
+  line 53     does not by itself prove       [\b(does|do|did) not (by itself|on its own|alone) (establish|prove|confirm|demonstrate|show)\b]
+  line 53     keeps her personal life privat [\bkeeps? (his|her|their) personal (details|life|information) private\b]
+  line 58     Tech outlets                   [\b(media|news|tech|business|trade|industry) outlets\b]
+  line 58     leading expert                 [\bleading experts?\b]
+  line 58     widely associated with         [\b(widely|particularly) (associated|connected) with\b]
+  line 58     from laptops to servers, from  [\bfrom [^,.;]{1,40} to [^,.;]{1,40}, (and )?from\b]
+  line 62     Refined the wording            [\b(refined|improved|enhanced|streamlined) (the )?(clarity|flow|readability|tone|wording|language)\b]
+  line 62     ensured consistency            [\bensured (factual )?(accuracy|neutrality|consistency|compliance)\b]
+  line 62     well-structured                [\bwell-structured\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  run launch - pick one and use it throughout
+--- second-language interference
+  false friends, check against the L1 file: 1
+  line 38     important                      [\bimportant\b]
+
+total phrase hits: 58
+gate hits (unambiguous, ratchetable): 28
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).

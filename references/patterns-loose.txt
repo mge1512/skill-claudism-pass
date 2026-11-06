@@ -11,7 +11,7 @@
 \bthe real\b
 \breach(es|ing)? for\b
 \blandscape\b
-\brealm\b
+\brealms?\b
 \bshape(s|d)?\b
 \bsurface\b
 \bharness\b
@@ -33,18 +33,22 @@
 # that moves and a symlink that points to a target are literal, so only the
 # usual abstract subjects and the "toward a conclusion" forms are matched.
 \b(attention|argument|conversation|discussion|focus|emphasis|burden|weight|risk|question|debate|center of gravity|centre of gravity) (moves|moved|moving|shifts|shifted)\b
-\bpoint(s|ed|ing)? (toward|towards|in the same direction|the same direction|at the same)\b
+\bpoint(s|ed|ing)? (toward|towards|in the same( direction)?|the same direction|at the same)\b
 \bthe (shift|unlock) is\b
 # The copula flourish: a clause that redefines its subject and hedges with a
 # trailing "here". Approximated without lookbehind, so "there is a X here" and
 # similar legitimate locatives turn up too. Judgment call.
 \bis (not )?(the|a|an) [a-z'-]+( [a-z'-]+){0,2} here[.,!?:;]
+# Testimony verbs (review, 2026-10). A person, a project or a certificate
+# authority vouching is literal; a decoder, a checksum or a signature vouching
+# is the agency metaphor in banlist.md. Judgment call.
+\bvouch(es|ed|ing)? (for|that)\b
 
 # --- chatbot closers, soft grade. Humans write these too, so they are signal
 # only in bulk and never a conviction on their own (Lolly field notes).
-\bI hope this (helps|email finds you well)\b
+\bI hope this (helps|(email|message|note) finds you well)\b
 \blet me know if you('d like| have any| need| want)\b
-\b[Ww]ould you like me to\b
+\b[Ww]ould you like (me to|a|an|more|the)\b
 \bfeel free to (reach out|ask|adjust|modify|tweak)\b
 \b[Yy]ou('re| are) absolutely right\b
 \bnot (meant as )?a substitute for professional (medical|legal|financial) advice\b
@@ -61,3 +65,119 @@
 \bensures?\b
 \bfunctionality\b
 \band/or\b
+
+# --- moved from patterns.txt (review, 2026-10). The bare word also names the
+# _ character ("names may contain underscores"); the verb with an object stays
+# strict. Past forms of "serves as" are ordinary in biographies ("served as
+# chair"), and "functions as well as" is a plural noun. "operates as", from
+# Wikipedia's copulative list, also describes what a daemon does.
+\bunderscor(e|es|ed|ing)\b
+\b(served|serving|functions|functioned|functioning|operates|operated|operating) as\b
+
+# --- upstream sync 2026-10-20: published aliases that also have literal uses
+# ("the boot loader hands over control to the kernel", "the update failed,
+# leaving you with a broken initrd", "what is useful for debugging").
+\bthe thing that (moved|shifted)\b
+\bhands (over|something back)\b
+\bmov(es|ed|ing) onto\b
+\bwhat('s| is) useful\b
+\bleaving you with\b
+\bhonestly [a-z]
+\ban honest (snapshot|breakdown|assessment|take|look|summary)\b
+
+# --- Wikipedia, "Signs of AI writing", page of 2026-10: forms with literal or
+# ordinary human uses ("the focal point of the camera", "marks the end of the
+# section", "In summary, the RX ring is used for ...").
+\bfocal point\b
+\bdistinction is important\b
+\bis an? (stark |powerful |timely |constant )?reminder\b
+\b(marks|marked) the (first|beginning|start|end|culmination)\b
+\bventur(e|es|ed|ing) into\b
+, ensuring\b
+\b(it|this|that|they)('s not| is not| isn't| was not| wasn't| are not| aren't| were not| weren't) [^.]{1,40}\. (it|this|that|they)('s|'re| is| are| was| were)\b
+\bnot [^.,;]{1,30}[,.] not [^.,;]{1,30}[,.] (and )?(certainly )?not\b
+\bfac(e|es|ed|ing) (several|numerous|many|significant|a number of) challenges\b
+\bfuture (outlook|prospects)\b
+\bin (summary|conclusion)\b
+\bis there anything else (i|you)\b
+\bmore detailed breakdown\b
+\bbased on (the )?available information\b
+(\bnot|n't) (widely|extensively) (documented|available|disclosed)\b
+\bshould be (treated|presented|read|understood|seen|viewed|taken) as [^.]{1,60}rather than\b
+\b(does|do|did) not (by itself|on its own|alone) (establish|prove|confirm|demonstrate|show)\b
+\bkeeps? (his|her|their) personal (details|life|information) private\b
+\b(media|news|tech|business|trade|industry) outlets\b
+\bleading experts?\b
+\b(widely|particularly) (associated|connected) with\b
+\bfrom [^,.;]{1,40} to [^,.;]{1,40}, (and )?from\b
+# Change descriptions in edit summaries, commit messages and release notes
+\b(refined|improved|enhanced|streamlined) (the )?(clarity|flow|readability|tone|wording|language)\b
+\bensured (factual )?(accuracy|neutrality|consistency|compliance)\b
+\bwell-structured\b
+
+# --- Claude-era frames with ordinary uses (Graphite 2026, Pangram; Sun et al.
+# for "according to the text", a Claude 3.5 Sonnet habit)
+\brather than simply\b
+\bless (about|a|an) .{1,40},? (and )?more (about|a|an)\b
+\bevery single\b
+\bperhaps the most\b
+\bjust as important\b
+\badds another (layer|dimension)\b
+\babsolutely essential\b
+\b(according to|based on) the (text|passage|excerpt|document|article)\b
+\bgenuine\b
+\b(thoughtful|dependable)\b
+
+# --- claudisms.ai pull requests #1 and #2, forms with literal uses ("the trap
+# is executed on exit" in a shell script, "SIGHUP is itself a signal")
+\b(the|migration) (catch|trap) is\b
+\bthe ragged edge\b
+\bwhat('s| it| this| that| the [a-z]+)? actually (happen(s|ed|ing)?|does|did|shows?|showed|means|works)\b
+\bnotice what (the|this|that|happens)\b
+\b(it|that|this)('s| is) structural\b
+\bstructurally[,.]
+\b(is|are) (itself|themselves) an? signal\b
+\bthat('s| is) the point\b
+
+# --- Wes Pomeroy, "You Valued Sending More Than Writing" (2026-04-25): a stock
+# closer in unreviewed AI mail
+\bif anything (is|was) unclear\b
+
+# --- press-release vocabulary with literal uses ("elevated privileges")
+\belevat(e|es|ed|ing)\b
+\bto sum up\b
+\b(save|saves|saving) (you )?(hours|days|weeks)\b
+
+# --- simple-english 2.1.1: a participle clause selling the feature, and
+# studies nobody names. Human documentation uses the first about 3 times per
+# million words, so it is a judgment call.
+, (making it (easy|easier|simple|simpler|possible)|allowing (you|users|teams|developers|them)|enabling (you|users|teams|developers|them))\b
+\b(studies|research) (show|shows|suggest|suggests|has shown|have shown)\b
+
+# --- excess vocabulary with literal senses or ordinary human use: the
+# Synergistic Processor Element of the Cell processor, the HiFive Unleashed
+# board, "no discernible overhead", "security is paramount", "programming
+# paradigm"
+\bsynerg(y|ies|istic)\b
+\bunleash(es|ed|ing)?\b
+\bdiscernible\b
+\bnuanced\b
+\binterplay\b
+\bprofound(ly)?\b
+\benduring\b
+\bvibrant\b
+\bcrucial(ly)?\b
+\bparamount\b
+\bvital\b
+\bshowcases?\b
+\bunprecedented\b
+\bparadigm\b
+\b(incredibly|immense)\b
+\bunravel(s|ed|ing)?\b
+\bsurpass(es|ed|ing)?\b
+\bnecessitat(e|es|ed|ing)\b
+\badvancements?\b
+\bunveil(s|ed|ing)?\b
+\bignit(e|es|ed|ing)\b
+\bcommitment to\b
+\brich (history|heritage|tradition|ecosystem)\b
