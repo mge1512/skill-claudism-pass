@@ -2,7 +2,7 @@
 name: claudism-pass
 description: 'Remove AI-writing tells ("Claudisms") from ENGLISH text and write in a register that suits fluent non-native readers. Use whenever an English deliverable is drafted, rewritten or reviewed: article, blog or LinkedIn post, mail, README, documentation, abstract, talk proposal, slide text, customer-facing copy. Apply before delivering longer English text, even unasked. Also on request: "Claudism pass", "AI tells". NOT for German, code, diffs, config, logs or short chat replies.'
 metadata:
-  version: "2026-11-06-02"
+  version: "2026-11-09-02"
 ---
 
 # Claudism pass
@@ -30,6 +30,7 @@ That audience decides the register:
 
 - Prefer common words over rare ones. "use" over "leverage", "start" over "commence", "so" over "hence".
 - One idea per sentence. Long subordinate chains are exactly what a second-language reader parses slowest.
+- Put the short, known part of a sentence first and the long, new part after the verb. In "The list of packages that the build service rebuilt after the security update is in rebuild.log", thirteen words come before the verb. "The file rebuild.log lists the packages that the build service rebuilt after the security update" has the verb in fourth place.
 - Say the thing literally. Metaphor, idiom and cultural reference are the slowest part of English for a non-native reader, and they are also most of what the banlist forbids. The two rules pull in the same direction, which is why the result reads plainer rather than duller.
 - Keep terminology constant. Use the same word for the same thing every time. Elegant variation ("the image", "the artifact", "the payload" for one object) costs the reader more than the repetition does.
 - Cut sports, war, poker and film metaphors outright: "we've seen this movie before", "the whole ballgame", "the tell", "moving the needle", "hits hardest".
@@ -83,7 +84,7 @@ Prevention beats repair. While writing, keep off the four constructions that pro
 3. **Announcing instead of delivering.** "Here's where it gets interesting", "Let's break it down", "I'm going to make three points", "It's worth noting that". Deliver the point; the announcement adds nothing.
 4. **Value-claim filler.** "this matters", "worth considering", "the right way", "the useful thing here". Telling the reader what to value before they decided. Let the substance make the case.
 
-Also keep off placement and agency metaphors ("shape", "lives", "holds", "carries", "moves", "points", "hands you", "vouches for", "the engine", "doing the work") and off hype adjectives and verbs ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge", "innovative", "empower").
+Also keep off placement and agency metaphors ("shape", "lives", "holds", "houses", "carries", "moves", "reaches", "points", "hands you", "vouches for", "the engine", "doing the work") and off hype adjectives and verbs ("robust", "seamless", "transformative", "comprehensive", "holistic", "cutting-edge", "innovative", "empower"). Do not describe a thing as if it had thoughts or wishes: a README that "knows", a ticket that "wants", a scheduler that "thinks".
 
 Rewrite an em dash rather than swapping in another character. A comma, a full stop, parentheses or two sentences usually fit; keep " - " for the rare aside. One substitute in every slot keeps the habit, and the simple-english skill counts a spaced hyphen between two statements as a dash.
 
@@ -133,6 +134,7 @@ A text search matches literal strings. The same move with a different noun or ve
 - Invented reactions: "it stuck with me", "the thing that got me". Name the actual reaction or leave it out.
 - "Bold term: explanation sentence" bullet lists, `---` as a section divider, and a neat bullet summary or closing recap at the end that repeats the text instead of giving a next step.
 - Four or more short declarative sentences in a row. Vary the length.
+- A statement without a verb, written as a sentence: "Twelve files in /etc, all defaults." Give it a subject and a finite verb: "Twelve files in /etc still have their default content." Headings, table cells, captions and list items are exempt.
 - Triplets by reflex: three adjectives, phrases or examples where the content has two or four.
 - Headings: Title Case where the house style is sentence case, a first heading that repeats the title, a heading with only sub-headings under it, skipped levels, and "X and Y" headings such as "Challenges and Outlook".
 - Boldface on every mention of a term, a small table that a sentence would say better, and Markdown (`**`, `##`, `---`) pasted into a plain-text target such as a LinkedIn post or a text mail.
@@ -140,11 +142,14 @@ A text search matches literal strings. The same move with a different noun or ve
 - A trailing participle clause that adds an evaluation or a consequence ("..., paving the way for ...") with a verb the scanner does not list.
 - Contrast definitions and importance flags in new wordings: "less a policy than a habit", "this is what decides it".
 - An echo of a prompt the reader never saw: "the text", "the passage", "the document you shared".
+- A "the" phrase or a pronoun with nothing to refer to: "the rule" when no rule has been named, "this" at the start of a section. Name the thing.
 - The symmetric closer: a last line with a balanced, philosophical cadence that nobody uses in speech.
 - A sentence that could have come from anyone. Rewrite it with the specific fact, or cut it.
 - Every number, quote and reference in the draft has a source that someone checked.
 - A benefit claim without a measurement ("saves hours every week"). Give the figure and its source, or drop the claim.
 - The same opening for several sentences in a row.
+- A document that reports its own edit: "now supports", "has been updated to", "the new section below". A README or a manual is read long after the change, so describe the current state and put the history in the changelog.
+- A term that neither the source material nor the field uses, coined for this draft: "update corridor", "verification spine". Use the established term, or define the new one at first use and keep it.
 
 Consult `references/banlist.md` for the full list with the reasoning behind each entry, and to check anything that looks borderline. The file is grouped into confirmed entries, structural and framing tics, register tics, spoken-word tells, imported vocabulary, and local additions caught in review.
 
@@ -183,6 +188,10 @@ Several banned words are terms of art in IT. Leave them alone in their technical
 | "load-bearing" (metaphor) | an actual wall |
 | "points" (directional metaphor) | a pointer, symlink, DNS record or reference that points to a target |
 | "moves" (abstract motion) | a literal move: a file, a service, data to another host |
+| "holds" (container metaphor) | a lock or a reference that is held |
+| "carries" (container metaphor) | a protocol field that carries a value |
+| "houses" (container metaphor) | an enclosure or a chassis that houses hardware |
+| "reaches" (motion metaphor) | a reachable host, a counter that reaches its limit |
 | "underscore" (verb) | the `_` character, as in `snake_case` names |
 | "elevate" | elevated privileges, as with `sudo` |
 | "paradigm" | a programming paradigm |

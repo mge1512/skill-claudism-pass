@@ -43,6 +43,11 @@
 # authority vouching is literal; a decoder, a checksum or a signature vouching
 # is the agency metaphor in banlist.md. Judgment call.
 \bvouch(es|ed|ing)? (for|that)\b
+# Mental states for things (review, 2026-11). People know and want things
+# literally, so only common technical nouns are matched as subjects.
+\b(readme|document|documentation|manual|page|section|ticket|issue|policy|spec|specification|config|configuration|file|code|script|test|pipeline|kernel|scheduler|compiler|daemon|service|system|tool|function|module|package) (knows|wants|believes|thinks|insists|remembers|cares|worries|feels|hopes)\b
+# Container verb (review, 2026-11). A chassis that houses the drives is literal.
+\bhous(es|ed)\b
 
 # --- chatbot closers, soft grade. Humans write these too, so they are signal
 # only in bulk and never a conviction on their own (Lolly field notes).
@@ -114,6 +119,13 @@
 \b(refined|improved|enhanced|streamlined) (the )?(clarity|flow|readability|tone|wording|language)\b
 \bensured (factual )?(accuracy|neutrality|consistency|compliance)\b
 \bwell-structured\b
+# Edit narration (review, 2026-11): a document that describes a current state
+# reports its own revision. Release notes and changelogs describe changes by
+# design, so every hit is a judgment call.
+\bnow (supports|includes|covers|handles|offers|provides|uses)\b
+\b(has|have) been (updated|revised|rewritten|expanded|extended|reworked) to\b
+\b(this|the) (updated|revised) (version|section|guide|document|readme|page)\b
+\bthe new (section|paragraph|chapter|table|example)s? (below|above)\b
 
 # --- Claude-era frames with ordinary uses (Graphite 2026, Pangram; Sun et al.
 # for "according to the text", a Claude 3.5 Sonnet habit)

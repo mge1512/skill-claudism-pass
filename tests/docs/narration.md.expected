@@ -1,0 +1,28 @@
+=== tests/docs/narration.md
+--- banlist hits, rewrite these: 0
+--- needs judgment, check the carve-outs in SKILL.md: 3
+  line 1      now supports                   [\bnow (supports|includes|covers|handles|offers|provides|uses)\b]
+  line 3      has been updated to            [\b(has|have) been (updated|revised|rewritten|expanded|extended|reworked) to\b]
+  line 5      the new section below          [\bthe new (section|paragraph|chapter|table|example)s? (below|above)\b]
+--- leaked scaffolding and chatbot boilerplate
+  clean
+--- hidden characters
+  clean
+--- decorative punctuation
+  clean
+--- structural tics
+  clean
+--- spelling variant
+  US markers: 0   EU/British markers: 0   (variant: auto)
+--- dates, clock, units
+  clean
+--- long sentences (over 25 words)
+  clean
+--- terminology consistency
+  clean
+--- second-language interference
+  clean
+
+total phrase hits: 3
+gate hits (unambiguous, ratchetable): 0
+Now read the draft for the constructions grep cannot see (SKILL.md, step 2).
