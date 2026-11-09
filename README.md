@@ -91,6 +91,16 @@ its own; its documented cross-client convention for named agents is
 should be found too, though the README does not state the skill paths. Check
 with `/skill:claudism-pass` in a session.
 
+**Mistral**
+
+Mistral takes a skill as a directory. Download `claudism-pass.skill` from the
+releases page, extract it with `unzip claudism-pass.skill`, and upload the
+`claudism-pass` directory that the command creates. Do not upload the archive
+itself or the single-file edition. The single-file edition has no YAML front
+matter, so Mistral does not accept it as a skill. The Vibe CLI reads a clone in
+`~/.agents/skills/claudism-pass`, or in `.agents/skills/claudism-pass` inside a
+project directory that is marked as trusted.
+
 **Anything else that reads SKILL.md**
 
 The skill is a plain directory in the Agent Skills format, so copy it wherever the
