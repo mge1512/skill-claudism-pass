@@ -538,11 +538,18 @@ for target in "${files[@]}"; do
         echo "  clean"
     fi
 
-    # Structural tics a regex can see. A --- on line 1 is YAML frontmatter,
-    # not a divider.
+    # Structural tics a regex can see. YAML front matter opens with --- on
+    # line 1 and closes with the next --- or ... line. Neither delimiter is a
+    # divider. Excluding line 1 alone reported the closing one, so a file with
+    # front matter, such as a SKILL.md, could never pass --gate.
     echo "--- structural tics"
     struct=0
-    div="$("$GREP" -n -E '^[[:space:]]*-{3,}[[:space:]]*$' "$tmp_prose" | "$GREP" -v '^1:' || true)"
+    div="$(awk '
+        NR == 1 && /^---[[:space:]]*$/ { fm = 1; next }
+        fm && /^(---|\.\.\.)[[:space:]]*$/ { fm = 0; next }
+        fm { next }
+        /^[[:space:]]*---+[[:space:]]*$/ { print NR ":" $0 }
+    ' "$tmp_prose")"
     if [ -n "$div" ]; then
         printf '%s\n' "$div" | sed 's/^/  divider, line /'
         struct=1
